@@ -7,8 +7,11 @@
     "save": "Save",
     "cancel": "Cancel",
     "close": "Close",
-    "mute": "Mute music",
-    "unmute": "Unmute music",
+    "mute": "Pause music",
+    "unmute": "Resume music",
+    "home": "Home",
+    "power": "Start screen",
+    "info": "Information",
     "language": "Language",
     "localMode": "Local mode: no database connected."
   },
@@ -22,7 +25,8 @@
     "m4": "QUESTIONS!",
     "pause": "Pause instructions",
     "resume": "Resume instructions",
-    "previous": "Previous instruction"
+    "previous": "Previous instruction",
+    "toMenu": "Go to menu"
   },
   "instructions": {
     "m1": "You have {{seconds}} seconds to answer each question",
@@ -30,10 +34,11 @@
     "m3": "for every wrong answer you'll earn one of the 4 possible punishments:"
   },
   "menu": {
-    "prompt": "Please pick a group of questions",
+    "prompt": "Select a group of questions",
     "group": "Group {{n}}",
     "groupDone": "Completed",
-    "createQuiz": "Create your own quiz for Hector",
+    "groupLocked": "You already finished this group. Reset the game in settings to play it again.",
+    "createQuiz": "Create",
     "startHector": "Let Hector start the game",
     "results": "Answers",
     "lockedCreate": "Finish all the questions to create your own quiz.",
@@ -42,12 +47,12 @@
     "photo": "Take a photo"
   },
   "pin": {
-    "title": "Enter the 4-digit code",
+    "title": "Enter the code",
     "wrong": "Wrong code",
     "enter": "Enter"
   },
   "play": {
-    "progress": "Question {{current}} of {{total}}",
+    "progress": "{{current}}/{{total}}",
     "group": "Group {{n}}",
     "hectorTitle": "Fernanda's quiz for Hector",
     "hearts": "Hearts",
@@ -92,9 +97,9 @@
     "cleared": "Answers were hidden from this screen."
   },
   "create": {
-    "title": "Your quiz for Hector",
-    "subtitle": "6 questions to see how much he knows about you",
-    "step": "Question {{n}} of 6",
+    "title": "Your quiz",
+    "subtitle": "",
+    "step": "Question {{n}} of {{total}}",
     "questionLabel": "Your question",
     "questionPlaceholder": "Write your question here",
     "answerPlaceholder": "Answer {{letter}}",

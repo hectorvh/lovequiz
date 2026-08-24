@@ -1,32 +1,32 @@
 import { useEffect, useRef, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 
-const PHOTO_COUNT = 12;
+import { COLLAGE_POOL } from '../data/collagePool';
+
+const VISIBLE = 12;
 const INTRO_MS = 1500;
 const SHUFFLE_MS = 15000;
 
-const photos = Array.from(
-  { length: PHOTO_COUNT },
-  (_, i) => `/images/collage/${String(i + 1).padStart(2, '0')}.jpg`,
-);
-
-const identity = () => photos.map((_, i) => i);
-
-/** Shuffle that keeps trying until most cells actually move, so the swap reads. */
-function shuffled(current: number[]): number[] {
-  const next = [...current];
+function shuffle<T>(input: T[]): T[] {
+  const next = [...input];
   for (let i = next.length - 1; i > 0; i -= 1) {
     const j = Math.floor(Math.random() * (i + 1));
     [next[i], next[j]] = [next[j], next[i]];
   }
-  const moved = next.filter((value, i) => value !== current[i]).length;
-  return moved >= next.length - 2 ? next : shuffled(current);
+  return next;
+}
+
+/** Twelve distinct photos, preferring ones that aren't currently on screen. */
+function pickTwelve(exclude: string[] = []): string[] {
+  const fresh = COLLAGE_POOL.filter((src) => !exclude.includes(src));
+  const source = fresh.length >= VISIBLE ? fresh : COLLAGE_POOL;
+  return shuffle(source).slice(0, VISIBLE);
 }
 
 /**
- * 3x4 grid of the couple's photos, fixed behind every screen. Two alternating
- * groups (odd- and even-indexed cells) drift in and out of a subtle zoom, and
- * every 15s the photos trade places with a slow crossfade.
+ * 3x4 grid of the couple's photos, fixed behind every screen. A random twelve
+ * are drawn from the pool; two alternating cell groups drift in and out of a
+ * subtle zoom, and every 15s the set is swapped with a slow crossfade.
  *
  * Runs at full opacity for the first 1.5s, then settles to 50% for the rest of
  * the session.
@@ -35,11 +35,11 @@ export default function PhotoCollageBackground() {
   const { pathname } = useLocation();
   const [dimmed, setDimmed] = useState(() => pathname !== '/');
 
-  const [order, setOrder] = useState(identity);
-  const [outgoing, setOutgoing] = useState<number[] | null>(null);
+  const [shown, setShown] = useState<string[]>(() => pickTwelve());
+  const [outgoing, setOutgoing] = useState<string[] | null>(null);
   const [cycle, setCycle] = useState(0);
-  const orderRef = useRef(order);
-  orderRef.current = order;
+  const shownRef = useRef(shown);
+  shownRef.current = shown;
 
   useEffect(() => {
     if (dimmed) return;
@@ -49,9 +49,10 @@ export default function PhotoCollageBackground() {
 
   useEffect(() => {
     const interval = window.setInterval(() => {
-      setOutgoing(orderRef.current);
-      setOrder(shuffled(orderRef.current));
-      setCycle((current) => current + 1);
+      const current = shownRef.current;
+      setOutgoing(current);
+      setShown(pickTwelve(current));
+      setCycle((n) => n + 1);
     }, SHUFFLE_MS);
 
     return () => window.clearInterval(interval);
@@ -63,12 +64,8 @@ export default function PhotoCollageBackground() {
         className="grid h-full w-full grid-cols-3 grid-rows-4 transition-opacity duration-1000 ease-out"
         style={{ opacity: dimmed ? 0.5 : 1 }}
       >
-        {order.map((photoIndex, cell) => (
+        {shown.map((src, cell) => (
           <div key={cell} className="relative">
-            {/*
-             * The zoom lives on this layer and overflows the cell slightly, so
-             * feathered neighbours overlap and blend rather than leaving gaps.
-             */}
             <div
               className={`absolute -inset-[4%] ${
                 cell % 2 === 0 ? 'animate-drift-a' : 'animate-drift-b'
@@ -77,14 +74,14 @@ export default function PhotoCollageBackground() {
             >
               {outgoing ? (
                 <img
-                  src={photos[outgoing[cell]]}
+                  src={outgoing[cell]}
                   alt=""
                   className="collage-feather absolute inset-0 h-full w-full object-cover"
                 />
               ) : null}
               <img
-                key={cycle}
-                src={photos[photoIndex]}
+                key={`${cycle}-${src}`}
+                src={src}
                 alt=""
                 loading={cell < 6 ? 'eager' : 'lazy'}
                 className={`collage-feather absolute inset-0 h-full w-full object-cover ${

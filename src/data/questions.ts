@@ -2,11 +2,12 @@
  * Fernanda's three question groups, transcribed from
  * `fernanda-questions-multilingual.md`.
  *
+ * Each group holds 8 seeds. A play session draws 5 unique IDs
+ * (`PLAY_QUESTIONS_PER_GROUP`) and keeps them for resume, language switches,
+ * and results.
+ *
  * `correctIndex` is 0-based and shared by all four locales, so the option order
  * must stay identical across es/en/fr/de when editing.
- *
- * Group size is data-driven: add or remove entries and the timer, progress
- * counter and results screens all adapt.
  */
 import type { Locale, Question } from '../types';
 
@@ -613,6 +614,8 @@ export const QUESTION_GROUPS: Record<'1' | '2' | '3', QuestionSeed[]> = {
   '3': GROUP_3,
 };
 
+export const PLAY_QUESTIONS_PER_GROUP = 5;
+
 export function getGroupQuestions(groupId: '1' | '2' | '3', locale: Locale): Question[] {
   return QUESTION_GROUPS[groupId].map((seed) => ({
     id: seed.id,
@@ -620,6 +623,69 @@ export function getGroupQuestions(groupId: '1' | '2' | '3', locale: Locale): Que
     options: [...seed.i18n[locale].options],
     correctIndex: seed.correctIndex,
   }));
+}
+
+function shuffleIds(ids: string[]): string[] {
+  const next = [...ids];
+  for (let i = next.length - 1; i > 0; i -= 1) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [next[i], next[j]] = [next[j], next[i]];
+  }
+  return next;
+}
+
+/** Unique random draw of 5 IDs from a group's 8 seeds. */
+export function pickPlayQuestionIds(groupId: '1' | '2' | '3'): string[] {
+  return shuffleIds(QUESTION_GROUPS[groupId].map((seed) => seed.id)).slice(
+    0,
+    PLAY_QUESTIONS_PER_GROUP,
+  );
+}
+
+/**
+ * Resolve stored IDs to the current locale, preserving play order.
+ * Already-answered IDs stay first so a mid-group resume never repeats them.
+ */
+export function ensurePlayQuestionIds(
+  groupId: '1' | '2' | '3',
+  existingIds: string[] | undefined,
+  answeredIds: string[] = [],
+): string[] {
+  if (
+    existingIds &&
+    existingIds.length === PLAY_QUESTIONS_PER_GROUP &&
+    new Set(existingIds).size === PLAY_QUESTIONS_PER_GROUP
+  ) {
+    return existingIds;
+  }
+
+  const uniqueAnswered = [...new Set(answeredIds)];
+  if (uniqueAnswered.length >= PLAY_QUESTIONS_PER_GROUP) {
+    return uniqueAnswered.slice(0, PLAY_QUESTIONS_PER_GROUP);
+  }
+
+  const remaining = shuffleIds(
+    QUESTION_GROUPS[groupId]
+      .map((seed) => seed.id)
+      .filter((id) => !uniqueAnswered.includes(id)),
+  );
+
+  return [...uniqueAnswered, ...remaining].slice(0, PLAY_QUESTIONS_PER_GROUP);
+}
+
+export function questionsForIds(
+  groupId: '1' | '2' | '3',
+  locale: Locale,
+  ids: string[],
+): Question[] {
+  const byId = new Map(getGroupQuestions(groupId, locale).map((question) => [question.id, question]));
+  const seen = new Set<string>();
+  return ids.flatMap((id) => {
+    if (seen.has(id)) return [];
+    seen.add(id);
+    const question = byId.get(id);
+    return question ? [question] : [];
+  });
 }
 
 /** Group 3 closes with the untimed, unscored map question. */

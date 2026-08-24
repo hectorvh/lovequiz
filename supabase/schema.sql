@@ -1,19 +1,23 @@
 -- ============================================================================
 --  Couple Quiz Game — Supabase schema
 --  Run this once in the Supabase SQL editor, then create a PUBLIC storage
---  bucket named "photos".
+--  bucket named "photos". Re-running is safe: new columns use IF NOT EXISTS.
 --
 --  There is no authentication in this app (single shared device, by design),
 --  so the policies below deliberately allow anonymous access. Keep the project
 --  URL and anon key private — that is the only thing protecting this data.
+--
+--  App env: VITE_SUPABASE_URL + VITE_SUPABASE_ANON_KEY. Leave both blank to
+--  play in local mode (localStorage only, no network writes).
 -- ============================================================================
 
 create table if not exists answers (
   id                  bigint generated always as identity primary key,
   player              text not null check (player in ('fernanda', 'hector')),
   group_id            text not null,
+  -- Seed id (e.g. g1q3). Fernanda groups store the 5 drawn questions, not all 8.
   question_id         text not null,
-  -- 0-based index of the chosen option; null means the 5s timer expired.
+  -- 0-based index of the chosen option; null means the 30s timer expired.
   selected_option     smallint,
   is_correct          boolean not null,
   punishment_assigned text check (punishment_assigned in ('beso', 'baile', 'masaje', 'secreto')),
@@ -21,6 +25,7 @@ create table if not exists answers (
 );
 
 create index if not exists answers_player_group_idx on answers (player, group_id);
+create index if not exists answers_question_idx on answers (group_id, question_id);
 
 create table if not exists group_summaries (
   id                    bigint generated always as identity primary key,
@@ -28,10 +33,16 @@ create table if not exists group_summaries (
   group_id              text not null,
   hearts_earned         integer not null default 0,
   punishments_by_type   jsonb not null default '{}'::jsonb,
+  -- Play order for this run (5 of 8 for Fernanda groups). Reconstruct results
+  -- by joining answers on question_id in this array's order.
+  question_ids          jsonb not null default '[]'::jsonb,
   -- Only set for group 3: distance in metres from the bonus map guess.
   bonus_distance_meters double precision,
   completed_at          timestamptz not null default now()
 );
+
+alter table group_summaries
+  add column if not exists question_ids jsonb not null default '[]'::jsonb;
 
 create table if not exists reciprocal_quiz_questions (
   id             bigint generated always as identity primary key,
@@ -39,8 +50,19 @@ create table if not exists reciprocal_quiz_questions (
   question_text  text not null,
   options        jsonb not null,
   correct_option text not null check (correct_option in ('A', 'B', 'C', 'D')),
+  -- One uuid per saved quiz. Live game reads the newest batch (5 questions).
+  batch_id       uuid,
+  sort_order     smallint not null default 0,
   created_at     timestamptz not null default now()
 );
+
+alter table reciprocal_quiz_questions
+  add column if not exists batch_id uuid;
+alter table reciprocal_quiz_questions
+  add column if not exists sort_order smallint not null default 0;
+
+create index if not exists reciprocal_quiz_batch_idx
+  on reciprocal_quiz_questions (created_at desc, batch_id);
 
 create table if not exists photos (
   id                      bigint generated always as identity primary key,

@@ -1,22 +1,47 @@
-const MUSIC_SRC = '/audio/background.mp3';
+/** Played in order, with a short breather between tracks, looping forever. */
+const PLAYLIST = [
+  '/audio/accidentally-in-love.mp3',
+  '/audio/viviendo-de-noche.mp3',
+  '/audio/cant-take-my-eyes-off-you.mp3',
+  '/audio/your-song.mp3',
+  '/audio/one-day.mp3',
+];
+const GAP_MS = 1500;
 
 let element: HTMLAudioElement | null = null;
+let trackIndex = 0;
+/** Non-null while sitting in the silence between two tracks. */
+let gapTimer: number | null = null;
 let waitingForGesture = false;
 /** Music stays silent until Play is pressed (or the player lands mid-session). */
 let musicRequested = false;
+/** Pause/resume of the current track — volume is never ducked. */
+let paused = false;
 
 /**
- * A single module-level <audio> element so the track survives every route
- * change. Only the mute toggle should ever stop it.
+ * A single module-level <audio> element so the playlist survives every route
+ * change. Only the speaker button should ever pause it.
  */
 function getElement(): HTMLAudioElement {
   if (!element) {
-    element = new Audio(MUSIC_SRC);
-    element.loop = true;
+    element = new Audio(PLAYLIST[trackIndex]);
     element.preload = 'auto';
     element.volume = 0.45;
+    element.addEventListener('ended', queueNextTrack);
   }
   return element;
+}
+
+function queueNextTrack() {
+  if (gapTimer !== null) return;
+
+  gapTimer = window.setTimeout(() => {
+    gapTimer = null;
+    const audio = getElement();
+    trackIndex = (trackIndex + 1) % PLAYLIST.length;
+    audio.src = PLAYLIST[trackIndex];
+    if (!paused) playWhenAllowed(audio);
+  }, GAP_MS);
 }
 
 /**
@@ -32,7 +57,7 @@ function playWhenAllowed(audio: HTMLAudioElement) {
       waitingForGesture = false;
       document.removeEventListener('pointerdown', retry);
       document.removeEventListener('keydown', retry);
-      if (!audio.muted) void audio.play().catch(() => undefined);
+      if (!paused && gapTimer === null) void audio.play().catch(() => undefined);
     };
 
     document.addEventListener('pointerdown', retry, { once: true });
@@ -40,21 +65,20 @@ function playWhenAllowed(audio: HTMLAudioElement) {
   });
 }
 
-export function startMusic(muted: boolean) {
+export function startMusic(isPaused: boolean) {
   musicRequested = true;
-  const audio = getElement();
-  audio.muted = muted;
-  if (muted) return;
-  playWhenAllowed(audio);
+  paused = isPaused;
+  if (paused || gapTimer !== null) return;
+  playWhenAllowed(getElement());
 }
 
-export function setMuted(muted: boolean) {
-  const audio = getElement();
-  audio.muted = muted;
+export function setMuted(isPaused: boolean) {
+  paused = isPaused;
   if (!musicRequested) return;
-  if (muted) {
+  const audio = getElement();
+  if (isPaused) {
     audio.pause();
-  } else {
+  } else if (gapTimer === null) {
     playWhenAllowed(audio);
   }
 }

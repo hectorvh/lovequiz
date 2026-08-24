@@ -76,6 +76,6 @@ src/
   i18n/        es / en / fr / de
   data/        questions.ts
 public/
-  audio/background.mp3
+  audio/accidentally-in-love.mp3, audio/viviendo-de-noche.mp3
   images/collage/01–12.jpg
 ```

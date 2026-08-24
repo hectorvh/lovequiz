@@ -7,8 +7,11 @@
     "save": "Speichern",
     "cancel": "Abbrechen",
     "close": "Schließen",
-    "mute": "Musik stumm schalten",
-    "unmute": "Musik einschalten",
+    "mute": "Musik pausieren",
+    "unmute": "Musik fortsetzen",
+    "home": "Startseite",
+    "power": "Startbildschirm",
+    "info": "Informationen",
     "language": "Sprache",
     "localMode": "Lokaler Modus: keine Datenbank verbunden."
   },
@@ -22,7 +25,8 @@
     "m4": "um FRAGEN!",
     "pause": "Anleitung pausieren",
     "resume": "Anleitung fortsetzen",
-    "previous": "Vorherige Anleitung"
+    "previous": "Vorherige Anleitung",
+    "toMenu": "Zum Menü"
   },
   "instructions": {
     "m1": "Du hast {{seconds}} Sekunden für jede Frage",
@@ -30,10 +34,11 @@
     "m3": "für jede falsche Antwort bekommst du eine der 4 möglichen Strafen:"
   },
   "menu": {
-    "prompt": "Bitte wähle eine Fragengruppe",
+    "prompt": "Wähle eine Fragengruppe",
     "group": "Gruppe {{n}}",
     "groupDone": "Abgeschlossen",
-    "createQuiz": "Erstelle dein eigenes Quiz für Hector",
+    "groupLocked": "Diese Gruppe hast du schon abgeschlossen. Setze das Spiel in den Einstellungen zurück, um sie erneut zu spielen.",
+    "createQuiz": "Erstellen",
     "startHector": "Hector soll das Spiel starten",
     "results": "Antworten",
     "lockedCreate": "Beende alle Fragen, um dein eigenes Quiz zu erstellen.",
@@ -42,12 +47,12 @@
     "photo": "Foto aufnehmen"
   },
   "pin": {
-    "title": "Gib den 4-stelligen Code ein",
+    "title": "Gib den Code ein",
     "wrong": "Falscher Code",
     "enter": "Weiter"
   },
   "play": {
-    "progress": "Frage {{current}} von {{total}}",
+    "progress": "{{current}}/{{total}}",
     "group": "Gruppe {{n}}",
     "hectorTitle": "Fernandas Quiz für Hector",
     "hearts": "Herzen",
@@ -92,9 +97,9 @@
     "cleared": "Die Antworten wurden auf diesem Bildschirm ausgeblendet."
   },
   "create": {
-    "title": "Dein Quiz für Hector",
-    "subtitle": "6 Fragen, um zu sehen, wie gut er dich kennt",
-    "step": "Frage {{n}} von 6",
+    "title": "Dein Quiz",
+    "subtitle": "",
+    "step": "Frage {{n}} von {{total}}",
     "questionLabel": "Deine Frage",
     "questionPlaceholder": "Schreibe hier deine Frage",
     "answerPlaceholder": "Antwort {{letter}}",

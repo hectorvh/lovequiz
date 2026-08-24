@@ -7,3 +7,6 @@
 export const QUESTION_DURATION_MS = 30_000;
 
 export const QUESTION_DURATION_SECONDS = QUESTION_DURATION_MS / 1000;
+
+/** Soft lock on Play and Settings. Compared client-side on this shared device. */
+export const GAME_PIN = '1996';

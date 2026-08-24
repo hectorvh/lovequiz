@@ -16,7 +16,7 @@ export default function QuizCreation() {
   const { t } = useTranslation();
   const navigate = useNavigate();
 
-  const quizDraft = useGameStore((s) => s.quizDraft);
+  const quizDraft = useGameStore((s) => s.quizDraft).slice(0, RECIPROCAL_QUIZ_LENGTH);
   const setQuizDraftItem = useGameStore((s) => s.setQuizDraftItem);
   const saveReciprocalQuizLocally = useGameStore((s) => s.saveReciprocalQuizLocally);
 
@@ -60,12 +60,12 @@ export default function QuizCreation() {
   const canSaveAll = quizDraft.every(isDraftItemComplete);
 
   return (
-    <div className="pt-2">
-      <ScreenTitle eyebrow={t('create.subtitle')} title={t('create.title')} />
+    <div className="flex h-full min-h-0 flex-col overflow-hidden pt-1">
+      <ScreenTitle title={t('create.title')} />
 
-      <Card>
+      <Card className="flex min-h-0 flex-1 flex-col overflow-hidden !p-4">
         <div className="mb-4 flex items-center justify-between">
-          <Tag>{t('create.step', { n: step + 1 })}</Tag>
+          <Tag>{t('create.step', { n: step + 1, total: RECIPROCAL_QUIZ_LENGTH })}</Tag>
           <div className="flex gap-1">
             {quizDraft.map((draft, index) => (
               <span
@@ -90,7 +90,7 @@ export default function QuizCreation() {
           onChange={(event) => update({ questionText: event.target.value })}
           placeholder={t('create.questionPlaceholder')}
           rows={2}
-          className="mb-4 w-full resize-none rounded-xl border-[1.5px] border-card-line bg-white px-3.5 py-2.5 text-[14.5px] text-ink outline-none placeholder:text-ink-soft/50 focus:border-wine"
+          className="mb-3 min-h-0 w-full resize-none rounded-xl border-[1.5px] border-card-line bg-white px-3.5 py-2.5 text-[14.5px] text-ink outline-none placeholder:text-ink-soft/50 focus:border-wine"
         />
 
         <p className="mb-2 text-xs font-semibold tracking-wide text-ink-soft uppercase">
@@ -131,13 +131,7 @@ export default function QuizCreation() {
           })}
         </div>
 
-        <p className="mt-3 text-[11px] leading-snug text-ink-soft">{t('create.notTranslated')}</p>
-
-        {!complete ? (
-          <p className="mt-2 text-[11.5px] leading-snug text-bad">{t('create.incomplete')}</p>
-        ) : null}
-
-        <div className="mt-5 space-y-2.5">
+        <div className="mt-3 space-y-2">
           {isLastStep ? (
             <PrimaryButton onClick={() => void save()} disabled={!canSaveAll || saving}>
               {t('create.saveAll')}

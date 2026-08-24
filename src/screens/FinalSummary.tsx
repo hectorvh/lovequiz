@@ -17,7 +17,7 @@ function OwedColumn({ heading, tally }: { heading: string; tally: Tally }) {
         {t('summary.hearts')}
       </p>
       <p className="font-display mb-3 text-center text-2xl font-semibold text-wine">
-        {tally.hearts} <span aria-hidden>💗</span>
+        {tally.hearts} <span aria-hidden>❤️</span>
       </p>
 
       {owesNothing ? (
@@ -45,7 +45,7 @@ export default function FinalSummary() {
   const tallies = useGameStore((s) => s.tallies);
 
   return (
-    <div className="pt-2">
+    <div className="flex h-full min-h-0 flex-col overflow-hidden pt-1">
       <ScreenTitle title={t('summary.title')} />
 
       <Card>

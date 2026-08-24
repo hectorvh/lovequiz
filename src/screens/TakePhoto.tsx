@@ -137,7 +137,7 @@ export default function TakePhoto() {
 
   if (photoTaken && !captured) {
     return (
-      <div className="pt-2">
+      <div className="flex h-full min-h-0 flex-col overflow-hidden pt-1">
         <ScreenTitle title={t('photo.title')} />
         <Card>
           <p className="mb-5 text-sm leading-relaxed text-ink-soft">{t('photo.alreadyTaken')}</p>
@@ -153,17 +153,17 @@ export default function TakePhoto() {
   }
 
   return (
-    <div className="pt-2">
+    <div className="flex h-full min-h-0 flex-col overflow-hidden pt-1">
       <ScreenTitle eyebrow={t('photo.subtitle')} title={t('photo.title')} />
 
-      <Card className="!p-4">
+      <Card className="flex min-h-0 flex-1 flex-col overflow-hidden !p-3.5">
         {captured ? (
-          <div className="space-y-3">
-            <figure>
+          <div className="flex min-h-0 flex-1 flex-col space-y-2 overflow-hidden">
+            <figure className="min-h-0 flex-1 overflow-hidden">
               <img
                 src={captured.dataUrl}
                 alt={t('photo.original')}
-                className="w-full rounded-2xl border border-card-line"
+                className="h-full max-h-40 w-full rounded-2xl border border-card-line object-cover"
               />
               <figcaption className="mt-1 text-center text-[11px] text-ink-soft">
                 {t('photo.original')}
@@ -175,7 +175,7 @@ export default function TakePhoto() {
                 <img
                   src={caricatureUrl}
                   alt={t('photo.caricature')}
-                  className="w-full rounded-2xl border border-gold"
+                  className="h-full max-h-32 w-full rounded-2xl border border-gold object-cover"
                 />
                 <figcaption className="mt-1 text-center text-[11px] text-ink-soft">
                   {t('photo.caricature')}
@@ -204,13 +204,13 @@ export default function TakePhoto() {
             </div>
           </div>
         ) : (
-          <div className="space-y-3">
-            <div className="relative overflow-hidden rounded-2xl border border-card-line bg-night">
+          <div className="flex min-h-0 flex-1 flex-col space-y-3">
+            <div className="relative min-h-0 flex-1 overflow-hidden rounded-2xl border border-card-line bg-night">
               <video
                 ref={videoRef}
                 playsInline
                 muted
-                className="aspect-3/4 w-full object-cover"
+                className="h-full w-full object-cover"
                 style={{ transform: facing === 'user' ? 'scaleX(-1)' : undefined }}
               />
             </div>

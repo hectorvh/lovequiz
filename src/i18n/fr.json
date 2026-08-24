@@ -7,8 +7,11 @@
     "save": "Enregistrer",
     "cancel": "Annuler",
     "close": "Fermer",
-    "mute": "Couper la musique",
-    "unmute": "Activer la musique",
+    "mute": "Mettre la musique en pause",
+    "unmute": "Reprendre la musique",
+    "home": "Accueil",
+    "power": "Écran d'accueil",
+    "info": "Informations",
     "language": "Langue",
     "localMode": "Mode local : aucune base de données connectée."
   },
@@ -22,7 +25,8 @@
     "m4": "de QUESTIONS !",
     "pause": "Mettre les instructions en pause",
     "resume": "Reprendre les instructions",
-    "previous": "Instruction précédente"
+    "previous": "Instruction précédente",
+    "toMenu": "Aller au menu"
   },
   "instructions": {
     "m1": "Tu as {{seconds}} secondes pour répondre à chaque question",
@@ -30,10 +34,11 @@
     "m3": "pour chaque mauvaise réponse tu gagneras l'un des 4 gages possibles :"
   },
   "menu": {
-    "prompt": "Choisis un groupe de questions",
+    "prompt": "Sélectionne un groupe de questions",
     "group": "Groupe {{n}}",
     "groupDone": "Terminé",
-    "createQuiz": "Crée ton propre questionnaire pour Hector",
+    "groupLocked": "Tu as déjà terminé ce groupe. Réinitialise le jeu dans les réglages pour y rejouer.",
+    "createQuiz": "Crée",
     "startHector": "Que Hector commence le jeu",
     "results": "Réponses",
     "lockedCreate": "Termine toutes les questions pour créer ton propre questionnaire.",
@@ -42,12 +47,12 @@
     "photo": "Prendre une photo"
   },
   "pin": {
-    "title": "Saisis le code à 4 chiffres",
+    "title": "Saisis le code",
     "wrong": "Code incorrect",
     "enter": "Entrer"
   },
   "play": {
-    "progress": "Question {{current}} sur {{total}}",
+    "progress": "{{current}}/{{total}}",
     "group": "Groupe {{n}}",
     "hectorTitle": "Le questionnaire de Fernanda pour Hector",
     "hearts": "Cœurs",
@@ -92,9 +97,9 @@
     "cleared": "Les réponses ont été masquées sur cet écran."
   },
   "create": {
-    "title": "Ton questionnaire pour Hector",
-    "subtitle": "6 questions pour voir ce qu'il sait de toi",
-    "step": "Question {{n}} sur 6",
+    "title": "Ton questionnaire",
+    "subtitle": "",
+    "step": "Question {{n}} sur {{total}}",
     "questionLabel": "Ta question",
     "questionPlaceholder": "Écris ta question ici",
     "answerPlaceholder": "Réponse {{letter}}",

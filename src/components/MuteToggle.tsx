@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { useGameStore } from '../state/gameStore';
+import { chromeButtonClass } from './ui';
 
 export default function MuteToggle() {
   const { t } = useTranslation();
@@ -12,7 +13,7 @@ export default function MuteToggle() {
       onClick={toggleMuted}
       aria-label={muted ? t('common.unmute') : t('common.mute')}
       aria-pressed={muted}
-      className="grid h-11 w-11 place-items-center rounded-full border border-white/15 bg-black/35 text-[#faf1e8] opacity-60 backdrop-blur transition active:scale-95 hover:bg-black/50"
+      className={chromeButtonClass}
     >
       <svg
         aria-hidden

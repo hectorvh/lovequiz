@@ -1,33 +1,58 @@
 import type { ReactNode } from 'react';
+import { useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 import PhotoCollageBackground from './PhotoCollageBackground';
 import MuteToggle from './MuteToggle';
+import HomeButton from './HomeButton';
+import PowerButton from './PowerButton';
+import InfoButton from './InfoButton';
+import SettingsButton from './SettingsButton';
 import LanguageSwitcher from './LanguageSwitcher';
 import { isSupabaseEnabled } from '../lib/supabaseClient';
 
 /**
- * Persistent shell: the collage, the mute toggle and the language switcher are
- * mounted once, outside the router, so they survive every screen transition.
+ * Persistent shell: the collage and the chrome buttons are mounted once,
+ * outside the router, so they survive every screen transition.
  */
 export default function Layout({ children }: { children: ReactNode }) {
   const { t } = useTranslation();
+  const { pathname } = useLocation();
+  const allowScroll = pathname === '/results';
 
   return (
-    <div className="relative flex min-h-dvh flex-col">
+    <div className="relative flex h-dvh flex-col overflow-hidden">
       <PhotoCollageBackground />
 
-      <header className="sticky top-0 z-30 flex items-start justify-between p-4">
-        <MuteToggle />
-        <LanguageSwitcher />
+      <header className="z-30 flex shrink-0 items-start justify-between p-3">
+        <div className="flex items-start gap-2">
+          <div className="flex flex-col gap-2">
+            <MuteToggle />
+            {pathname === '/menu' ? <InfoButton /> : null}
+          </div>
+          {/* Menu already is home, so it offers a way out to the start screen instead. */}
+          {pathname === '/menu' ? (
+            <PowerButton />
+          ) : pathname === '/' || pathname === '/intro' ? null : (
+            <HomeButton />
+          )}
+        </div>
+        <div className="flex items-start gap-2">
+          <SettingsButton />
+          <LanguageSwitcher />
+        </div>
       </header>
 
-      <main className="relative z-10 mx-auto w-full max-w-md flex-1 px-4 pb-10">
+      <main
+        className={`relative z-10 mx-auto flex min-h-0 w-full max-w-md flex-1 flex-col px-4 ${
+          allowScroll ? 'overflow-y-auto pb-8' : 'overflow-hidden pb-8'
+        }`}
+      >
         {children}
       </main>
 
       {!isSupabaseEnabled ? (
-        <p className="relative z-10 pb-3 text-center text-[11px] text-white/45">
+        <p className="pointer-events-none absolute inset-x-0 bottom-1.5 z-10 text-center text-[11px] text-white/45">
           {t('common.localMode')}
         </p>
       ) : null}

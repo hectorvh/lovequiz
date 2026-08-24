@@ -1,13 +1,13 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { GAME_PIN } from '../config';
 import { Card, GhostButton, PrimaryButton } from './ui';
 
 /**
- * Soft lock only. The PIN is compared client-side by design — it keeps Fernanda
- * out of the settings screen, nothing more.
+ * Soft lock only. The PIN is compared client-side by design — it gates Play
+ * and Settings on this shared device, nothing more.
  */
-const PIN = '1996';
 
 export default function PinModal({
   onSuccess,
@@ -21,7 +21,7 @@ export default function PinModal({
   const [error, setError] = useState(false);
 
   const submit = () => {
-    if (value === PIN) {
+    if (value === GAME_PIN) {
       onSuccess();
       return;
     }

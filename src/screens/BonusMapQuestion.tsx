@@ -58,6 +58,7 @@ export default function BonusMapQuestion({ onContinue }: { onContinue: (meters: 
     });
 
     mapRef.current = map;
+    requestAnimationFrame(() => map.invalidateSize());
 
     return () => {
       map.remove();
@@ -88,22 +89,24 @@ export default function BonusMapQuestion({ onContinue }: { onContinue: (meters: 
   const answered = distance !== null;
 
   return (
-    <div className="pt-2">
-      <Card className="!p-4">
-        <div className="mb-2.5 flex items-center justify-between">
+    <div className="flex min-h-0 flex-1 flex-col">
+      <Card className="flex min-h-0 flex-1 flex-col overflow-hidden !p-3.5">
+        <div className="mb-2 flex shrink-0 items-center justify-between">
           <Tag>{t('bonus.tag')}</Tag>
         </div>
 
-        <p className="font-display mb-1 text-lg leading-snug text-ink">{t('bonus.prompt')}</p>
-        <p className="mb-3 text-[11.5px] leading-snug text-ink-soft">{t('bonus.noScore')}</p>
+        <p className="font-display mb-1 shrink-0 text-[clamp(0.95rem,2.5vh,1.15rem)] leading-snug text-ink">
+          {t('bonus.prompt')}
+        </p>
+        <p className="mb-2 shrink-0 text-[11.5px] leading-snug text-ink-soft">{t('bonus.noScore')}</p>
 
         <div
           ref={containerRef}
-          className="h-72 w-full overflow-hidden rounded-2xl border border-card-line"
+          className="min-h-40 w-full flex-1 overflow-hidden rounded-2xl border border-card-line"
         />
 
         {answered ? (
-          <div className="animate-rise mt-3 rounded-xl bg-good-bg px-3.5 py-3 text-[13px] leading-relaxed text-[#204623]">
+          <div className="animate-rise mt-2 shrink-0 rounded-xl bg-good-bg px-3 py-2 text-[12px] leading-snug text-[#204623]">
             <p className="font-semibold">
               {t('bonus.resultKm', { km: formatKilometers(distance, i18n.language) })}
             </p>
@@ -111,10 +114,10 @@ export default function BonusMapQuestion({ onContinue }: { onContinue: (meters: 
             <p className="mt-1 opacity-80">{t('bonus.reveal')}</p>
           </div>
         ) : (
-          <p className="mt-3 text-center text-[11.5px] text-ink-soft">{t('bonus.hint')}</p>
+          <p className="mt-2 shrink-0 text-center text-[11.5px] text-ink-soft">{t('bonus.hint')}</p>
         )}
 
-        <div className="mt-3">
+        <div className="mt-2 shrink-0">
           {answered ? (
             <PrimaryButton onClick={() => onContinue(distance)}>
               {t('common.continue')}

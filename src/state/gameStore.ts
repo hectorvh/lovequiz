@@ -5,6 +5,7 @@ import {
   FERNANDA_GROUPS,
   PUNISHMENT_ORDER,
   emptyTally,
+  isFernandaGroup,
   playerForGroup,
   type AnswerRecord,
   type GroupId,
@@ -15,6 +16,7 @@ import {
   type ReciprocalQuestion,
   type Tally,
 } from '../types';
+import { ensurePlayQuestionIds } from '../data/questions';
 import { STORE_KEY, flushGroupToDatabase } from './persistence';
 import { setGameFlag, type GroupCommit } from '../lib/db';
 
@@ -27,7 +29,7 @@ export interface QuizDraftItem {
   correctOption: 'A' | 'B' | 'C' | 'D' | null;
 }
 
-export const RECIPROCAL_QUIZ_LENGTH = 6;
+export const RECIPROCAL_QUIZ_LENGTH = 5;
 
 export const emptyDraftItem = (): QuizDraftItem => ({
   questionText: '',
@@ -38,6 +40,8 @@ export const emptyDraftItem = (): QuizDraftItem => ({
 interface InProgressGroup {
   answers: AnswerRecord[];
   bonusDistanceMeters: number | null;
+  /** Play order for this session. Fernanda groups: 5 unique IDs from the group's 8. */
+  questionIds: string[];
 }
 
 interface GameState {
@@ -55,6 +59,8 @@ interface GameState {
   bonusDistances: Record<string, number | null>;
   /** Live answers for a group still being played, so a refresh doesn't lose them. */
   inProgress: Record<string, InProgressGroup>;
+  /** Play-order IDs kept after a group finishes, so results match what was asked. */
+  playedQuestionIds: Record<string, string[]>;
 
   reciprocalQuiz: ReciprocalQuestion[];
   reciprocalQuizSaved: boolean;
@@ -93,6 +99,7 @@ const initialState: GameState = {
   answers: {},
   bonusDistances: {},
   inProgress: {},
+  playedQuestionIds: {},
   reciprocalQuiz: [],
   reciprocalQuizSaved: false,
   quizDraft: Array.from({ length: RECIPROCAL_QUIZ_LENGTH }, emptyDraftItem),
@@ -145,14 +152,37 @@ export const useGameStore = create<GameStore>()(
       startGroup: (groupId) =>
         set((state) => {
           const alreadyPlaying = state.inProgress[groupId];
-          if (alreadyPlaying) return state;
+          if (alreadyPlaying?.questionIds?.length) return state;
+
+          const questionIds = isFernandaGroup(groupId)
+            ? ensurePlayQuestionIds(
+                groupId,
+                alreadyPlaying?.questionIds,
+                alreadyPlaying?.answers.map((answer) => answer.questionId) ?? [],
+              )
+            : alreadyPlaying?.questionIds?.length
+              ? alreadyPlaying.questionIds
+              : state.reciprocalQuiz.map((question) => question.id);
+
+          if (alreadyPlaying) {
+            const keptAnswers = questionIds.flatMap((id) => {
+              const row = alreadyPlaying.answers.find((answer) => answer.questionId === id);
+              return row ? [row] : [];
+            });
+            return {
+              inProgress: {
+                ...state.inProgress,
+                [groupId]: { ...alreadyPlaying, questionIds, answers: keptAnswers },
+              },
+            };
+          }
 
           const previous = state.answers[groupId];
           if (!previous) {
             return {
               inProgress: {
                 ...state.inProgress,
-                [groupId]: { answers: [], bonusDistanceMeters: null },
+                [groupId]: { answers: [], bonusDistanceMeters: null, questionIds },
               },
             };
           }
@@ -160,6 +190,8 @@ export const useGameStore = create<GameStore>()(
           const player = playerForGroup(groupId);
           const remainingAnswers = { ...state.answers };
           delete remainingAnswers[groupId];
+          const remainingPlayed = { ...state.playedQuestionIds };
+          delete remainingPlayed[groupId];
 
           return {
             tallies: {
@@ -168,9 +200,10 @@ export const useGameStore = create<GameStore>()(
             },
             completedGroups: state.completedGroups.filter((id) => id !== groupId),
             answers: remainingAnswers,
+            playedQuestionIds: remainingPlayed,
             inProgress: {
               ...state.inProgress,
-              [groupId]: { answers: [], bonusDistanceMeters: null },
+              [groupId]: { answers: [], bonusDistanceMeters: null, questionIds },
             },
           };
         }),
@@ -178,7 +211,11 @@ export const useGameStore = create<GameStore>()(
       answerQuestion: (groupId, question, selectedIndex) => {
         const state = get();
         const player = playerForGroup(groupId);
-        const current = state.inProgress[groupId] ?? { answers: [], bonusDistanceMeters: null };
+        const current = state.inProgress[groupId] ?? {
+          answers: [],
+          bonusDistanceMeters: null,
+          questionIds: [],
+        };
 
         if (current.answers.some((a) => a.questionId === question.id)) return null;
 
@@ -225,6 +262,7 @@ export const useGameStore = create<GameStore>()(
           const current = state.inProgress[groupId] ?? {
             answers: [],
             bonusDistanceMeters: null,
+            questionIds: [],
           };
           return {
             inProgress: {
@@ -243,8 +281,14 @@ export const useGameStore = create<GameStore>()(
         const remaining = { ...state.inProgress };
         delete remaining[groupId];
 
+        const questionIds =
+          inProgress.questionIds?.length > 0
+            ? inProgress.questionIds
+            : inProgress.answers.map((answer) => answer.questionId);
+
         set({
           answers: { ...state.answers, [groupId]: inProgress.answers },
+          playedQuestionIds: { ...state.playedQuestionIds, [groupId]: questionIds },
           bonusDistances: {
             ...state.bonusDistances,
             [groupId]: inProgress.bonusDistanceMeters,
@@ -266,6 +310,7 @@ export const useGameStore = create<GameStore>()(
           player,
           groupId,
           answers: inProgress.answers,
+          questionIds,
           hearts: groupTally.hearts,
           punishments: groupTally.punishments,
           bonusDistanceMeters: inProgress.bonusDistanceMeters,
@@ -283,8 +328,27 @@ export const useGameStore = create<GameStore>()(
         }),
 
       saveReciprocalQuizLocally: (questions) => {
-        set({ reciprocalQuiz: questions, reciprocalQuizSaved: true });
+        // Replaces the in-session quiz so Hector plays the new set. Older
+        // rows in Supabase are left alone — we only ever insert.
+        set((state) => {
+          const { hector: _hectorAnswers, ...otherAnswers } = state.answers;
+          const { hector: _hectorBonus, ...otherBonus } = state.bonusDistances;
+          const { hector: _hectorProgress, ...otherProgress } = state.inProgress;
+          const { hector: _hectorPlayed, ...otherPlayed } = state.playedQuestionIds;
+          return {
+            reciprocalQuiz: questions,
+            reciprocalQuizSaved: true,
+            quizDraft: Array.from({ length: RECIPROCAL_QUIZ_LENGTH }, emptyDraftItem),
+            completedGroups: state.completedGroups.filter((id) => id !== 'hector'),
+            answers: otherAnswers,
+            bonusDistances: otherBonus,
+            inProgress: otherProgress,
+            playedQuestionIds: otherPlayed,
+            tallies: { ...state.tallies, hector: emptyTally() },
+          };
+        });
         pushFlag('reciprocal_quiz_saved', true);
+        pushFlag('hector_quiz_complete', false);
       },
 
       setPhotoTaken: (taken) => {
@@ -297,7 +361,8 @@ export const useGameStore = create<GameStore>()(
        * rows are never touched, and completion flags stay intact so the menu
        * gating and the final summary keep working.
        */
-      clearAnswersLocally: () => set({ answers: {}, bonusDistances: {}, inProgress: {} }),
+      clearAnswersLocally: () =>
+        set({ answers: {}, bonusDistances: {}, inProgress: {}, playedQuestionIds: {} }),
 
       resetPhotoGate: () => {
         set({ photoTaken: false });
@@ -316,6 +381,7 @@ export const useGameStore = create<GameStore>()(
           answers: {},
           bonusDistances: {},
           inProgress: {},
+          playedQuestionIds: {},
           reciprocalQuiz: [],
           reciprocalQuizSaved: false,
           quizDraft: Array.from({ length: RECIPROCAL_QUIZ_LENGTH }, emptyDraftItem),
@@ -323,7 +389,36 @@ export const useGameStore = create<GameStore>()(
         });
       },
     }),
-    { name: STORE_KEY, version: 1 },
+    {
+      name: STORE_KEY,
+      version: 3,
+      migrate: (persisted) => {
+        const state = persisted as GameState;
+        const draft = Array.isArray(state.quizDraft) ? state.quizDraft : [];
+        const inProgress = Object.fromEntries(
+          Object.entries(state.inProgress ?? {}).map(([id, group]) => [
+            id,
+            {
+              answers: group.answers ?? [],
+              bonusDistanceMeters: group.bonusDistanceMeters ?? null,
+              questionIds: group.questionIds ?? [],
+            },
+          ]),
+        );
+        return {
+          ...state,
+          inProgress,
+          playedQuestionIds: state.playedQuestionIds ?? {},
+          quizDraft: [
+            ...draft.slice(0, RECIPROCAL_QUIZ_LENGTH),
+            ...Array.from(
+              { length: Math.max(0, RECIPROCAL_QUIZ_LENGTH - draft.length) },
+              emptyDraftItem,
+            ),
+          ],
+        };
+      },
+    },
   ),
 );
 

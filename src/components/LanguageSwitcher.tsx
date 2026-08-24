@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { LOCALE_LABELS } from '../i18n';
 import { LOCALES, type Locale } from '../types';
 import { useGameStore } from '../state/gameStore';
+import { chromeButtonClass } from './ui';
 
 export default function LanguageSwitcher() {
   const { t } = useTranslation();
@@ -33,7 +34,7 @@ export default function LanguageSwitcher() {
         onClick={() => setOpen((v) => !v)}
         aria-label={t('common.language')}
         aria-expanded={open}
-        className="grid h-11 w-11 place-items-center rounded-full border border-white/15 bg-black/35 text-lg opacity-60 backdrop-blur transition active:scale-95 hover:bg-black/50"
+        className={`${chromeButtonClass} text-lg`}
       >
         <span aria-hidden>{LOCALE_LABELS[locale].flag}</span>
       </button>

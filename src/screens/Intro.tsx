@@ -1,10 +1,30 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
-import { PrimaryButton } from '../components/ui';
+import { chromeButtonClass, introTypeClass } from '../components/ui';
 import { QUESTION_DURATION_SECONDS } from '../config';
-import { PUNISHMENT_EMOJI, PUNISHMENT_ORDER } from '../types';
+import {
+  PUNISHMENT_EMOJI,
+  PUNISHMENT_ORDER,
+  type PunishmentKey,
+} from '../types';
+
+const EMPHASIS_PATTERN = /(Fernanda|Héctor|Hector|PREGUNTAS|QUESTIONS|FRAGEN)/g;
+const EMPHASIS_TOKEN = /^(Fernanda|Héctor|Hector|PREGUNTAS|QUESTIONS|FRAGEN)$/;
+
+/** Names and the QUESTIONS word sit 50% larger than the surrounding intro type. */
+function emphasizeIntroWords(text: string): ReactNode {
+  return text.split(EMPHASIS_PATTERN).map((part, index) =>
+    EMPHASIS_TOKEN.test(part) ? (
+      <span key={index} className="inline-block text-[1.5em] leading-none">
+        {part}
+      </span>
+    ) : (
+      part
+    ),
+  );
+}
 
 interface TimedStep {
   kind: 'text';
@@ -18,6 +38,105 @@ interface PunishmentStep {
 
 type Step = TimedStep | PunishmentStep;
 
+const CASTIGO_FLIP_MS = 550;
+const CASTIGO_AUTO_START_MS = 950;
+const CASTIGO_AUTO_STAGGER_MS = 750;
+
+function emptyFlipState(): Record<PunishmentKey, boolean> {
+  return {
+    beso: false,
+    baile: false,
+    masaje: false,
+    secreto: false,
+  };
+}
+
+function PunishmentFlipCard({
+  punishmentKey,
+  flipped,
+  interactive,
+  onToggle,
+}: {
+  punishmentKey: PunishmentKey;
+  flipped: boolean;
+  interactive: boolean;
+  onToggle: () => void;
+}) {
+  const { t } = useTranslation();
+  const label = t(`punishments.${punishmentKey}Full`);
+
+  return (
+    <button
+      type="button"
+      onClick={onToggle}
+      disabled={!interactive}
+      aria-label={label}
+      aria-pressed={flipped}
+      className="castigo-scene pointer-events-auto h-36 w-full disabled:opacity-100"
+    >
+      <span className={`castigo-card ${flipped ? 'is-flipped' : ''}`}>
+        <span className="castigo-face rounded-2xl border border-white/15 bg-black/40 backdrop-blur">
+          <span className="text-5xl" aria-hidden>
+            {PUNISHMENT_EMOJI[punishmentKey]}
+          </span>
+        </span>
+        <span className="castigo-face castigo-face-back rounded-2xl border border-white/15 bg-black/40 px-2.5 text-center backdrop-blur">
+          <span className="font-display text-[clamp(1.15rem,4.2vw,1.75rem)] leading-tight font-semibold text-[#faf1e8]">
+            {label}
+          </span>
+        </span>
+      </span>
+    </button>
+  );
+}
+
+/** Auto-flips icon → text once each, in order, then leaves the cards free to tap. */
+function PunishmentBoard() {
+  const [flipped, setFlipped] = useState(emptyFlipState);
+  const [autoDone, setAutoDone] = useState(false);
+
+  useEffect(() => {
+    const timers: number[] = [];
+    const lastIndex = PUNISHMENT_ORDER.length - 1;
+
+    PUNISHMENT_ORDER.forEach((key, index) => {
+      timers.push(
+        window.setTimeout(() => {
+          setFlipped((current) => ({ ...current, [key]: true }));
+        }, CASTIGO_AUTO_START_MS + index * CASTIGO_AUTO_STAGGER_MS),
+      );
+    });
+
+    timers.push(
+      window.setTimeout(
+        () => setAutoDone(true),
+        CASTIGO_AUTO_START_MS + lastIndex * CASTIGO_AUTO_STAGGER_MS + CASTIGO_FLIP_MS,
+      ),
+    );
+
+    return () => {
+      for (const timer of timers) window.clearTimeout(timer);
+    };
+  }, []);
+
+  return (
+    <ul className="animate-scroll-up grid w-full max-w-sm grid-cols-2 gap-3">
+      {PUNISHMENT_ORDER.map((key) => (
+        <li key={key}>
+          <PunishmentFlipCard
+            punishmentKey={key}
+            flipped={flipped[key]}
+            interactive={autoDone}
+            onToggle={() =>
+              setFlipped((current) => ({ ...current, [key]: !current[key] }))
+            }
+          />
+        </li>
+      ))}
+    </ul>
+  );
+}
+
 function CircleButton({
   label,
   disabled,
@@ -27,7 +146,7 @@ function CircleButton({
   label: string;
   disabled?: boolean;
   onClick: () => void;
-  children: string;
+  children: ReactNode;
 }) {
   return (
     <button
@@ -35,9 +154,11 @@ function CircleButton({
       onClick={onClick}
       disabled={disabled}
       aria-label={label}
-      className="grid h-11 w-11 place-items-center rounded-full border border-white/15 bg-black/35 text-2xl leading-none text-[#faf1e8] backdrop-blur transition active:scale-95 hover:bg-black/50 disabled:cursor-not-allowed disabled:opacity-35 disabled:active:scale-100"
+      className={`${chromeButtonClass} text-2xl leading-none`}
     >
-      <span aria-hidden>{children}</span>
+      <span aria-hidden className="grid place-items-center">
+        {children}
+      </span>
     </button>
   );
 }
@@ -107,29 +228,21 @@ export default function Intro() {
         {step.kind === 'text' ? (
           <p
             key={index}
-            className="animate-rise font-display text-3xl leading-tight font-semibold text-[#faf1e8] italic drop-shadow-[0_3px_14px_rgba(0,0,0,0.7)]"
+            className={`animate-scroll-up ${introTypeClass} text-3xl leading-tight text-[#faf1e8] drop-shadow-[0_3px_14px_rgba(0,0,0,0.7)]`}
           >
-            {step.text}
+            {emphasizeIntroWords(step.text)}
           </p>
         ) : (
           <>
-            <ul className="animate-rise grid w-full max-w-sm grid-cols-2 gap-3">
-              {PUNISHMENT_ORDER.map((key) => (
-                <li
-                  key={key}
-                  className="flex aspect-square flex-col items-center justify-center rounded-2xl border border-white/15 bg-black/40 px-3 text-center backdrop-blur"
-                >
-                  <span className="text-3xl" aria-hidden>
-                    {PUNISHMENT_EMOJI[key]}
-                  </span>
-                  <span className="mt-2 text-[13px] leading-snug font-semibold text-[#faf1e8]">
-                    {t(`punishments.${key}Full`)}
-                  </span>
-                </li>
-              ))}
-            </ul>
-            <div className="pointer-events-auto mt-6 w-full max-w-sm">
-              <PrimaryButton onClick={() => navigate('/menu')}>{t('common.continue')}</PrimaryButton>
+            <PunishmentBoard />
+            <div className="pointer-events-auto mt-6 flex justify-center">
+              <button
+                type="button"
+                onClick={() => navigate('/menu')}
+                className={`${introTypeClass} rounded-xl bg-wine px-9 py-4.5 text-[1.6875rem] leading-none text-[#fbe9ee] transition active:scale-[0.98] hover:bg-wine-deep`}
+              >
+                {t('common.continue')}
+              </button>
             </div>
           </>
         )}
@@ -144,7 +257,32 @@ export default function Intro() {
           disabled={isLast}
           onClick={() => setPaused((value) => !value)}
         >
-          {paused ? '▶' : '⏸'}
+          {paused ? (
+            <svg viewBox="0 0 24 24" className="h-5 w-5" fill="currentColor" aria-hidden>
+              <path d="M8 5.14v13.72c0 .7.76 1.13 1.35.76l10.4-6.86a.9.9 0 000-1.52L9.35 4.38A.9.9 0 008 5.14z" />
+            </svg>
+          ) : (
+            <svg viewBox="0 0 24 24" className="h-5 w-5" fill="currentColor" aria-hidden>
+              <rect x="6.5" y="5" width="3.5" height="14" rx="1" />
+              <rect x="14" y="5" width="3.5" height="14" rx="1" />
+            </svg>
+          )}
+        </CircleButton>
+        <CircleButton label={t('intro.toMenu')} onClick={() => navigate('/menu')}>
+          <svg
+            viewBox="0 0 24 24"
+            className="h-5 w-5"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth={1.6}
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <rect x="4" y="4" width="7" height="7" rx="1.6" />
+            <rect x="13" y="4" width="7" height="7" rx="1.6" />
+            <rect x="4" y="13" width="7" height="7" rx="1.6" />
+            <rect x="13" y="13" width="7" height="7" rx="1.6" />
+          </svg>
         </CircleButton>
       </div>
     </>

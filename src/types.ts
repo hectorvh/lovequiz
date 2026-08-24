@@ -7,6 +7,9 @@ export type GroupId = '1' | '2' | '3' | 'hector';
 
 export const FERNANDA_GROUPS = ['1', '2', '3'] as const satisfies readonly GroupId[];
 
+/** Groups are keyed by number internally but always shown to the player as A / B / C. */
+export const GROUP_LETTERS: Record<'1' | '2' | '3', string> = { '1': 'A', '2': 'B', '3': 'C' };
+
 export type Player = 'fernanda' | 'hector';
 
 export type PunishmentKey = 'beso' | 'baile' | 'masaje' | 'secreto';
@@ -32,7 +35,7 @@ export interface Question {
 export interface AnswerRecord {
   groupId: GroupId;
   questionId: string;
-  /** null means the 5s timer expired with no selection. */
+  /** null means the question timer expired with no selection. */
   selectedIndex: number | null;
   isCorrect: boolean;
   punishmentAssigned: PunishmentKey | null;
@@ -49,7 +52,7 @@ export const emptyTally = (): Tally => ({
   punishments: { beso: 0, baile: 0, masaje: 0, secreto: 0 },
 });
 
-/** One of the 6 questions Fernanda writes for Hector. Stored verbatim, never translated. */
+/** One of the questions Fernanda writes for Hector. Stored verbatim, never translated. */
 export interface ReciprocalQuestion {
   id: string;
   questionText: string;
@@ -76,3 +79,6 @@ export const isFernandaGroup = (id: string): id is '1' | '2' | '3' =>
 
 export const playerForGroup = (groupId: GroupId): Player =>
   groupId === 'hector' ? 'hector' : 'fernanda';
+
+export const groupLetter = (groupId: GroupId): string =>
+  isFernandaGroup(groupId) ? GROUP_LETTERS[groupId] : '';

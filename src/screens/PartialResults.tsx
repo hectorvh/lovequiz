@@ -6,7 +6,7 @@ import HeartCounter from '../components/HeartCounter';
 import PunishmentCounters from '../components/PunishmentCounters';
 import { Card, PrimaryButton, ScreenTitle } from '../components/ui';
 import { computeTally, selectGroupAnswers, useGameStore } from '../state/gameStore';
-import { isFernandaGroup, playerForGroup, type GroupId } from '../types';
+import { groupLetter, isFernandaGroup, playerForGroup, type GroupId } from '../types';
 
 export default function PartialResults() {
   const { groupId: rawGroupId } = useParams<{ groupId: string }>();
@@ -20,11 +20,11 @@ export default function PartialResults() {
   const totals = useGameStore((s) => s.tallies[player]);
 
   const title = isFernandaGroup(groupId)
-    ? t('partial.title', { n: groupId })
+    ? t('partial.title', { n: groupLetter(groupId) })
     : t('partial.titleHector');
 
   return (
-    <div className="pt-2">
+    <div className="flex h-full min-h-0 flex-col overflow-hidden pt-1">
       <ScreenTitle title={title} />
 
       <Card>

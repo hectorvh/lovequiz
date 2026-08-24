@@ -1,4 +1,4 @@
-import { Suspense, lazy, useEffect, useMemo, useState } from 'react';
+import { Suspense, lazy, useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
@@ -7,12 +7,13 @@ import PunishmentCounters from '../components/PunishmentCounters';
 import TimerBar from '../components/TimerBar';
 import { Card, PrimaryButton, Tag } from '../components/ui';
 import { QUESTION_DURATION_MS } from '../config';
-import { GROUP_WITH_BONUS, getGroupQuestions } from '../data/questions';
+import { GROUP_WITH_BONUS, questionsForIds } from '../data/questions';
 import { playSfx } from '../lib/sfx';
 import { useGameStore } from '../state/gameStore';
 import {
   OPTION_KEYS,
   PUNISHMENT_EMOJI,
+  groupLetter,
   isFernandaGroup,
   playerForGroup,
   type GroupId,
@@ -36,7 +37,6 @@ export default function QuestionPlay() {
   const { t } = useTranslation();
 
   const locale = useGameStore((s) => s.locale);
-  const muted = useGameStore((s) => s.muted);
   const reciprocalQuiz = useGameStore((s) => s.reciprocalQuiz);
   const startGroup = useGameStore((s) => s.startGroup);
   const answerQuestion = useGameStore((s) => s.answerQuestion);
@@ -48,6 +48,8 @@ export default function QuestionPlay() {
   const player = playerForGroup(groupId);
   const tally = useGameStore((s) => s.tallies[player]);
 
+  const questionIds = useGameStore((s) => s.inProgress[groupId]?.questionIds);
+
   const questions: Question[] = useMemo(() => {
     if (groupId === 'hector') {
       // Fernanda's own wording, always rendered as written — never translated.
@@ -58,8 +60,11 @@ export default function QuestionPlay() {
         correctIndex: OPTION_KEYS.indexOf(q.correctOption),
       }));
     }
-    return isFernandaGroup(groupId) ? getGroupQuestions(groupId, locale) : [];
-  }, [groupId, locale, reciprocalQuiz]);
+    if (isFernandaGroup(groupId) && questionIds?.length) {
+      return questionsForIds(groupId, locale, questionIds);
+    }
+    return [];
+  }, [groupId, locale, reciprocalQuiz, questionIds]);
 
   // Resume from however many answers are already banked for this group.
   const [cursor, setCursor] = useState(
@@ -69,17 +74,50 @@ export default function QuestionPlay() {
   const [showBonus, setShowBonus] = useState(false);
   const [finishing, setFinishing] = useState(false);
 
+  const [hydrated, setHydrated] = useState(() => useGameStore.persist.hasHydrated());
+  const cursorSynced = useRef(false);
+  const sealedRef = useRef(false);
+
   useEffect(() => {
-    if (!isValidGroup) {
+    const unsub = useGameStore.persist.onFinishHydration(() => setHydrated(true));
+    if (useGameStore.persist.hasHydrated()) setHydrated(true);
+    return unsub;
+  }, []);
+
+  useEffect(() => {
+    if (!hydrated) return;
+    sealedRef.current =
+      isFernandaGroup(groupId) &&
+      useGameStore.getState().completedGroups.includes(groupId);
+    if (!isValidGroup || sealedRef.current) {
       navigate('/menu', { replace: true });
       return;
     }
     startGroup(groupId);
-  }, [groupId, isValidGroup, navigate, startGroup]);
+  }, [hydrated, groupId, isValidGroup, navigate, startGroup]);
 
   useEffect(() => {
-    if (isValidGroup && questions.length === 0) navigate('/menu', { replace: true });
-  }, [isValidGroup, questions.length, navigate]);
+    cursorSynced.current = false;
+  }, [groupId]);
+
+  useEffect(() => {
+    if (cursorSynced.current || questions.length === 0) return;
+    cursorSynced.current = true;
+    const answered = useGameStore.getState().inProgress[groupId]?.answers.length ?? 0;
+    setCursor(Math.min(answered, questions.length));
+  }, [groupId, questions.length]);
+
+  useEffect(() => {
+    if (!hydrated) return;
+    if (
+      groupId === 'hector' &&
+      isValidGroup &&
+      !sealedRef.current &&
+      reciprocalQuiz.length === 0
+    ) {
+      navigate('/menu', { replace: true });
+    }
+  }, [hydrated, groupId, isValidGroup, reciprocalQuiz.length, navigate]);
 
   const question = questions[cursor];
   const hasBonus = groupId === GROUP_WITH_BONUS;
@@ -99,8 +137,8 @@ export default function QuestionPlay() {
     const punishment = answerQuestion(groupId, question, selectedIndex);
     const isCorrect = selectedIndex !== null && selectedIndex === question.correctIndex;
 
-    if (isCorrect) playSfx('correct', muted);
-    else playSfx(selectedIndex === null ? 'timeout' : 'incorrect', muted);
+    if (isCorrect) playSfx('correct', false);
+    else playSfx(selectedIndex === null ? 'timeout' : 'incorrect', false);
 
     setFeedback({ selectedIndex, isCorrect, punishment });
   };
@@ -120,7 +158,11 @@ export default function QuestionPlay() {
 
   if (showBonus) {
     return (
-      <Suspense fallback={<Card className="mt-2 !p-6 text-center text-sm text-ink-soft">…</Card>}>
+      <Suspense
+        fallback={
+          <Card className="mt-1 !p-6 text-center text-sm text-ink-soft">…</Card>
+        }
+      >
         <BonusMapQuestion onContinue={(meters) => void finishGroup(meters)} />
       </Suspense>
     );
@@ -129,27 +171,27 @@ export default function QuestionPlay() {
   if (!question) return null;
 
   const heading =
-    groupId === 'hector' ? t('play.hectorTitle') : t('play.group', { n: groupId });
+    groupId === 'hector' ? t('play.hectorTitle') : t('play.group', { n: groupLetter(groupId) });
 
   return (
-    <div className="pt-2">
-      <Card className="!p-5">
-        <div className="mb-1 flex items-center justify-between gap-2">
+    <div className="flex min-h-0 flex-1 flex-col justify-start">
+      <Card className="flex w-full max-h-full min-h-0 flex-col overflow-hidden !p-3.5">
+        <div className="mb-2 flex shrink-0 items-center justify-between gap-2">
           <Tag>{heading}</Tag>
-          <span className="text-[11px] font-semibold text-ink-soft">
+          <span className="font-display text-sm font-semibold tabular-nums text-ink-soft">
             {t('play.progress', { current: cursor + 1, total: questions.length })}
           </span>
         </div>
 
-        <div className="mb-3 min-h-7">
+        <div className="mb-2 min-h-6 shrink-0">
           <HeartCounter hearts={tally.hearts} />
         </div>
 
-        <div className="mb-4">
+        <div className="mb-2 shrink-0">
           <PunishmentCounters counts={tally.punishments} highlight={feedback?.punishment} />
         </div>
 
-        <div className="mb-4">
+        <div className="mb-2 shrink-0">
           <TimerBar
             durationMs={QUESTION_DURATION_MS}
             running={feedback === null}
@@ -158,9 +200,11 @@ export default function QuestionPlay() {
           />
         </div>
 
-        <p className="font-display mb-4 text-xl leading-snug text-ink">{question.text}</p>
+        <p className="font-display mb-2 shrink-0 text-[clamp(0.95rem,2.5vh,1.2rem)] leading-snug text-ink">
+          {question.text}
+        </p>
 
-        <div className="flex flex-col gap-2.5">
+        <div className="flex min-h-0 flex-col gap-1.5 overflow-hidden">
           {question.options.map((option, index) => {
             const isChosen = feedback?.selectedIndex === index;
             const isRight = index === question.correctIndex;
@@ -178,7 +222,7 @@ export default function QuestionPlay() {
                 type="button"
                 disabled={feedback !== null}
                 onClick={() => resolve(index)}
-                className={`rounded-xl border-[1.5px] px-3.5 py-3 text-left text-[14.5px] text-ink transition ${tone}`}
+                className={`rounded-xl border-[1.5px] px-3 py-[clamp(0.45rem,1.4vh,0.75rem)] text-left text-[clamp(0.8rem,1.8vh,0.95rem)] leading-snug text-ink transition ${tone}`}
               >
                 {option}
               </button>
@@ -188,7 +232,7 @@ export default function QuestionPlay() {
 
         {feedback ? (
           <div
-            className={`animate-rise mt-3.5 rounded-xl px-3.5 py-3 text-[13px] leading-relaxed ${
+            className={`animate-rise mt-2 shrink-0 rounded-xl px-3 py-2 text-[12px] leading-snug ${
               feedback.isCorrect ? 'bg-good-bg text-[#204623]' : 'bg-bad-bg text-[#5c1416]'
             }`}
           >
@@ -207,7 +251,7 @@ export default function QuestionPlay() {
                   {t('play.correctWas', { answer: question.options[question.correctIndex] })}
                 </span>
                 {feedback.punishment ? (
-                  <span className="mt-1 block font-semibold">
+                  <span className="mt-0.5 block font-semibold">
                     {t('play.punishmentAdded', {
                       name: `${PUNISHMENT_EMOJI[feedback.punishment]} ${t(
                         `punishments.${feedback.punishment}Full`,
@@ -221,7 +265,7 @@ export default function QuestionPlay() {
         ) : null}
 
         {feedback ? (
-          <div className="mt-3.5">
+          <div className="mt-2 shrink-0">
             <PrimaryButton onClick={goNext} disabled={finishing}>
               {isLastQuestion && !hasBonus ? t('play.finish') : t('common.continue')}
             </PrimaryButton>

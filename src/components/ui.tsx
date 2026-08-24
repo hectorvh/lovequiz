@@ -18,7 +18,7 @@ export function Card({
 
 export function ScreenTitle({ eyebrow, title }: { eyebrow?: string; title: string }) {
   return (
-    <div className="mb-5 text-center">
+    <div className="mb-3 text-center">
       {eyebrow ? (
         <p className="mb-2 text-[11px] font-semibold tracking-[0.18em] text-gold uppercase">
           {eyebrow}
@@ -50,6 +50,13 @@ export function GhostButton({ className = '', ...props }: ButtonProps) {
     />
   );
 }
+
+/** Display face used on intro copy and on the matching action labels. */
+export const introTypeClass = 'font-display font-semibold italic';
+
+/** Shared chrome for mute / settings / language — 70% opaque circular buttons. */
+export const chromeButtonClass =
+  'grid h-11 w-11 place-items-center rounded-full border border-white/15 bg-black/35 text-[#faf1e8] opacity-70 backdrop-blur transition active:scale-95 hover:bg-black/50 disabled:cursor-not-allowed disabled:opacity-35 disabled:active:scale-100';
 
 export function Tag({ children }: { children: ReactNode }) {
   return (

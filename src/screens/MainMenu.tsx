@@ -2,16 +2,19 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
-import PinModal from '../components/PinModal';
 import Toast from '../components/Toast';
-import { Card } from '../components/ui';
+import { chromeButtonClass, introTypeClass } from '../components/ui';
 import {
   selectAllGroupsComplete,
   selectAnyGroupComplete,
   selectHectorQuizComplete,
   useGameStore,
 } from '../state/gameStore';
-import { FERNANDA_GROUPS } from '../types';
+import { FERNANDA_GROUPS, GROUP_LETTERS } from '../types';
+
+const introLabelClass = `${introTypeClass} text-center text-3xl leading-tight text-[#faf1e8] drop-shadow-[0_3px_14px_rgba(0,0,0,0.7)]`;
+
+const menuActionClass = `${introTypeClass} rounded-xl px-6 py-3 text-lg leading-snug whitespace-nowrap transition active:scale-[0.98]`;
 
 export default function MainMenu() {
   const { t } = useTranslation();
@@ -25,16 +28,11 @@ export default function MainMenu() {
   const hectorQuizComplete = useGameStore(selectHectorQuizComplete);
 
   const [toast, setToast] = useState<string | null>(null);
-  const [pinOpen, setPinOpen] = useState(false);
 
   const photoUnlocked = allGroupsComplete && hectorQuizComplete;
 
   const onCreateQuiz = () => {
-    if (!allGroupsComplete) {
-      setToast(t('menu.lockedCreate'));
-      return;
-    }
-    navigate(reciprocalQuizSaved ? '/play/hector' : '/create-quiz');
+    navigate('/create-quiz');
   };
 
   const onResults = () => {
@@ -46,89 +44,114 @@ export default function MainMenu() {
   };
 
   return (
-    <div className="pt-2">
-      <Card>
-        <p className="mb-6 text-center font-display text-lg leading-snug font-semibold text-ink">
-          {t('menu.prompt')}
-        </p>
+    <div className="flex h-full min-h-0 flex-col items-center overflow-hidden px-2 text-center">
+      <div className="flex min-h-0 flex-1 flex-col items-center justify-center">
+        <p className={`${introLabelClass} mb-8`}>{t('menu.prompt')}</p>
 
-        <div className="mb-7 flex justify-center gap-4">
+        <div className="flex justify-center gap-4">
           {FERNANDA_GROUPS.map((groupId) => {
             const done = completedGroups.includes(groupId);
+            const label = t('menu.group', { n: GROUP_LETTERS[groupId] });
             return (
               <button
                 key={groupId}
                 type="button"
-                onClick={() => navigate(`/play/${groupId}`)}
-                aria-label={t('menu.group', { n: groupId })}
-                className={`grid h-20 w-20 place-items-center rounded-full border-2 font-display text-2xl font-semibold shadow-md transition active:scale-95 ${
+                onClick={() => {
+                  if (done) {
+                    setToast(t('menu.groupLocked'));
+                    return;
+                  }
+                  navigate(`/play/${groupId}`);
+                }}
+                aria-disabled={done}
+                aria-label={done ? `${label} — ${t('menu.groupDone')}` : label}
+                className={`grid h-20 w-20 place-items-center rounded-full border-2 shadow-md transition active:scale-95 ${
                   done
-                    ? 'border-gold bg-gold/15 text-gold-deep'
+                    ? 'border-good bg-good text-[#eaf3e7]'
                     : 'border-wine bg-wine text-[#fbe9ee] hover:bg-wine-deep'
                 }`}
               >
-                <span>{groupId}</span>
                 {done ? (
-                  <span className="-mt-1 text-[9px] tracking-wide uppercase">
-                    {t('menu.groupDone')}
+                  <svg
+                    aria-hidden
+                    viewBox="0 0 24 24"
+                    className="h-8 w-8"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth={2.4}
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="M5 12.5l4.5 4.5L19 7" />
+                  </svg>
+                ) : (
+                  <span className={`${introTypeClass} text-2xl leading-none`}>
+                    {GROUP_LETTERS[groupId]}
                   </span>
-                ) : null}
+                )}
               </button>
             );
           })}
         </div>
 
-        <div className="space-y-2.5">
-          {/* aria-disabled rather than disabled: a tap still has to surface the reason. */}
+        {photoUnlocked ? (
           <button
             type="button"
-            onClick={onCreateQuiz}
-            aria-disabled={!allGroupsComplete}
-            className={`w-full rounded-xl bg-wine px-4 py-3.5 text-[14.5px] leading-snug font-semibold text-[#fbe9ee] transition active:scale-[0.98] ${
-              allGroupsComplete ? 'hover:bg-wine-deep' : 'opacity-45'
-            }`}
+            onClick={() => navigate(photoTaken ? '/summary' : '/photo')}
+            aria-label={t('menu.photo')}
+            className={`${chromeButtonClass} mt-6`}
           >
-            {reciprocalQuizSaved ? t('menu.startHector') : t('menu.createQuiz')}
-          </button>
-
-          <button
-            type="button"
-            onClick={onResults}
-            aria-disabled={!anyGroupComplete}
-            className={`w-full rounded-xl border-[1.5px] border-wine px-4 py-3 text-sm font-semibold text-wine transition active:scale-[0.98] ${
-              anyGroupComplete ? '' : 'opacity-45'
-            }`}
-          >
-            {t('menu.results')}
-          </button>
-        </div>
-
-        <div className="mt-6 flex items-center justify-center gap-3 border-t border-card-line pt-4">
-          <button
-            type="button"
-            onClick={() => setPinOpen(true)}
-            aria-label={t('menu.settings')}
-            className="grid h-11 w-11 place-items-center rounded-full border border-card-line bg-white text-lg transition active:scale-95 hover:bg-card-line/40"
-          >
-            <span aria-hidden>⚙️</span>
-          </button>
-
-          {photoUnlocked ? (
-            <button
-              type="button"
-              onClick={() => navigate(photoTaken ? '/summary' : '/photo')}
-              aria-label={t('menu.photo')}
-              className="animate-pop grid h-11 w-11 place-items-center rounded-full border border-gold bg-gold/20 text-lg transition active:scale-95 hover:bg-gold/35"
+            <svg
+              aria-hidden
+              viewBox="0 0 24 24"
+              className="h-5 w-5"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth={1.6}
+              strokeLinecap="round"
+              strokeLinejoin="round"
             >
-              <span aria-hidden>📷</span>
-            </button>
-          ) : null}
-        </div>
-      </Card>
+              <path d="M4.5 8.5h3l1.2-2h6.6l1.2 2H19.5A1.5 1.5 0 0121 10v8.5a1.5 1.5 0 01-1.5 1.5h-15A1.5 1.5 0 013 18.5V10a1.5 1.5 0 011.5-1.5z" />
+              <circle cx="12" cy="14.2" r="3.2" />
+            </svg>
+          </button>
+        ) : null}
+      </div>
 
-      {pinOpen ? (
-        <PinModal onSuccess={() => navigate('/settings')} onClose={() => setPinOpen(false)} />
-      ) : null}
+      {/*
+        inline-flex + items-stretch sizes the pair to the longer label so both
+        buttons share one width, then they sit on the bottom of the screen.
+      */}
+      <div className="mb-2 inline-flex w-auto flex-col items-stretch gap-2.5">
+        <button
+          type="button"
+          onClick={onCreateQuiz}
+          className={`${menuActionClass} bg-wine text-[#fbe9ee] hover:bg-wine-deep`}
+        >
+          {t('menu.createQuiz')}
+        </button>
+
+        {reciprocalQuizSaved ? (
+          <button
+            type="button"
+            onClick={() => navigate('/play/hector')}
+            className={`${menuActionClass} bg-wine text-[#fbe9ee] hover:bg-wine-deep`}
+          >
+            {t('menu.startHector')}
+          </button>
+        ) : null}
+
+        <button
+          type="button"
+          onClick={onResults}
+          aria-disabled={!anyGroupComplete}
+          className={`${menuActionClass} border-[1.5px] border-[#fbe9ee]/70 bg-transparent text-[#fbe9ee] ${
+            anyGroupComplete ? 'hover:bg-white/10' : 'opacity-45'
+          }`}
+        >
+          {t('menu.results')}
+        </button>
+      </div>
 
       <Toast message={toast} onDismiss={() => setToast(null)} />
     </div>

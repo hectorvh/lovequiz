@@ -23,6 +23,8 @@ export interface GroupCommit {
   player: Player;
   groupId: GroupId;
   answers: AnswerRecord[];
+  /** IDs in the order they were asked (5 of 8 for Fernanda groups). */
+  questionIds: string[];
   hearts: number;
   punishments: Record<PunishmentKey, number>;
   bonusDistanceMeters: number | null;
@@ -57,6 +59,7 @@ export async function commitGroup(commit: GroupCommit): Promise<DbResult> {
       hearts_earned: commit.hearts,
       punishments_by_type: commit.punishments,
       bonus_distance_meters: commit.bonusDistanceMeters,
+      question_ids: commit.questionIds,
       completed_at: commit.completedAt,
     });
     if (summaryError) throw summaryError;
@@ -67,15 +70,22 @@ export async function commitGroup(commit: GroupCommit): Promise<DbResult> {
   }
 }
 
+/**
+ * Inserts a new set of questions as one batch. Previous quiz rows are never
+ * deleted — the live game always reads the newest batch_id.
+ */
 export async function saveReciprocalQuiz(questions: ReciprocalQuestion[]): Promise<DbResult> {
   if (!supabase) return skipped;
   try {
+    const batchId = crypto.randomUUID();
     const { error } = await supabase.from('reciprocal_quiz_questions').insert(
-      questions.map((q) => ({
+      questions.map((q, index) => ({
         question_text: q.questionText,
         options: q.options,
         correct_option: q.correctOption,
         created_at: q.createdAt,
+        batch_id: batchId,
+        sort_order: index,
       })),
     );
     if (error) throw error;
@@ -88,20 +98,49 @@ export async function saveReciprocalQuiz(questions: ReciprocalQuestion[]): Promi
 export async function fetchReciprocalQuiz(): Promise<DbResult<ReciprocalQuestion[]>> {
   if (!supabase) return skipped;
   try {
+    const { data: latest, error: latestError } = await supabase
+      .from('reciprocal_quiz_questions')
+      .select('batch_id')
+      .order('created_at', { ascending: false })
+      .limit(1);
+    if (latestError) throw latestError;
+
+    const batchId = latest?.[0]?.batch_id as string | null | undefined;
+
+    const mapRows = (
+      data: {
+        id: unknown;
+        question_text: unknown;
+        options: unknown;
+        correct_option: unknown;
+        created_at: unknown;
+      }[] | null,
+    ): ReciprocalQuestion[] =>
+      (data ?? []).map((row) => ({
+        id: String(row.id),
+        questionText: row.question_text as string,
+        options: row.options as ReciprocalQuestion['options'],
+        correctOption: row.correct_option as ReciprocalQuestion['correctOption'],
+        createdAt: row.created_at as string,
+      }));
+
+    if (batchId) {
+      const { data, error } = await supabase
+        .from('reciprocal_quiz_questions')
+        .select('*')
+        .eq('batch_id', batchId)
+        .order('sort_order', { ascending: true });
+      if (error) throw error;
+      return { ok: true, data: mapRows(data) };
+    }
+
     const { data, error } = await supabase
       .from('reciprocal_quiz_questions')
       .select('*')
-      .order('created_at', { ascending: true });
+      .order('created_at', { ascending: false })
+      .limit(5);
     if (error) throw error;
-
-    const questions: ReciprocalQuestion[] = (data ?? []).map((row) => ({
-      id: String(row.id),
-      questionText: row.question_text as string,
-      options: row.options as ReciprocalQuestion['options'],
-      correctOption: row.correct_option as ReciprocalQuestion['correctOption'],
-      createdAt: row.created_at as string,
-    }));
-    return { ok: true, data: questions };
+    return { ok: true, data: mapRows([...(data ?? [])].reverse()) };
   } catch (error) {
     return { ok: false, error: message(error) };
   }

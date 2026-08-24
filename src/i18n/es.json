@@ -7,8 +7,11 @@
     "save": "Guardar",
     "cancel": "Cancelar",
     "close": "Cerrar",
-    "mute": "Silenciar música",
-    "unmute": "Activar música",
+    "mute": "Pausar música",
+    "unmute": "Reanudar música",
+    "home": "Inicio",
+    "power": "Pantalla de inicio",
+    "info": "Información",
     "language": "Idioma",
     "localMode": "Modo local: sin base de datos conectada."
   },
@@ -22,7 +25,8 @@
     "m4": "de PREGUNTAS!",
     "pause": "Pausar instrucciones",
     "resume": "Reanudar instrucciones",
-    "previous": "Instrucción anterior"
+    "previous": "Instrucción anterior",
+    "toMenu": "Ir al menú"
   },
   "instructions": {
     "m1": "Tienes {{seconds}} segundos para responder cada pregunta",
@@ -30,10 +34,11 @@
     "m3": "por cada pregunta incorrecta te ganarás uno de los 4 posibles castigos:"
   },
   "menu": {
-    "prompt": "Por favor selecciona un grupo de preguntas",
+    "prompt": "Selecciona un grupo de preguntas",
     "group": "Grupo {{n}}",
     "groupDone": "Completado",
-    "createQuiz": "Crea tu propio cuestionario para Hector",
+    "groupLocked": "Ya completaste este grupo. Reinicia el juego en ajustes para volver a jugarlo.",
+    "createQuiz": "Crea",
     "startHector": "Que Hector empiece el juego",
     "results": "Respuestas",
     "lockedCreate": "Finaliza todas las preguntas para poder hacer tu propio cuestionario.",
@@ -42,12 +47,12 @@
     "photo": "Tomar foto"
   },
   "pin": {
-    "title": "Introduce el código de 4 dígitos",
+    "title": "Introduce el codigo",
     "wrong": "Código incorrecto",
     "enter": "Entrar"
   },
   "play": {
-    "progress": "Pregunta {{current}} de {{total}}",
+    "progress": "{{current}}/{{total}}",
     "group": "Grupo {{n}}",
     "hectorTitle": "El cuestionario de Fernanda para Hector",
     "hearts": "Corazones",
@@ -92,9 +97,9 @@
     "cleared": "Las respuestas se ocultaron de esta pantalla."
   },
   "create": {
-    "title": "Tu cuestionario para Hector",
-    "subtitle": "6 preguntas para ver cuánto sabe de ti",
-    "step": "Pregunta {{n}} de 6",
+    "title": "Tu cuestionario",
+    "subtitle": "",
+    "step": "Pregunta {{n}} de {{total}}",
     "questionLabel": "Tu pregunta",
     "questionPlaceholder": "Escribe tu pregunta aquí",
     "answerPlaceholder": "Respuesta {{letter}}",

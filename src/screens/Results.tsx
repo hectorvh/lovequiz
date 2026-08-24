@@ -3,18 +3,17 @@ import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 import { Card, GhostButton, ScreenTitle } from '../components/ui';
-import { getGroupQuestions } from '../data/questions';
+import { questionsForIds } from '../data/questions';
 import { formatKilometers } from '../lib/distance';
 import { useGameStore } from '../state/gameStore';
 import {
   FERNANDA_GROUPS,
   OPTION_KEYS,
+  groupLetter,
   isFernandaGroup,
   type GroupId,
   type Question,
 } from '../types';
-
-const GROUP_LETTERS: Record<string, string> = { '1': 'A', '2': 'B', '3': 'C' };
 
 /**
  * Reads the local mirror that is written in the same step as the Supabase
@@ -27,6 +26,7 @@ export default function Results() {
 
   const locale = useGameStore((s) => s.locale);
   const answers = useGameStore((s) => s.answers);
+  const playedQuestionIds = useGameStore((s) => s.playedQuestionIds);
   const bonusDistances = useGameStore((s) => s.bonusDistances);
   const completedGroups = useGameStore((s) => s.completedGroups);
   const reciprocalQuiz = useGameStore((s) => s.reciprocalQuiz);
@@ -42,37 +42,58 @@ export default function Results() {
   );
 
   const questionsFor = (groupId: GroupId): Question[] => {
+    const ids =
+      playedQuestionIds[groupId] ??
+      (answers[groupId] ?? []).map((row) => row.questionId);
+
     if (groupId === 'hector') {
-      return reciprocalQuiz.map((q) => ({
-        id: q.id,
-        text: q.questionText,
-        options: OPTION_KEYS.map((key) => q.options[key]),
-        correctIndex: OPTION_KEYS.indexOf(q.correctOption),
-      }));
+      const byId = new Map(
+        reciprocalQuiz.map((q) => [
+          q.id,
+          {
+            id: q.id,
+            text: q.questionText,
+            options: OPTION_KEYS.map((key) => q.options[key]),
+            correctIndex: OPTION_KEYS.indexOf(q.correctOption),
+          } satisfies Question,
+        ]),
+      );
+      return ids.flatMap((id) => {
+        const question = byId.get(id);
+        return question ? [question] : [];
+      });
     }
-    return isFernandaGroup(groupId) ? getGroupQuestions(groupId, locale) : [];
+
+    return isFernandaGroup(groupId) ? questionsForIds(groupId, locale, ids) : [];
   };
 
   const labelFor = (groupId: GroupId) =>
     groupId === 'hector'
       ? t('results.hectorLabel')
-      : t('results.groupLabel', { letter: GROUP_LETTERS[groupId] });
+      : t('results.groupLabel', { letter: groupLetter(groupId) });
 
   if (selected) {
     const questions = questionsFor(selected);
     const rows = answers[selected] ?? [];
     const bonus = bonusDistances[selected];
+    const playOrder =
+      playedQuestionIds[selected] ?? rows.map((row) => row.questionId);
+    const orderedRows = playOrder.flatMap((id) => {
+      const row = rows.find((entry) => entry.questionId === id);
+      return row ? [row] : [];
+    });
+    const resultRows = orderedRows.length > 0 ? orderedRows : rows;
 
     return (
       <div className="pt-2">
         <ScreenTitle title={labelFor(selected)} />
 
         <Card>
-          {rows.length === 0 ? (
+          {resultRows.length === 0 ? (
             <p className="text-sm text-ink-soft">{t('results.cleared')}</p>
           ) : (
             <ul className="space-y-3">
-              {rows.map((row) => {
+              {resultRows.map((row) => {
                 const question = questions.find((q) => q.id === row.questionId);
                 const given =
                   row.selectedIndex === null
