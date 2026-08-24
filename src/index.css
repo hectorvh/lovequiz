@@ -1,0 +1,102 @@
+@import 'tailwindcss';
+
+@theme {
+  --color-night: #2b1320;
+  --color-night-2: #3a1a2b;
+  --color-card: #f7ece7;
+  --color-card-line: #e3cfc6;
+  --color-wine: #7a2340;
+  --color-wine-deep: #4a1226;
+  --color-gold: #d9a441;
+  --color-gold-deep: #8a6420;
+  --color-ink: #3a1520;
+  --color-ink-soft: #6b4452;
+  --color-good: #4c7a4f;
+  --color-good-bg: #dcead9;
+  --color-bad: #a3383a;
+  --color-bad-bg: #f4dcdb;
+
+  --font-display: 'Fraunces', ui-serif, Georgia, serif;
+  --font-body: 'Sora', ui-sans-serif, system-ui, sans-serif;
+
+  --animate-drift-a: drift-a 9s ease-in-out infinite;
+  --animate-drift-b: drift-b 11s ease-in-out infinite;
+  --animate-rise: rise 0.5s ease-out both;
+  --animate-pop: pop 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+@keyframes drift-a {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.14);
+  }
+}
+
+@keyframes drift-b {
+  0%,
+  100% {
+    transform: scale(1.14);
+  }
+  50% {
+    transform: scale(1);
+  }
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pop {
+  from {
+    opacity: 0;
+    transform: scale(0.7);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  color: var(--color-ink);
+  background:
+    radial-gradient(ellipse 900px 600px at 15% -10%, #52203a 0%, transparent 60%),
+    radial-gradient(ellipse 900px 700px at 100% 110%, #3a2044 0%, transparent 55%),
+    var(--color-night);
+  background-attachment: fixed;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Leaflet needs an explicit stacking context below the app chrome. */
+.leaflet-container {
+  background: #10202b;
+  font-family: var(--font-body);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

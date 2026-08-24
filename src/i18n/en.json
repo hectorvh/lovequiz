@@ -1,0 +1,155 @@
+{
+  "common": {
+    "skip": "Skip",
+    "continue": "Continue",
+    "back": "Back",
+    "accept": "Accept",
+    "save": "Save",
+    "cancel": "Cancel",
+    "close": "Close",
+    "mute": "Mute music",
+    "unmute": "Unmute music",
+    "language": "Language",
+    "localMode": "Local mode: no database connected."
+  },
+  "intro": {
+    "m1": "Hello Fernanda",
+    "m2": "This is a game Hector made for you!",
+    "m3": "and guess what it's about",
+    "m4": "QUESTIONS!"
+  },
+  "instructions": {
+    "m1": "You have {{seconds}} seconds to answer each question",
+    "m2": "for every correct answer you'll win a heart",
+    "m3": "for every wrong answer you'll earn one of the 4 possible punishments:",
+    "m4": "The punishments stack up and in the end you'll have to pay them alllll!"
+  },
+  "menu": {
+    "prompt": "Please pick a group of questions",
+    "group": "Group {{n}}",
+    "groupDone": "Completed",
+    "createQuiz": "Create your own quiz for Hector",
+    "startHector": "Let Hector start the game",
+    "results": "Answers",
+    "lockedCreate": "Finish all the questions to create your own quiz.",
+    "lockedResults": "Finish all the questions to see your results.",
+    "settings": "Settings",
+    "photo": "Take a photo"
+  },
+  "pin": {
+    "title": "Enter the 4-digit code",
+    "wrong": "Wrong code",
+    "enter": "Enter"
+  },
+  "play": {
+    "progress": "Question {{current}} of {{total}}",
+    "group": "Group {{n}}",
+    "hectorTitle": "Fernanda's quiz for Hector",
+    "hearts": "Hearts",
+    "correct": "Correct!",
+    "correctSub": "You won a heart",
+    "incorrect": "Wrong",
+    "timeout": "Time's up!",
+    "punishmentAdded": "One punishment added: {{name}}",
+    "correctWas": "The correct answer was: {{answer}}",
+    "finish": "See results",
+    "resumed": "Picking up where you left off"
+  },
+  "bonus": {
+    "tag": "Bonus question",
+    "prompt": "Select on the map where Héctor currently lives.",
+    "hint": "Tap the map to drop your marker, then press Accept.",
+    "noScore": "This question doesn't count towards hearts or punishments, and there's no time limit.",
+    "resultKm": "Your marker landed {{km}} km from the right spot.",
+    "resultM": "That's {{m}} metres.",
+    "reveal": "Héctor lives at that point on the map."
+  },
+  "partial": {
+    "title": "Group {{n}} results",
+    "titleHector": "Hector's results",
+    "heartsThisGroup": "Hearts from this group",
+    "punishmentsTotal": "Punishments so far",
+    "noHearts": "No hearts this time",
+    "runningTotal": "Running total: {{n}} hearts"
+  },
+  "results": {
+    "title": "Answers",
+    "pick": "Pick a group to see the details",
+    "groupLabel": "Results {{letter}}",
+    "hectorLabel": "Hector's results",
+    "yourAnswer": "Fernanda's answer",
+    "hectorAnswer": "Hector's answer",
+    "correctAnswer": "Correct answer",
+    "noAnswer": "No answer (time ran out)",
+    "correct": "Correct",
+    "incorrect": "Wrong",
+    "empty": "No answers saved yet.",
+    "cleared": "Answers were hidden from this screen."
+  },
+  "create": {
+    "title": "Your quiz for Hector",
+    "subtitle": "6 questions to see how much he knows about you",
+    "step": "Question {{n}} of 6",
+    "questionLabel": "Your question",
+    "questionPlaceholder": "Write your question here",
+    "answerPlaceholder": "Answer {{letter}}",
+    "markCorrect": "Mark the correct answer",
+    "incomplete": "Fill in the question, all 4 answers, and mark one as correct.",
+    "saveAll": "Save",
+    "savedToast": "Your quiz is ready!",
+    "notTranslated": "This is saved exactly as you write it, with no translation."
+  },
+  "photo": {
+    "title": "A photo to remember",
+    "subtitle": "Smile, this one goes in the collection",
+    "switchCamera": "Switch camera",
+    "capture": "Take photo",
+    "retake": "Take another",
+    "saveLocal": "Save to device",
+    "generating": "Creating your caricature...",
+    "caricatureFailed": "We couldn't create the caricature, but your original photo is saved.",
+    "original": "Original photo",
+    "caricature": "Caricature",
+    "alreadyTaken": "You already took your photo. You can enable another one from Settings.",
+    "permissionDenied": "We couldn't access the camera. Check your browser permissions.",
+    "finish": "Continue",
+    "uploading": "Saving..."
+  },
+  "summary": {
+    "title": "Thank you for playing",
+    "message": "Thank you for playing with me, Fernanda. Every question in this game is an excuse to remember everything we've lived together. Now it's time to pay up.",
+    "fernandaOwes": "What Fernanda owes",
+    "hectorOwes": "What Hector owes",
+    "hearts": "Hearts earned",
+    "nothingOwed": "Nothing to pay",
+    "closing": "With love, Hector"
+  },
+  "settings": {
+    "title": "Settings",
+    "deleteAnswers": "Delete answers",
+    "deleteAnswersDesc": "Hides answers in the app and clears what's stored on this device. Database records are never deleted.",
+    "deleteAnswersDone": "Answers removed from this device.",
+    "savePhotos": "Save photos to device",
+    "savePhotosDesc": "Download the saved photos.",
+    "noPhotos": "No photos yet.",
+    "download": "Download",
+    "resetPhoto": "Reset game (photo only)",
+    "resetPhotoDesc": "Re-enables the photo screen without touching any progress.",
+    "resetPhotoDone": "The photo screen is available again.",
+    "resetAll": "Reset all progress",
+    "resetAllDesc": "Clears hearts, punishments, completed groups and the saved quiz on this device.",
+    "resetAllDone": "Progress reset.",
+    "confirmTitle": "Are you sure?",
+    "confirmReset": "Yes, reset"
+  },
+  "punishments": {
+    "beso": "Kiss",
+    "besoFull": "French kiss",
+    "baile": "Dance",
+    "baileFull": "Sexy dance",
+    "masaje": "Massage",
+    "masajeFull": "Hot massage",
+    "secreto": "Secret",
+    "secretoFull": "Embarrassing secret"
+  }
+}

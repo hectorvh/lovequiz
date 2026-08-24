@@ -1,0 +1,155 @@
+{
+  "common": {
+    "skip": "Passer",
+    "continue": "Continuer",
+    "back": "Retour",
+    "accept": "Accepter",
+    "save": "Enregistrer",
+    "cancel": "Annuler",
+    "close": "Fermer",
+    "mute": "Couper la musique",
+    "unmute": "Activer la musique",
+    "language": "Langue",
+    "localMode": "Mode local : aucune base de données connectée."
+  },
+  "intro": {
+    "m1": "Bonjour Fernanda",
+    "m2": "Voici un jeu que Hector a préparé pour toi !",
+    "m3": "et devine de quoi il s'agit",
+    "m4": "de QUESTIONS !"
+  },
+  "instructions": {
+    "m1": "Tu as {{seconds}} secondes pour répondre à chaque question",
+    "m2": "pour chaque bonne réponse tu gagneras un cœur",
+    "m3": "pour chaque mauvaise réponse tu gagneras l'un des 4 gages possibles :",
+    "m4": "Les gages s'accumulent et à la fin il faudra tous les payer !"
+  },
+  "menu": {
+    "prompt": "Choisis un groupe de questions",
+    "group": "Groupe {{n}}",
+    "groupDone": "Terminé",
+    "createQuiz": "Crée ton propre questionnaire pour Hector",
+    "startHector": "Que Hector commence le jeu",
+    "results": "Réponses",
+    "lockedCreate": "Termine toutes les questions pour créer ton propre questionnaire.",
+    "lockedResults": "Termine toutes les questions pour voir tes résultats.",
+    "settings": "Réglages",
+    "photo": "Prendre une photo"
+  },
+  "pin": {
+    "title": "Saisis le code à 4 chiffres",
+    "wrong": "Code incorrect",
+    "enter": "Entrer"
+  },
+  "play": {
+    "progress": "Question {{current}} sur {{total}}",
+    "group": "Groupe {{n}}",
+    "hectorTitle": "Le questionnaire de Fernanda pour Hector",
+    "hearts": "Cœurs",
+    "correct": "Correct !",
+    "correctSub": "Tu as gagné un cœur",
+    "incorrect": "Raté",
+    "timeout": "Temps écoulé !",
+    "punishmentAdded": "Un gage en plus : {{name}}",
+    "correctWas": "La bonne réponse était : {{answer}}",
+    "finish": "Voir les résultats",
+    "resumed": "On reprend où tu t'étais arrêtée"
+  },
+  "bonus": {
+    "tag": "Question bonus",
+    "prompt": "Sélectionne sur la carte l'endroit où Héctor vit actuellement.",
+    "hint": "Touche la carte pour placer ton marqueur, puis appuie sur Accepter.",
+    "noScore": "Cette question ne compte ni pour les cœurs ni pour les gages, et il n'y a pas de limite de temps.",
+    "resultKm": "Ton marqueur est à {{km}} km du bon endroit.",
+    "resultM": "Cela fait {{m}} mètres.",
+    "reveal": "Héctor habite à ce point sur la carte."
+  },
+  "partial": {
+    "title": "Résultats du groupe {{n}}",
+    "titleHector": "Résultats de Hector",
+    "heartsThisGroup": "Cœurs de ce groupe",
+    "punishmentsTotal": "Gages accumulés",
+    "noHearts": "Aucun cœur cette fois",
+    "runningTotal": "Total cumulé : {{n}} cœurs"
+  },
+  "results": {
+    "title": "Réponses",
+    "pick": "Choisis un groupe pour voir le détail",
+    "groupLabel": "Résultats {{letter}}",
+    "hectorLabel": "Résultats de Hector",
+    "yourAnswer": "Réponse de Fernanda",
+    "hectorAnswer": "Réponse de Hector",
+    "correctAnswer": "Bonne réponse",
+    "noAnswer": "Pas de réponse (temps écoulé)",
+    "correct": "Correcte",
+    "incorrect": "Incorrecte",
+    "empty": "Aucune réponse enregistrée pour le moment.",
+    "cleared": "Les réponses ont été masquées sur cet écran."
+  },
+  "create": {
+    "title": "Ton questionnaire pour Hector",
+    "subtitle": "6 questions pour voir ce qu'il sait de toi",
+    "step": "Question {{n}} sur 6",
+    "questionLabel": "Ta question",
+    "questionPlaceholder": "Écris ta question ici",
+    "answerPlaceholder": "Réponse {{letter}}",
+    "markCorrect": "Marque la bonne réponse",
+    "incomplete": "Remplis la question, les 4 réponses et marque une bonne réponse.",
+    "saveAll": "Enregistrer",
+    "savedToast": "Ton questionnaire est prêt !",
+    "notTranslated": "Ceci est enregistré exactement comme tu l'écris, sans traduction."
+  },
+  "photo": {
+    "title": "Une photo souvenir",
+    "subtitle": "Souris, celle-ci rejoint la collection",
+    "switchCamera": "Changer de caméra",
+    "capture": "Prendre la photo",
+    "retake": "En prendre une autre",
+    "saveLocal": "Enregistrer sur l'appareil",
+    "generating": "Création de ta caricature...",
+    "caricatureFailed": "Nous n'avons pas pu créer la caricature, mais ta photo originale est enregistrée.",
+    "original": "Photo originale",
+    "caricature": "Caricature",
+    "alreadyTaken": "Tu as déjà pris ta photo. Tu peux en autoriser une autre depuis les Réglages.",
+    "permissionDenied": "Impossible d'accéder à la caméra. Vérifie les autorisations du navigateur.",
+    "finish": "Continuer",
+    "uploading": "Enregistrement..."
+  },
+  "summary": {
+    "title": "Merci d'avoir joué",
+    "message": "Merci d'avoir joué avec moi, Fernanda. Chaque question de ce jeu est un prétexte pour se rappeler tout ce que nous avons vécu ensemble. Maintenant, il faut payer.",
+    "fernandaOwes": "Ce que doit Fernanda",
+    "hectorOwes": "Ce que doit Hector",
+    "hearts": "Cœurs gagnés",
+    "nothingOwed": "Rien à payer",
+    "closing": "Avec amour, Hector"
+  },
+  "settings": {
+    "title": "Réglages",
+    "deleteAnswers": "Supprimer les réponses",
+    "deleteAnswersDesc": "Masque les réponses dans l'app et efface ce qui est stocké sur cet appareil. Les enregistrements de la base de données ne sont jamais supprimés.",
+    "deleteAnswersDone": "Réponses supprimées de cet appareil.",
+    "savePhotos": "Enregistrer les photos sur l'appareil",
+    "savePhotosDesc": "Télécharge les photos enregistrées.",
+    "noPhotos": "Aucune photo pour le moment.",
+    "download": "Télécharger",
+    "resetPhoto": "Réinitialiser le jeu (photo seulement)",
+    "resetPhotoDesc": "Réactive l'écran photo sans toucher à la progression.",
+    "resetPhotoDone": "L'écran photo est de nouveau disponible.",
+    "resetAll": "Réinitialiser toute la progression",
+    "resetAllDesc": "Efface les cœurs, les gages, les groupes terminés et le questionnaire enregistré sur cet appareil.",
+    "resetAllDone": "Progression réinitialisée.",
+    "confirmTitle": "Tu es sûre ?",
+    "confirmReset": "Oui, réinitialiser"
+  },
+  "punishments": {
+    "beso": "Baiser",
+    "besoFull": "Baiser langoureux",
+    "baile": "Danse",
+    "baileFull": "Danse sexy",
+    "masaje": "Massage",
+    "masajeFull": "Massage chaud",
+    "secreto": "Secret",
+    "secretoFull": "Secret embarrassant"
+  }
+}
