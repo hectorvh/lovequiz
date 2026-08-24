@@ -16,6 +16,7 @@ import {
   type ReciprocalQuestion,
   type Tally,
 } from '../types';
+import { pickGroupSticker, type GroupStickerRef } from '../data/groupStickers';
 import { ensurePlayQuestionIds } from '../data/questions';
 import {
   DEFAULT_QUESTION_DURATION_SECONDS,
@@ -66,6 +67,8 @@ interface GameState {
   inProgress: Record<string, InProgressGroup>;
   /** Play-order IDs kept after a group finishes, so results match what was asked. */
   playedQuestionIds: Record<string, string[]>;
+  /** Sticker chosen once when a Fernanda group is completed, so the menu does not re-roll. */
+  groupStickers: Record<string, GroupStickerRef>;
 
   reciprocalQuiz: ReciprocalQuestion[];
   reciprocalQuizSaved: boolean;
@@ -83,6 +86,7 @@ interface GameActions {
   answerQuestion: (groupId: GroupId, question: Question, selectedIndex: number | null) => PunishmentKey | null;
   recordBonusDistance: (groupId: GroupId, meters: number) => void;
   completeGroup: (groupId: GroupId) => Promise<void>;
+  ensureGroupStickers: () => void;
 
   setQuizDraftItem: (index: number, item: QuizDraftItem) => void;
   saveReciprocalQuizLocally: (questions: ReciprocalQuestion[]) => void;
@@ -107,6 +111,7 @@ const initialState: GameState = {
   bonusDistances: {},
   inProgress: {},
   playedQuestionIds: {},
+  groupStickers: {},
   reciprocalQuiz: [],
   reciprocalQuizSaved: false,
   quizDraft: Array.from({ length: RECIPROCAL_QUIZ_LENGTH }, emptyDraftItem),
@@ -200,6 +205,8 @@ export const useGameStore = create<GameStore>()(
           delete remainingAnswers[groupId];
           const remainingPlayed = { ...state.playedQuestionIds };
           delete remainingPlayed[groupId];
+          const remainingStickers = { ...state.groupStickers };
+          delete remainingStickers[groupId];
 
           return {
             tallies: {
@@ -209,6 +216,7 @@ export const useGameStore = create<GameStore>()(
             completedGroups: state.completedGroups.filter((id) => id !== groupId),
             answers: remainingAnswers,
             playedQuestionIds: remainingPlayed,
+            groupStickers: remainingStickers,
             inProgress: {
               ...state.inProgress,
               [groupId]: { answers: [], bonusDistanceMeters: null, questionIds },
@@ -294,6 +302,9 @@ export const useGameStore = create<GameStore>()(
             ? inProgress.questionIds
             : inProgress.answers.map((answer) => answer.questionId);
 
+        const correctCount = inProgress.answers.filter((answer) => answer.isCorrect).length;
+        const sticker = isFernandaGroup(groupId) ? pickGroupSticker(correctCount) : null;
+
         set({
           answers: { ...state.answers, [groupId]: inProgress.answers },
           playedQuestionIds: { ...state.playedQuestionIds, [groupId]: questionIds },
@@ -305,6 +316,9 @@ export const useGameStore = create<GameStore>()(
             ? state.completedGroups
             : [...state.completedGroups, groupId],
           inProgress: remaining,
+          groupStickers: sticker
+            ? { ...state.groupStickers, [groupId]: sticker }
+            : state.groupStickers,
         });
 
         const completed = get().completedGroups;
@@ -326,6 +340,25 @@ export const useGameStore = create<GameStore>()(
         };
 
         await flushGroupToDatabase(commit);
+      },
+
+      ensureGroupStickers: () => {
+        const state = get();
+        let next = state.groupStickers;
+        let changed = false;
+
+        for (const groupId of FERNANDA_GROUPS) {
+          if (!state.completedGroups.includes(groupId) || next[groupId]) continue;
+          const answers = state.answers[groupId];
+          if (!answers?.length) continue;
+          const sticker = pickGroupSticker(answers.filter((answer) => answer.isCorrect).length);
+          if (!sticker) continue;
+          if (!changed) next = { ...state.groupStickers };
+          next[groupId] = sticker;
+          changed = true;
+        }
+
+        if (changed) set({ groupStickers: next });
       },
 
       setQuizDraftItem: (index, item) =>
@@ -398,6 +431,7 @@ export const useGameStore = create<GameStore>()(
           bonusDistances: {},
           inProgress: {},
           playedQuestionIds: {},
+          groupStickers: {},
           reciprocalQuiz: [],
           reciprocalQuizSaved: false,
           quizDraft: Array.from({ length: RECIPROCAL_QUIZ_LENGTH }, emptyDraftItem),
@@ -407,7 +441,7 @@ export const useGameStore = create<GameStore>()(
     }),
     {
       name: STORE_KEY,
-      version: 4,
+      version: 5,
       migrate: (persisted) => {
         const state = persisted as GameState;
         const draft = Array.isArray(state.quizDraft) ? state.quizDraft : [];
@@ -426,6 +460,7 @@ export const useGameStore = create<GameStore>()(
           ...state,
           inProgress,
           playedQuestionIds: state.playedQuestionIds ?? {},
+          groupStickers: state.groupStickers ?? {},
           questionDurationSeconds:
             Number.isFinite(duration) && duration > 0
               ? Math.min(

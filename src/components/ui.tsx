@@ -58,9 +58,17 @@ export const introTypeClass = 'font-display font-semibold italic';
 export const chromeButtonClass =
   'grid h-11 w-11 place-items-center rounded-full border border-white/15 bg-black/35 text-[#faf1e8] opacity-70 backdrop-blur transition active:scale-95 hover:bg-black/50 disabled:cursor-not-allowed disabled:opacity-35 disabled:active:scale-100';
 
-export function Tag({ children }: { children: ReactNode }) {
+export function Tag({
+  children,
+  className = '',
+}: {
+  children: ReactNode;
+  className?: string;
+}) {
   return (
-    <span className="inline-block rounded-full bg-[#f3e3c8] px-2.5 py-1 text-[11px] font-semibold tracking-wide text-gold-deep uppercase">
+    <span
+      className={`inline-block rounded-full bg-[#f3e3c8] px-2.5 py-1 text-[11px] font-semibold tracking-wide text-gold-deep ${className}`}
+    >
       {children}
     </span>
   );

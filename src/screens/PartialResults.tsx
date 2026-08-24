@@ -28,9 +28,6 @@ export default function PartialResults() {
       <ScreenTitle title={title} />
 
       <Card>
-        <p className="mb-2 text-xs font-semibold tracking-wide text-ink-soft uppercase">
-          {t('partial.heartsThisGroup')}
-        </p>
         {groupTally.hearts === 0 ? (
           <p className="mb-4 text-sm text-ink-soft">{t('partial.noHearts')}</p>
         ) : (

@@ -4,7 +4,7 @@
  */
 export const DEFAULT_QUESTION_DURATION_SECONDS = 30;
 export const MIN_QUESTION_DURATION_SECONDS = 5;
-export const MAX_QUESTION_DURATION_SECONDS = 120;
+export const MAX_QUESTION_DURATION_SECONDS = 30;
 
 /** Kept for callers that still want a compile-time default in milliseconds. */
 export const QUESTION_DURATION_MS = DEFAULT_QUESTION_DURATION_SECONDS * 1000;

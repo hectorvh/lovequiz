@@ -8,7 +8,7 @@ import TimerBar from '../components/TimerBar';
 import { Card, PrimaryButton, Tag } from '../components/ui';
 import { GROUP_WITH_BONUS, questionsForIds } from '../data/questions';
 import { playSfx } from '../lib/sfx';
-import { useGameStore } from '../state/gameStore';
+import { computeTally, selectGroupAnswers, useGameStore } from '../state/gameStore';
 import {
   OPTION_KEYS,
   PUNISHMENT_EMOJI,
@@ -46,6 +46,8 @@ export default function QuestionPlay() {
   const groupId = (rawGroupId ?? '1') as GroupId;
   const player = playerForGroup(groupId);
   const tally = useGameStore((s) => s.tallies[player]);
+  const groupAnswers = useGameStore(selectGroupAnswers(groupId));
+  const groupHearts = useMemo(() => computeTally(groupAnswers ?? []).hearts, [groupAnswers]);
   const durationMs = useGameStore((s) => s.questionDurationSeconds) * 1000;
 
   const questionIds = useGameStore((s) => s.inProgress[groupId]?.questionIds);
@@ -174,12 +176,20 @@ export default function QuestionPlay() {
     groupId === 'hector' ? t('play.hectorTitle') : t('play.group', { n: groupLetter(groupId) });
 
   return (
-    <div className="flex min-h-0 flex-1 flex-col justify-start pt-[7vh]">
+    <div className="flex min-h-0 flex-1 flex-col justify-start pt-1">
       <Card className="flex w-full max-h-full min-h-0 flex-col overflow-hidden !p-[5%]">
         <div className="mb-2 grid shrink-0 grid-cols-[1fr_auto_1fr] items-center gap-1">
           <span />
           <div className="justify-self-center">
-            <Tag>{heading}</Tag>
+            <Tag
+              className={
+                groupId === 'hector'
+                  ? 'px-2.5 py-1 text-[11px] tracking-normal'
+                  : 'px-3 py-1.5 text-[15.4px] tracking-normal'
+              }
+            >
+              {heading}
+            </Tag>
           </div>
           <span className="font-display justify-self-end text-[1rem] font-semibold tabular-nums text-ink-soft">
             {t('play.progress', { current: cursor + 1, total: questions.length })}
@@ -187,7 +197,7 @@ export default function QuestionPlay() {
         </div>
 
         <div className="mb-2 min-h-8 shrink-0">
-          <HeartCounter hearts={tally.hearts} />
+          <HeartCounter hearts={groupHearts} />
         </div>
 
         <div className="mb-2 shrink-0">

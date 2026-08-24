@@ -60,12 +60,12 @@ export default function PinModal({
           ) : null}
 
           <div className="mt-4 grid grid-cols-2 gap-2">
-            <PrimaryButton className={pinButtonClass} onClick={submit} disabled={value.length !== 4}>
-              {t('pin.enter')}
-            </PrimaryButton>
             <GhostButton className={pinButtonClass} onClick={onClose}>
               {t('common.cancel')}
             </GhostButton>
+            <PrimaryButton className={pinButtonClass} onClick={submit} disabled={value.length !== 4}>
+              {t('pin.enter')}
+            </PrimaryButton>
           </div>
         </Card>
       </div>

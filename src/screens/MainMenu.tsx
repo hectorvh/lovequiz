@@ -1,12 +1,14 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 import Toast from '../components/Toast';
 import { chromeButtonClass, introTypeClass } from '../components/ui';
+import { groupStickerSrc } from '../data/groupStickers';
 import {
   selectAllGroupsComplete,
   selectAnyGroupComplete,
+  selectHectorQuizComplete,
   useGameStore,
 } from '../state/gameStore';
 import { FERNANDA_GROUPS, GROUP_LETTERS } from '../types';
@@ -20,7 +22,7 @@ function CameraGlyph() {
     <svg
       aria-hidden
       viewBox="0 0 24 24"
-      className="h-5 w-5"
+      className="h-[27px] w-[27px]"
       fill="none"
       stroke="currentColor"
       strokeWidth={1.6}
@@ -38,12 +40,19 @@ export default function MainMenu() {
   const navigate = useNavigate();
 
   const completedGroups = useGameStore((s) => s.completedGroups);
+  const groupStickers = useGameStore((s) => s.groupStickers);
+  const ensureGroupStickers = useGameStore((s) => s.ensureGroupStickers);
   const reciprocalQuizSaved = useGameStore((s) => s.reciprocalQuizSaved);
   const photoTaken = useGameStore((s) => s.photoTaken);
   const allGroupsComplete = useGameStore(selectAllGroupsComplete);
   const anyGroupComplete = useGameStore(selectAnyGroupComplete);
+  const hectorQuizComplete = useGameStore(selectHectorQuizComplete);
 
   const [toast, setToast] = useState<string | null>(null);
+
+  useEffect(() => {
+    ensureGroupStickers();
+  }, [ensureGroupStickers, completedGroups]);
 
   const onCreateQuiz = () => {
     if (!allGroupsComplete) {
@@ -78,6 +87,7 @@ export default function MainMenu() {
           {FERNANDA_GROUPS.map((groupId) => {
             const done = completedGroups.includes(groupId);
             const label = t('menu.group', { n: GROUP_LETTERS[groupId] });
+            const stickerSrc = groupStickerSrc(groupStickers[groupId]);
             return (
               <button
                 key={groupId}
@@ -93,24 +103,17 @@ export default function MainMenu() {
                 aria-label={done ? `${label} — ${t('menu.groupDone')}` : label}
                 className={`grid h-20 w-20 place-items-center border-2 shadow-md transition active:scale-95 ${
                   done
-                    ? 'rounded-full border-good bg-good text-[#eaf3e7]'
+                    ? 'overflow-hidden rounded-full border-[#355c38] bg-good text-white'
                     : 'rounded-2xl border-wine bg-wine text-[#fbe9ee] hover:bg-wine-deep'
                 }`}
               >
-                {done ? (
-                  <svg
-                    aria-hidden
-                    viewBox="0 0 24 24"
-                    className="h-8 w-8"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth={2.4}
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <path d="M5 12.5l4.5 4.5L19 7" />
-                  </svg>
-                ) : (
+                {done && stickerSrc ? (
+                  <img
+                    src={stickerSrc}
+                    alt=""
+                    className="pointer-events-none h-full w-full object-cover"
+                  />
+                ) : done ? null : (
                   <span className={`${introTypeClass} text-[1.95rem] leading-none`}>
                     {GROUP_LETTERS[groupId]}
                   </span>
@@ -121,7 +124,15 @@ export default function MainMenu() {
         </div>
       </div>
 
-      {reciprocalQuizSaved ? (
+      {hectorQuizComplete ? (
+        <button
+          type="button"
+          onClick={() => navigate('/summary')}
+          className={`${menuActionClass} mb-2.5 bg-wine text-[#fbe9ee] hover:bg-wine-deep`}
+        >
+          {t('menu.summary')}
+        </button>
+      ) : reciprocalQuizSaved ? (
         <button
           type="button"
           onClick={() => navigate('/play/hector')}
@@ -132,7 +143,7 @@ export default function MainMenu() {
       ) : null}
 
       <div className="relative mb-2 w-full">
-        <div className="grid grid-cols-2 items-center gap-14">
+        <div className="grid grid-cols-2 items-center gap-20">
           <button
             type="button"
             onClick={onResults}
@@ -161,7 +172,7 @@ export default function MainMenu() {
           onClick={onPhoto}
           aria-label={t('menu.photo')}
           aria-disabled={!allGroupsComplete}
-          className={`absolute top-1/2 left-1/2 z-10 -translate-x-1/2 -translate-y-1/2 ${chromeButtonClass} ${
+          className={`absolute top-1/2 left-1/2 z-10 -translate-x-1/2 -translate-y-1/2 ${chromeButtonClass} !h-[59px] !w-[59px] ${
             allGroupsComplete ? '' : 'opacity-45'
           }`}
         >

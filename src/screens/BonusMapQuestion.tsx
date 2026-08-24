@@ -95,10 +95,9 @@ export default function BonusMapQuestion({ onContinue }: { onContinue: (meters: 
           <Tag>{t('bonus.tag')}</Tag>
         </div>
 
-        <p className="font-display mb-1 shrink-0 text-[clamp(0.95rem,2.5vh,1.15rem)] leading-snug text-ink">
+        <p className="font-display mb-2 shrink-0 text-[clamp(0.95rem,2.5vh,1.15rem)] leading-snug text-ink">
           {t('bonus.prompt')}
         </p>
-        <p className="mb-2 shrink-0 text-[11.5px] leading-snug text-ink-soft">{t('bonus.noScore')}</p>
 
         <div
           ref={containerRef}

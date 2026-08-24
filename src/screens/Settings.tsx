@@ -31,6 +31,12 @@ export default function Settings() {
     setTimerDraft(String(questionDurationSeconds));
   }, [questionDurationSeconds]);
 
+  useEffect(() => {
+    if (questionDurationSeconds > MAX_QUESTION_DURATION_SECONDS) {
+      setQuestionDurationSeconds(MAX_QUESTION_DURATION_SECONDS);
+    }
+  }, [questionDurationSeconds, setQuestionDurationSeconds]);
+
   const commitTimer = (raw: string) => {
     const parsed = Number.parseInt(raw, 10);
     if (Number.isNaN(parsed)) {
@@ -74,8 +80,8 @@ export default function Settings() {
     <div className="flex h-full min-h-0 flex-col overflow-hidden pt-1">
       <ScreenTitle title={t('settings.title')} />
 
-      <Card className="flex min-h-0 flex-1 flex-col overflow-hidden !p-3.5">
-        <div className="min-h-0 flex-1 space-y-3 overflow-y-auto">
+      <Card className="flex flex-col !p-3.5">
+        <div className="space-y-3">
           <section>
             <h2 className="mb-0.5 text-sm font-semibold text-ink">{t('settings.timer')}</h2>
             <p className="mb-2 text-[11.5px] leading-snug text-ink-soft">
@@ -117,7 +123,7 @@ export default function Settings() {
             </div>
           </section>
 
-          <section className="min-h-0">
+          <section>
             <h2 className="mb-0.5 text-sm font-semibold text-ink">{t('settings.savePhotos')}</h2>
             <p className="mb-2 text-[11.5px] leading-snug text-ink-soft">
               {t('settings.savePhotosDesc')}
@@ -126,7 +132,7 @@ export default function Settings() {
             {photos.length === 0 ? (
               <p className="text-[12px] text-ink-soft">{t('settings.noPhotos')}</p>
             ) : (
-              <ul className="max-h-24 space-y-1.5 overflow-hidden">
+              <ul className={`space-y-1.5 ${photos.length > 3 ? 'max-h-36 overflow-y-auto' : ''}`}>
                 {photos.map((photo) => (
                   <li
                     key={photo.id}
@@ -179,6 +185,9 @@ export default function Settings() {
                 {t('settings.confirmErase')}
               </h2>
               <div className="grid grid-cols-2 gap-2">
+                <GhostButton className={pinButtonClass} onClick={() => setConfirmingReset(false)}>
+                  {t('common.cancel')}
+                </GhostButton>
                 <PrimaryButton
                   className={pinButtonClass}
                   onClick={() => {
@@ -189,9 +198,6 @@ export default function Settings() {
                 >
                   {t('settings.confirmReset')}
                 </PrimaryButton>
-                <GhostButton className={pinButtonClass} onClick={() => setConfirmingReset(false)}>
-                  {t('common.cancel')}
-                </GhostButton>
               </div>
             </Card>
           </div>

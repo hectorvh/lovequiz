@@ -26,10 +26,7 @@ export default function Layout({ children }: { children: ReactNode }) {
 
       <header className="z-30 flex shrink-0 items-start justify-between p-3">
         <div className="flex items-start gap-2">
-          <div className="flex flex-col gap-2">
-            <MuteToggle />
-            {pathname === '/menu' ? <InfoButton /> : null}
-          </div>
+          <MuteToggle />
           {/* Menu already is home, so it offers a way out to the start screen instead. */}
           {pathname === '/menu' ? (
             <PowerButton />
@@ -38,6 +35,7 @@ export default function Layout({ children }: { children: ReactNode }) {
           )}
         </div>
         <div className="flex items-start gap-2">
+          {pathname === '/menu' ? <InfoButton /> : null}
           <SettingsButton />
           <LanguageSwitcher />
         </div>
