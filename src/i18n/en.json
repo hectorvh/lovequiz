@@ -12,17 +12,22 @@
     "language": "Language",
     "localMode": "Local mode: no database connected."
   },
+  "start": {
+    "play": "Play"
+  },
   "intro": {
     "m1": "Hello Fernanda",
     "m2": "This is a game Hector made for you!",
     "m3": "and guess what it's about",
-    "m4": "QUESTIONS!"
+    "m4": "QUESTIONS!",
+    "pause": "Pause instructions",
+    "resume": "Resume instructions",
+    "previous": "Previous instruction"
   },
   "instructions": {
     "m1": "You have {{seconds}} seconds to answer each question",
     "m2": "for every correct answer you'll win a heart",
-    "m3": "for every wrong answer you'll earn one of the 4 possible punishments:",
-    "m4": "The punishments stack up and in the end you'll have to pay them alllll!"
+    "m3": "for every wrong answer you'll earn one of the 4 possible punishments:"
   },
   "menu": {
     "prompt": "Please pick a group of questions",

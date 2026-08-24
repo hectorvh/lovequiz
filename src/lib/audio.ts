@@ -2,6 +2,8 @@ const MUSIC_SRC = '/audio/background.mp3';
 
 let element: HTMLAudioElement | null = null;
 let waitingForGesture = false;
+/** Music stays silent until Play is pressed (or the player lands mid-session). */
+let musicRequested = false;
 
 /**
  * A single module-level <audio> element so the track survives every route
@@ -39,6 +41,7 @@ function playWhenAllowed(audio: HTMLAudioElement) {
 }
 
 export function startMusic(muted: boolean) {
+  musicRequested = true;
   const audio = getElement();
   audio.muted = muted;
   if (muted) return;
@@ -48,6 +51,7 @@ export function startMusic(muted: boolean) {
 export function setMuted(muted: boolean) {
   const audio = getElement();
   audio.muted = muted;
+  if (!musicRequested) return;
   if (muted) {
     audio.pause();
   } else {

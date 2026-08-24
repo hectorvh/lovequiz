@@ -12,17 +12,22 @@
     "language": "Idioma",
     "localMode": "Modo local: sin base de datos conectada."
   },
+  "start": {
+    "play": "Jugar"
+  },
   "intro": {
     "m1": "Hola Fernanda",
     "m2": "Este es un juego que Hector preparó para ti!",
     "m3": "y adivina de qué se trata",
-    "m4": "de PREGUNTAS!"
+    "m4": "de PREGUNTAS!",
+    "pause": "Pausar instrucciones",
+    "resume": "Reanudar instrucciones",
+    "previous": "Instrucción anterior"
   },
   "instructions": {
     "m1": "Tienes {{seconds}} segundos para responder cada pregunta",
     "m2": "por cada pregunta correcta ganarás un corazón",
-    "m3": "por cada pregunta incorrecta te ganarás uno de los 4 posibles castigos:",
-    "m4": "Los castigos son acumulables y al final tendrás que pagarlos todooooos!"
+    "m3": "por cada pregunta incorrecta te ganarás uno de los 4 posibles castigos:"
   },
   "menu": {
     "prompt": "Por favor selecciona un grupo de preguntas",

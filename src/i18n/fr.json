@@ -12,17 +12,22 @@
     "language": "Langue",
     "localMode": "Mode local : aucune base de données connectée."
   },
+  "start": {
+    "play": "Jouer"
+  },
   "intro": {
     "m1": "Bonjour Fernanda",
     "m2": "Voici un jeu que Hector a préparé pour toi !",
     "m3": "et devine de quoi il s'agit",
-    "m4": "de QUESTIONS !"
+    "m4": "de QUESTIONS !",
+    "pause": "Mettre les instructions en pause",
+    "resume": "Reprendre les instructions",
+    "previous": "Instruction précédente"
   },
   "instructions": {
     "m1": "Tu as {{seconds}} secondes pour répondre à chaque question",
     "m2": "pour chaque bonne réponse tu gagneras un cœur",
-    "m3": "pour chaque mauvaise réponse tu gagneras l'un des 4 gages possibles :",
-    "m4": "Les gages s'accumulent et à la fin il faudra tous les payer !"
+    "m3": "pour chaque mauvaise réponse tu gagneras l'un des 4 gages possibles :"
   },
   "menu": {
     "prompt": "Choisis un groupe de questions",

@@ -12,17 +12,22 @@
     "language": "Sprache",
     "localMode": "Lokaler Modus: keine Datenbank verbunden."
   },
+  "start": {
+    "play": "Spielen"
+  },
   "intro": {
     "m1": "Hallo Fernanda",
     "m2": "Das ist ein Spiel, das Hector für dich vorbereitet hat!",
     "m3": "und rate mal, worum es geht",
-    "m4": "um FRAGEN!"
+    "m4": "um FRAGEN!",
+    "pause": "Anleitung pausieren",
+    "resume": "Anleitung fortsetzen",
+    "previous": "Vorherige Anleitung"
   },
   "instructions": {
     "m1": "Du hast {{seconds}} Sekunden für jede Frage",
     "m2": "für jede richtige Antwort gewinnst du ein Herz",
-    "m3": "für jede falsche Antwort bekommst du eine der 4 möglichen Strafen:",
-    "m4": "Die Strafen summieren sich und am Ende musst du sie alleeee bezahlen!"
+    "m3": "für jede falsche Antwort bekommst du eine der 4 möglichen Strafen:"
   },
   "menu": {
     "prompt": "Bitte wähle eine Fragengruppe",

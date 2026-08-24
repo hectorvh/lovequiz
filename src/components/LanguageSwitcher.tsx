@@ -33,7 +33,7 @@ export default function LanguageSwitcher() {
         onClick={() => setOpen((v) => !v)}
         aria-label={t('common.language')}
         aria-expanded={open}
-        className="grid h-11 w-11 place-items-center rounded-full border border-white/15 bg-black/35 text-lg backdrop-blur transition active:scale-95 hover:bg-black/50"
+        className="grid h-11 w-11 place-items-center rounded-full border border-white/15 bg-black/35 text-lg opacity-60 backdrop-blur transition active:scale-95 hover:bg-black/50"
       >
         <span aria-hidden>{LOCALE_LABELS[locale].flag}</span>
       </button>
