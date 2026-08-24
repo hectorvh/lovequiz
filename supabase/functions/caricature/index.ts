@@ -7,7 +7,7 @@ const corsHeaders = {
   "Access-Control-Allow-Methods": "POST, OPTIONS",
 };
 
-const DEFAULT_MODEL = "gemini-3.1-flash-image-preview";
+const DEFAULT_MODEL = "gemini-2.5-flash-image";
 const PROMPT =
   "Transform this photo into a fun, friendly cartoon caricature portrait. Keep the same people, poses, and clothes. Clean lines, vibrant colors. No extra people, no text, no watermark.";
 

@@ -68,7 +68,7 @@ or is not deployed, the **original photo is still saved** (Supabase Storage
 when connected, otherwise localStorage) and a notice is shown.
 
 1. Secret `GEMINI_API_KEY` is already set in **Edge Functions → Secrets**.
-   Optional: `GEMINI_IMAGE_MODEL` (defaults to `gemini-3.1-flash-image-preview`).
+   Optional: `GEMINI_IMAGE_MODEL` (defaults to `gemini-2.5-flash-image`).
 2. Deploy once from the repo root (JWT off — this app has no login):
 
 ```bash
