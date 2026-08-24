@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
@@ -7,6 +7,7 @@ import { saveReciprocalQuiz } from '../lib/db';
 import {
   RECIPROCAL_QUIZ_LENGTH,
   isDraftItemComplete,
+  selectAllGroupsComplete,
   useGameStore,
   type QuizDraftItem,
 } from '../state/gameStore';
@@ -19,9 +20,14 @@ export default function QuizCreation() {
   const quizDraft = useGameStore((s) => s.quizDraft).slice(0, RECIPROCAL_QUIZ_LENGTH);
   const setQuizDraftItem = useGameStore((s) => s.setQuizDraftItem);
   const saveReciprocalQuizLocally = useGameStore((s) => s.saveReciprocalQuizLocally);
+  const allGroupsComplete = useGameStore(selectAllGroupsComplete);
 
   const [step, setStep] = useState(0);
   const [saving, setSaving] = useState(false);
+
+  useEffect(() => {
+    if (!allGroupsComplete) navigate('/menu', { replace: true });
+  }, [allGroupsComplete, navigate]);
 
   const item = quizDraft[step];
   const complete = isDraftItemComplete(item);

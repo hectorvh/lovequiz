@@ -30,24 +30,24 @@ Correct answer marked with ✅ in every language.
 
 ### 3
 
-- 🇪🇸 **¿Cuántos idiomas tiene la flor de loto 3d con la que Héctor le pidió que fuera su novia a Fer?**
+- 🇪🇸 **¿Cuántos idiomas tiene la flor de loto 3d con la que Hector le pidió que fuera su novia a Fer?**
   A: 13 ✅ | B: 15 | C: 17 | D: Solo 1: el idioma es el del amor
 - 🇬🇧 **How many languages does the 3D lotus flower Hector used to ask Fer to be his girlfriend have?**
   A: 13 ✅ | B: 15 | C: 17 | D: Just 1 — the language of love
-- 🇫🇷 **Combien de langues comporte la fleur de lotus 3D avec laquelle Héctor a demandé à Fer de sortir avec lui ?**
+- 🇫🇷 **Combien de langues comporte la fleur de lotus 3D avec laquelle Hector a demandé à Fer de sortir avec lui ?**
   A: 13 ✅ | B: 15 | C: 17 | D: Une seule : la langue de l'amour
-- 🇩🇪 **Wie viele Sprachen hat die 3D-Lotusblume, mit der Héctor Fer gefragt hat, ob sie seine Freundin sein möchte?**
+- 🇩🇪 **Wie viele Sprachen hat die 3D-Lotusblume, mit der Hector Fer gefragt hat, ob sie seine Freundin sein möchte?**
   A: 13 ✅ | B: 15 | C: 17 | D: Nur 1 — die Sprache der Liebe
 
 ### 4
 
-- 🇪🇸 **¿Cuántos vuelos de Dublín-Düsseldorf han tomado sumados entre Héctor y Fer?**
+- 🇪🇸 **¿Cuántos vuelos de Dublín-Düsseldorf han tomado sumados entre Hector y Fer?**
   A: 8 | B: 10 ✅ | C: 12 | D: 16
-- 🇬🇧 **How many Dublin–Düsseldorf flights have Héctor and Fer taken combined?**
+- 🇬🇧 **How many Dublin–Düsseldorf flights have Hector and Fer taken combined?**
   A: 8 | B: 10 ✅ | C: 12 | D: 16
-- 🇫🇷 **Combien de vols Dublin-Düsseldorf Héctor et Fer ont-ils pris au total ?**
+- 🇫🇷 **Combien de vols Dublin-Düsseldorf Hector et Fer ont-ils pris au total ?**
   A: 8 | B: 10 ✅ | C: 12 | D: 16
-- 🇩🇪 **Wie viele Flüge Dublin–Düsseldorf haben Héctor und Fer zusammen genommen?**
+- 🇩🇪 **Wie viele Flüge Dublin–Düsseldorf haben Hector und Fer zusammen genommen?**
   A: 8 | B: 10 ✅ | C: 12 | D: 16
 
 ### 5
@@ -63,13 +63,13 @@ Correct answer marked with ✅ in every language.
 
 ### 6
 
-- 🇪🇸 **¿En qué año Héctor se tituló de ingeniero?**
+- 🇪🇸 **¿En qué año Hector se tituló de ingeniero?**
   A: 2018 | B: 2019 | C: 2020 ✅ | D: 2021
-- 🇬🇧 **In what year did Héctor graduate as an engineer?**
+- 🇬🇧 **In what year did Hector graduate as an engineer?**
   A: 2018 | B: 2019 | C: 2020 ✅ | D: 2021
-- 🇫🇷 **En quelle année Héctor a-t-il obtenu son diplôme d'ingénieur ?**
+- 🇫🇷 **En quelle année Hector a-t-il obtenu son diplôme d'ingénieur ?**
   A: 2018 | B: 2019 | C: 2020 ✅ | D: 2021
-- 🇩🇪 **In welchem Jahr hat Héctor sein Ingenieurstudium abgeschlossen?**
+- 🇩🇪 **In welchem Jahr hat Hector sein Ingenieurstudium abgeschlossen?**
   A: 2018 | B: 2019 | C: 2020 ✅ | D: 2021
 
 ### 7
@@ -133,13 +133,13 @@ Correct answer marked with ✅ in every language.
 
 ### 4
 
-- 🇪🇸 **¿Con que número de playera Héctor jugaba fútbol la mayor parte de su vida?**
+- 🇪🇸 **¿Con que número de playera Hector jugaba fútbol la mayor parte de su vida?**
   A: 7 ✅ | B: 10 | C: 11 | D: 96
-- 🇬🇧 **What jersey number did Héctor wear playing soccer for most of his life?**
+- 🇬🇧 **What jersey number did Hector wear playing soccer for most of his life?**
   A: 7 ✅ | B: 10 | C: 11 | D: 96
-- 🇫🇷 **Quel numéro de maillot Héctor portait-il en jouant au football la majeure partie de sa vie ?**
+- 🇫🇷 **Quel numéro de maillot Hector portait-il en jouant au football la majeure partie de sa vie ?**
   A: 7 ✅ | B: 10 | C: 11 | D: 96
-- 🇩🇪 **Welche Trikotnummer trug Héctor die meiste Zeit seines Lebens beim Fußballspielen?**
+- 🇩🇪 **Welche Trikotnummer trug Hector die meiste Zeit seines Lebens beim Fußballspielen?**
   A: 7 ✅ | B: 10 | C: 11 | D: 96
 
 ### 5
@@ -155,13 +155,13 @@ Correct answer marked with ✅ in every language.
 
 ### 6
 
-- 🇪🇸 **¿Cuántos legos de Spiderman le regaló Fer a Héctor?**
+- 🇪🇸 **¿Cuántos legos de Spiderman le regaló Fer a Hector?**
   A: 12 | B: 16 | C: 18 | D: 20 ✅
-- 🇬🇧 **How many Spiderman Lego pieces/sets did Fer give Héctor?**
+- 🇬🇧 **How many Spiderman Lego pieces/sets did Fer give Hector?**
   A: 12 | B: 16 | C: 18 | D: 20 ✅
-- 🇫🇷 **Combien de Lego Spiderman Fer a-t-elle offerts à Héctor ?**
+- 🇫🇷 **Combien de Lego Spiderman Fer a-t-elle offerts à Hector ?**
   A: 12 | B: 16 | C: 18 | D: 20 ✅
-- 🇩🇪 **Wie viele Spiderman-Legos hat Fer Héctor geschenkt?**
+- 🇩🇪 **Wie viele Spiderman-Legos hat Fer Hector geschenkt?**
   A: 12 | B: 16 | C: 18 | D: 20 ✅
 
 ### 7
@@ -192,24 +192,24 @@ Correct answer marked with ✅ in every language.
 
 ### 1
 
-- 🇪🇸 **¿Cuántos primos del lado materno tiene Héctor?**
+- 🇪🇸 **¿Cuántos primos del lado materno tiene Hector?**
   A: 7 | B: 9 ✅ | C: 11 | D: 15
-- 🇬🇧 **How many cousins does Héctor have on his mother's side?**
+- 🇬🇧 **How many cousins does Hector have on his mother's side?**
   A: 7 | B: 9 ✅ | C: 11 | D: 15
-- 🇫🇷 **Combien de cousins Héctor a-t-il du côté maternel ?**
+- 🇫🇷 **Combien de cousins Hector a-t-il du côté maternel ?**
   A: 7 | B: 9 ✅ | C: 11 | D: 15
-- 🇩🇪 **Wie viele Cousins und Cousinen hat Héctor mütterlicherseits?**
+- 🇩🇪 **Wie viele Cousins und Cousinen hat Hector mütterlicherseits?**
   A: 7 | B: 9 ✅ | C: 11 | D: 15
 
 ### 2
 
-- 🇪🇸 **¿Cuál es el pin favorito de Héctor que le ha regalado Fer?**
+- 🇪🇸 **¿Cuál es el pin favorito de Hector que le ha regalado Fer?**
   A: El queso de Francia | B: Los limones de Italia | C: El de la obra de Hercules ✅ | D: El RedBus de Londres
-- 🇬🇧 **What is Héctor's favorite pin that Fer has given him?**
+- 🇬🇧 **What is Hector's favorite pin that Fer has given him?**
   A: The cheese from France | B: The lemons from Italy | C: The Hercules musical one ✅ | D: The London red bus
-- 🇫🇷 **Quel est le pin's préféré de Héctor offert par Fer ?**
+- 🇫🇷 **Quel est le pin's préféré de Hector offert par Fer ?**
   A: Le fromage de France | B: Les citrons d'Italie | C: Celui de la comédie musicale Hercule ✅ | D: Le bus rouge de Londres
-- 🇩🇪 **Welches ist Héctors Lieblings-Pin, den Fer ihm geschenkt hat?**
+- 🇩🇪 **Welches ist Hectors Lieblings-Pin, den Fer ihm geschenkt hat?**
   A: Der Käse aus Frankreich | B: Die Zitronen aus Italien | C: Der vom Hercules-Musical ✅ | D: Der rote Londoner Bus
 
 ### 3
@@ -225,24 +225,24 @@ Correct answer marked with ✅ in every language.
 
 ### 4
 
-- 🇪🇸 **¿De qué color es el coche del papá de Héctor que les prestó para moverse en Toluca?**
+- 🇪🇸 **¿De qué color es el coche del papá de Hector que les prestó para moverse en Toluca?**
   A: Azul | B: Rojo | C: Blanco | D: Gris ✅
-- 🇬🇧 **What color is Héctor's dad's car that he lent them to get around in Toluca?**
+- 🇬🇧 **What color is Hector's dad's car that he lent them to get around in Toluca?**
   A: Blue | B: Red | C: White | D: Gray ✅
-- 🇫🇷 **De quelle couleur est la voiture du père de Héctor qu'il leur a prêtée pour se déplacer à Toluca ?**
+- 🇫🇷 **De quelle couleur est la voiture du père de Hector qu'il leur a prêtée pour se déplacer à Toluca ?**
   A: Bleue | B: Rouge | C: Blanche | D: Grise ✅
-- 🇩🇪 **Welche Farbe hat das Auto von Héctors Vater, das er ihnen geliehen hat, um sich in Toluca fortzubewegen?**
+- 🇩🇪 **Welche Farbe hat das Auto von Hectors Vater, das er ihnen geliehen hat, um sich in Toluca fortzubewegen?**
   A: Blau | B: Rot | C: Weiß | D: Grau ✅
 
 ### 5
 
-- 🇪🇸 **¿Cuál es la pizza favorita de Héctor?**
+- 🇪🇸 **¿Cuál es la pizza favorita de Hector?**
   A: Peperoni ✅ | B: Nduja | C: Champiñones | D: 3 quesos
-- 🇬🇧 **What is Héctor's favorite pizza?**
+- 🇬🇧 **What is Hector's favorite pizza?**
   A: Pepperoni ✅ | B: Nduja | C: Mushroom | D: Three cheese
-- 🇫🇷 **Quelle est la pizza préférée de Héctor ?**
+- 🇫🇷 **Quelle est la pizza préférée de Hector ?**
   A: Pepperoni ✅ | B: Nduja | C: Champignons | D: Trois fromages
-- 🇩🇪 **Was ist Héctors Lieblingspizza?**
+- 🇩🇪 **Was ist Hectors Lieblingspizza?**
   A: Peperoni ✅ | B: Nduja | C: Champignon | D: Drei-Käse
 
 ### 6
@@ -280,9 +280,9 @@ Correct answer marked with ✅ in every language.
 
 ### Bonus (solo Grupo 3 — sin penalización / no scoring effect)
 
-- 🇪🇸 Selecciona en el mapa donde vive Héctor actualmente.
-- 🇬🇧 Select on the map where Héctor currently lives.
-- 🇫🇷 Sélectionne sur la carte l'endroit où Héctor vit actuellement.
-- 🇩🇪 Wähle auf der Karte aus, wo Héctor derzeit lebt.
+- 🇪🇸 Selecciona en el mapa donde vive Hector actualmente.
+- 🇬🇧 Select on the map where Hector currently lives.
+- 🇫🇷 Sélectionne sur la carte l'endroit où Hector vit actuellement.
+- 🇩🇪 Wähle auf der Karte aus, wo Hector derzeit lebt.
 
 Calcula la distancia en metros al punto fijo `51.93828946997965, 7.591595632371097`.

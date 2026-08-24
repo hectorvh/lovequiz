@@ -31,7 +31,7 @@
   "instructions": {
     "m1": "Tienes {{seconds}} segundos para responder cada pregunta",
     "m2": "por cada pregunta correcta ganarás un corazón",
-    "m3": "por cada pregunta incorrecta te ganarás uno de los 4 posibles castigos:"
+    "m3": "por cada pregunta incorrecta acumularás uno de los 4 posibles castigos:"
   },
   "menu": {
     "prompt": "Selecciona un grupo de preguntas",
@@ -41,8 +41,9 @@
     "createQuiz": "Crea",
     "startHector": "Que Hector empiece el juego",
     "results": "Respuestas",
-    "lockedCreate": "Finaliza todas las preguntas para poder hacer tu propio cuestionario.",
+    "lockedCreate": "Finaliza los 3 grupos de preguntas para poder hacer tu propio cuestionario.",
     "lockedResults": "Finaliza todas las preguntas para poder ver tus resultados.",
+    "lockedPhoto": "Finaliza los 3 grupos de preguntas para tomar una foto.",
     "settings": "Ajustes",
     "photo": "Tomar foto"
   },
@@ -67,12 +68,12 @@
   },
   "bonus": {
     "tag": "Pregunta bonus",
-    "prompt": "Selecciona en el mapa donde vive Héctor actualmente.",
+    "prompt": "Selecciona en el mapa donde vive Hector actualmente.",
     "hint": "Toca el mapa para poner tu marcador, luego pulsa Aceptar.",
     "noScore": "Esta pregunta no cuenta para corazones ni castigos, y no tiene tiempo límite.",
     "resultKm": "Tu marcador quedó a {{km}} km del lugar correcto.",
     "resultM": "Eso son {{m}} metros.",
-    "reveal": "Héctor vive en ese punto del mapa."
+    "reveal": "Hector vive en ese punto del mapa."
   },
   "partial": {
     "title": "Resultados del Grupo {{n}}",
@@ -146,20 +147,25 @@
     "resetPhoto": "Reiniciar juego (solo la foto)",
     "resetPhotoDesc": "Vuelve a habilitar la pantalla de foto sin tocar el progreso.",
     "resetPhotoDone": "La pantalla de foto está habilitada otra vez.",
-    "resetAll": "Reiniciar todo el progreso",
+    "resetAll": "Reiniciar todo el proceso",
     "resetAllDesc": "Borra corazones, castigos, grupos completados y el cuestionario guardado en este dispositivo.",
     "resetAllDone": "Progreso reiniciado.",
     "confirmTitle": "¿Seguro?",
-    "confirmReset": "Sí, reiniciar"
+    "confirmErase": "¿Estás seguro de borrar todo el proceso?",
+    "confirmReset": "Sí, reiniciar",
+    "timer": "Tiempo por pregunta",
+    "timerDesc": "Segundos para responder cada pregunta.",
+    "timerMinus": "Un segundo menos",
+    "timerPlus": "Un segundo más"
   },
   "punishments": {
     "beso": "Beso",
-    "besoFull": "Beso Francés",
+    "besoFull": "Beso\nFrancés",
     "baile": "Baile",
-    "baileFull": "Baile sexy",
+    "baileFull": "Baile\nsexy",
     "masaje": "Masaje",
-    "masajeFull": "Masaje Hot",
+    "masajeFull": "Masaje\nHot",
     "secreto": "Secreto",
-    "secretoFull": "Secreto Vergonzoso"
+    "secretoFull": "Secreto\nVergonzoso"
   }
 }

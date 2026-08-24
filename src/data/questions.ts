@@ -93,7 +93,7 @@ const GROUP_1: QuestionSeed[] = [
     correctIndex: 0,
     i18n: {
       es: {
-        text: '¿Cuántos idiomas tiene la flor de loto 3d con la que Héctor le pidió que fuera su novia a Fer?',
+        text: '¿Cuántos idiomas tiene la flor de loto 3d con la que Hector le pidió que fuera su novia a Fer?',
         options: ['13', '15', '17', 'Solo 1: el idioma es el del amor'],
       },
       en: {
@@ -101,11 +101,11 @@ const GROUP_1: QuestionSeed[] = [
         options: ['13', '15', '17', 'Just 1 — the language of love'],
       },
       fr: {
-        text: 'Combien de langues comporte la fleur de lotus 3D avec laquelle Héctor a demandé à Fer de sortir avec lui ?',
+        text: 'Combien de langues comporte la fleur de lotus 3D avec laquelle Hector a demandé à Fer de sortir avec lui ?',
         options: ['13', '15', '17', "Une seule : la langue de l'amour"],
       },
       de: {
-        text: 'Wie viele Sprachen hat die 3D-Lotusblume, mit der Héctor Fer gefragt hat, ob sie seine Freundin sein möchte?',
+        text: 'Wie viele Sprachen hat die 3D-Lotusblume, mit der Hector Fer gefragt hat, ob sie seine Freundin sein möchte?',
         options: ['13', '15', '17', 'Nur 1 — die Sprache der Liebe'],
       },
     },
@@ -115,19 +115,19 @@ const GROUP_1: QuestionSeed[] = [
     correctIndex: 1,
     i18n: {
       es: {
-        text: '¿Cuántos vuelos de Dublín-Düsseldorf han tomado sumados entre Héctor y Fer?',
+        text: '¿Cuántos vuelos de Dublín-Düsseldorf han tomado sumados entre Hector y Fer?',
         options: ['8', '10', '12', '16'],
       },
       en: {
-        text: 'How many Dublin–Düsseldorf flights have Héctor and Fer taken combined?',
+        text: 'How many Dublin–Düsseldorf flights have Hector and Fer taken combined?',
         options: ['8', '10', '12', '16'],
       },
       fr: {
-        text: 'Combien de vols Dublin-Düsseldorf Héctor et Fer ont-ils pris au total ?',
+        text: 'Combien de vols Dublin-Düsseldorf Hector et Fer ont-ils pris au total ?',
         options: ['8', '10', '12', '16'],
       },
       de: {
-        text: 'Wie viele Flüge Dublin–Düsseldorf haben Héctor und Fer zusammen genommen?',
+        text: 'Wie viele Flüge Dublin–Düsseldorf haben Hector und Fer zusammen genommen?',
         options: ['8', '10', '12', '16'],
       },
     },
@@ -159,19 +159,19 @@ const GROUP_1: QuestionSeed[] = [
     correctIndex: 2,
     i18n: {
       es: {
-        text: '¿En qué año Héctor se tituló de ingeniero?',
+        text: '¿En qué año Hector se tituló de ingeniero?',
         options: ['2018', '2019', '2020', '2021'],
       },
       en: {
-        text: 'In what year did Héctor graduate as an engineer?',
+        text: 'In what year did Hector graduate as an engineer?',
         options: ['2018', '2019', '2020', '2021'],
       },
       fr: {
-        text: "En quelle année Héctor a-t-il obtenu son diplôme d'ingénieur ?",
+        text: "En quelle année Hector a-t-il obtenu son diplôme d'ingénieur ?",
         options: ['2018', '2019', '2020', '2021'],
       },
       de: {
-        text: 'In welchem Jahr hat Héctor sein Ingenieurstudium abgeschlossen?',
+        text: 'In welchem Jahr hat Hector sein Ingenieurstudium abgeschlossen?',
         options: ['2018', '2019', '2020', '2021'],
       },
     },
@@ -282,19 +282,19 @@ const GROUP_2: QuestionSeed[] = [
     correctIndex: 0,
     i18n: {
       es: {
-        text: '¿Con qué número de playera Héctor jugaba fútbol la mayor parte de su vida?',
+        text: '¿Con qué número de playera Hector jugaba fútbol la mayor parte de su vida?',
         options: ['7', '10', '11', '96'],
       },
       en: {
-        text: 'What jersey number did Héctor wear playing soccer for most of his life?',
+        text: 'What jersey number did Hector wear playing soccer for most of his life?',
         options: ['7', '10', '11', '96'],
       },
       fr: {
-        text: 'Quel numéro de maillot Héctor portait-il en jouant au football la majeure partie de sa vie ?',
+        text: 'Quel numéro de maillot Hector portait-il en jouant au football la majeure partie de sa vie ?',
         options: ['7', '10', '11', '96'],
       },
       de: {
-        text: 'Welche Trikotnummer trug Héctor die meiste Zeit seines Lebens beim Fußballspielen?',
+        text: 'Welche Trikotnummer trug Hector die meiste Zeit seines Lebens beim Fußballspielen?',
         options: ['7', '10', '11', '96'],
       },
     },
@@ -326,19 +326,19 @@ const GROUP_2: QuestionSeed[] = [
     correctIndex: 3,
     i18n: {
       es: {
-        text: '¿Cuántos legos de Spiderman le regaló Fer a Héctor?',
+        text: '¿Cuántos legos de Spiderman le regaló Fer a Hector?',
         options: ['12', '16', '18', '20'],
       },
       en: {
-        text: 'How many Spiderman Lego sets did Fer give Héctor?',
+        text: 'How many Spiderman Lego sets did Fer give Hector?',
         options: ['12', '16', '18', '20'],
       },
       fr: {
-        text: 'Combien de Lego Spiderman Fer a-t-elle offerts à Héctor ?',
+        text: 'Combien de Lego Spiderman Fer a-t-elle offerts à Hector ?',
         options: ['12', '16', '18', '20'],
       },
       de: {
-        text: 'Wie viele Spiderman-Legos hat Fer Héctor geschenkt?',
+        text: 'Wie viele Spiderman-Legos hat Fer Hector geschenkt?',
         options: ['12', '16', '18', '20'],
       },
     },
@@ -395,19 +395,19 @@ const GROUP_3: QuestionSeed[] = [
     correctIndex: 1,
     i18n: {
       es: {
-        text: '¿Cuántos primos del lado materno tiene Héctor?',
+        text: '¿Cuántos primos del lado materno tiene Hector?',
         options: ['7', '9', '11', '15'],
       },
       en: {
-        text: "How many cousins does Héctor have on his mother's side?",
+        text: "How many cousins does Hector have on his mother's side?",
         options: ['7', '9', '11', '15'],
       },
       fr: {
-        text: 'Combien de cousins Héctor a-t-il du côté maternel ?',
+        text: 'Combien de cousins Hector a-t-il du côté maternel ?',
         options: ['7', '9', '11', '15'],
       },
       de: {
-        text: 'Wie viele Cousins und Cousinen hat Héctor mütterlicherseits?',
+        text: 'Wie viele Cousins und Cousinen hat Hector mütterlicherseits?',
         options: ['7', '9', '11', '15'],
       },
     },
@@ -417,7 +417,7 @@ const GROUP_3: QuestionSeed[] = [
     correctIndex: 2,
     i18n: {
       es: {
-        text: '¿Cuál es el pin favorito de Héctor que le ha regalado Fer?',
+        text: '¿Cuál es el pin favorito de Hector que le ha regalado Fer?',
         options: [
           'El queso de Francia',
           'Los limones de Italia',
@@ -426,7 +426,7 @@ const GROUP_3: QuestionSeed[] = [
         ],
       },
       en: {
-        text: "What is Héctor's favorite pin that Fer has given him?",
+        text: "What is Hector's favorite pin that Fer has given him?",
         options: [
           'The cheese from France',
           'The lemons from Italy',
@@ -435,7 +435,7 @@ const GROUP_3: QuestionSeed[] = [
         ],
       },
       fr: {
-        text: "Quel est le pin's préféré de Héctor offert par Fer ?",
+        text: "Quel est le pin's préféré de Hector offert par Fer ?",
         options: [
           'Le fromage de France',
           "Les citrons d'Italie",
@@ -444,7 +444,7 @@ const GROUP_3: QuestionSeed[] = [
         ],
       },
       de: {
-        text: 'Welches ist Héctors Lieblings-Pin, den Fer ihm geschenkt hat?',
+        text: 'Welches ist Hectors Lieblings-Pin, den Fer ihm geschenkt hat?',
         options: [
           'Der Käse aus Frankreich',
           'Die Zitronen aus Italien',
@@ -481,19 +481,19 @@ const GROUP_3: QuestionSeed[] = [
     correctIndex: 3,
     i18n: {
       es: {
-        text: '¿De qué color es el coche del papá de Héctor que les prestó para moverse en Toluca?',
+        text: '¿De qué color es el coche del papá de Hector que les prestó para moverse en Toluca?',
         options: ['Azul', 'Rojo', 'Blanco', 'Gris'],
       },
       en: {
-        text: "What color is Héctor's dad's car that he lent them to get around in Toluca?",
+        text: "What color is Hector's dad's car that he lent them to get around in Toluca?",
         options: ['Blue', 'Red', 'White', 'Gray'],
       },
       fr: {
-        text: 'De quelle couleur est la voiture du père de Héctor qu’il leur a prêtée pour se déplacer à Toluca ?',
+        text: 'De quelle couleur est la voiture du père de Hector qu’il leur a prêtée pour se déplacer à Toluca ?',
         options: ['Bleue', 'Rouge', 'Blanche', 'Grise'],
       },
       de: {
-        text: 'Welche Farbe hat das Auto von Héctors Vater, das er ihnen geliehen hat, um sich in Toluca fortzubewegen?',
+        text: 'Welche Farbe hat das Auto von Hectors Vater, das er ihnen geliehen hat, um sich in Toluca fortzubewegen?',
         options: ['Blau', 'Rot', 'Weiß', 'Grau'],
       },
     },
@@ -503,19 +503,19 @@ const GROUP_3: QuestionSeed[] = [
     correctIndex: 0,
     i18n: {
       es: {
-        text: '¿Cuál es la pizza favorita de Héctor?',
+        text: '¿Cuál es la pizza favorita de Hector?',
         options: ['Peperoni', 'Nduja', 'Champiñones', '3 quesos'],
       },
       en: {
-        text: "What is Héctor's favorite pizza?",
+        text: "What is Hector's favorite pizza?",
         options: ['Pepperoni', 'Nduja', 'Mushroom', 'Three cheese'],
       },
       fr: {
-        text: 'Quelle est la pizza préférée de Héctor ?',
+        text: 'Quelle est la pizza préférée de Hector ?',
         options: ['Pepperoni', 'Nduja', 'Champignons', 'Trois fromages'],
       },
       de: {
-        text: 'Was ist Héctors Lieblingspizza?',
+        text: 'Was ist Hectors Lieblingspizza?',
         options: ['Peperoni', 'Nduja', 'Champignon', 'Drei-Käse'],
       },
     },

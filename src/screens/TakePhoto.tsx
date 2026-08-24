@@ -6,7 +6,7 @@ import { Card, GhostButton, PrimaryButton, ScreenTitle } from '../components/ui'
 import { generateCaricature } from '../lib/caricatureApi';
 import { uploadPhoto } from '../lib/db';
 import { appendLocalPhoto } from '../state/persistence';
-import { useGameStore } from '../state/gameStore';
+import { selectAllGroupsComplete, useGameStore } from '../state/gameStore';
 
 type Facing = 'user' | 'environment';
 
@@ -28,6 +28,7 @@ export default function TakePhoto() {
 
   const photoTaken = useGameStore((s) => s.photoTaken);
   const setPhotoTaken = useGameStore((s) => s.setPhotoTaken);
+  const allGroupsComplete = useGameStore(selectAllGroupsComplete);
 
   const videoRef = useRef<HTMLVideoElement>(null);
   const streamRef = useRef<MediaStream | null>(null);
@@ -43,6 +44,10 @@ export default function TakePhoto() {
     streamRef.current?.getTracks().forEach((track) => track.stop());
     streamRef.current = null;
   }, []);
+
+  useEffect(() => {
+    if (!allGroupsComplete) navigate('/menu', { replace: true });
+  }, [allGroupsComplete, navigate]);
 
   useEffect(() => {
     if (photoTaken || captured) return;

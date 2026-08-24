@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 import PinModal from './PinModal';
@@ -8,6 +8,7 @@ import { chromeButtonClass } from './ui';
 export default function SettingsButton() {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const location = useLocation();
   const [pinOpen, setPinOpen] = useState(false);
 
   return (
@@ -37,7 +38,9 @@ export default function SettingsButton() {
         <PinModal
           onSuccess={() => {
             setPinOpen(false);
-            navigate('/settings');
+            if (location.pathname !== '/settings') {
+              navigate('/settings', { state: { from: location.pathname } });
+            }
           }}
           onClose={() => setPinOpen(false)}
         />

@@ -1,9 +1,13 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 import Toast from '../components/Toast';
-import { Card, GhostButton, PrimaryButton, ScreenTitle } from '../components/ui';
+import { Card, GhostButton, PrimaryButton, ScreenTitle, introTypeClass } from '../components/ui';
+import {
+  MAX_QUESTION_DURATION_SECONDS,
+  MIN_QUESTION_DURATION_SECONDS,
+} from '../config';
 import { getPhotoUrl, listPhotos } from '../lib/db';
 import { readLocalPhotos } from '../state/persistence';
 import { useGameStore } from '../state/gameStore';
@@ -12,14 +16,39 @@ import type { StoredPhoto } from '../types';
 export default function Settings() {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
+  const location = useLocation();
 
-  const clearAnswersLocally = useGameStore((s) => s.clearAnswersLocally);
-  const resetPhotoGate = useGameStore((s) => s.resetPhotoGate);
   const resetAllProgress = useGameStore((s) => s.resetAllProgress);
+  const questionDurationSeconds = useGameStore((s) => s.questionDurationSeconds);
+  const setQuestionDurationSeconds = useGameStore((s) => s.setQuestionDurationSeconds);
 
   const [photos, setPhotos] = useState<StoredPhoto[]>([]);
   const [toast, setToast] = useState<string | null>(null);
   const [confirmingReset, setConfirmingReset] = useState(false);
+  const [timerDraft, setTimerDraft] = useState(String(questionDurationSeconds));
+
+  useEffect(() => {
+    setTimerDraft(String(questionDurationSeconds));
+  }, [questionDurationSeconds]);
+
+  const commitTimer = (raw: string) => {
+    const parsed = Number.parseInt(raw, 10);
+    if (Number.isNaN(parsed)) {
+      setTimerDraft(String(questionDurationSeconds));
+      return;
+    }
+    setQuestionDurationSeconds(parsed);
+  };
+
+  const leaveSettings = () => {
+    commitTimer(timerDraft);
+    const from = (location.state as { from?: string } | null)?.from;
+    if (from && from !== '/settings') {
+      navigate(from);
+      return;
+    }
+    navigate('/menu');
+  };
 
   useEffect(() => {
     const load = async () => {
@@ -39,26 +68,53 @@ export default function Settings() {
     link.click();
   };
 
+  const pinButtonClass = '!w-full !px-3 !py-2 !text-sm';
+
   return (
     <div className="flex h-full min-h-0 flex-col overflow-hidden pt-1">
       <ScreenTitle title={t('settings.title')} />
 
       <Card className="flex min-h-0 flex-1 flex-col overflow-hidden !p-3.5">
-        <div className="min-h-0 flex-1 space-y-3 overflow-hidden">
+        <div className="min-h-0 flex-1 space-y-3 overflow-y-auto">
           <section>
-            <h2 className="mb-0.5 text-sm font-semibold text-ink">{t('settings.deleteAnswers')}</h2>
+            <h2 className="mb-0.5 text-sm font-semibold text-ink">{t('settings.timer')}</h2>
             <p className="mb-2 text-[11.5px] leading-snug text-ink-soft">
-              {t('settings.deleteAnswersDesc')}
+              {t('settings.timerDesc')}
             </p>
-            <GhostButton
-              className="!py-2.5"
-              onClick={() => {
-                clearAnswersLocally();
-                setToast(t('settings.deleteAnswersDone'));
-              }}
-            >
-              {t('settings.deleteAnswers')}
-            </GhostButton>
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                aria-label={t('settings.timerMinus')}
+                disabled={questionDurationSeconds <= MIN_QUESTION_DURATION_SECONDS}
+                onClick={() => setQuestionDurationSeconds(questionDurationSeconds - 1)}
+                className="grid h-10 w-10 shrink-0 place-items-center rounded-xl border-[1.5px] border-wine text-lg font-semibold text-wine transition active:scale-95 disabled:opacity-45"
+              >
+                −
+              </button>
+              <input
+                type="text"
+                inputMode="numeric"
+                pattern="[0-9]*"
+                value={timerDraft}
+                onChange={(event) => setTimerDraft(event.target.value.replace(/\D/g, ''))}
+                onBlur={() => commitTimer(timerDraft)}
+                onKeyDown={(event) => {
+                  if (event.key === 'Enter') {
+                    event.currentTarget.blur();
+                  }
+                }}
+                className="w-full rounded-xl border-[1.5px] border-card-line bg-white py-2 text-center font-display text-xl text-ink outline-none focus:border-wine"
+              />
+              <button
+                type="button"
+                aria-label={t('settings.timerPlus')}
+                disabled={questionDurationSeconds >= MAX_QUESTION_DURATION_SECONDS}
+                onClick={() => setQuestionDurationSeconds(questionDurationSeconds + 1)}
+                className="grid h-10 w-10 shrink-0 place-items-center rounded-xl border-[1.5px] border-wine text-lg font-semibold text-wine transition active:scale-95 disabled:opacity-45"
+              >
+                +
+              </button>
+            </div>
           </section>
 
           <section className="min-h-0">
@@ -104,32 +160,27 @@ export default function Settings() {
           </section>
 
           <section>
-            <h2 className="mb-0.5 text-sm font-semibold text-ink">{t('settings.resetPhoto')}</h2>
-            <p className="mb-2 text-[11.5px] leading-snug text-ink-soft">
-              {t('settings.resetPhotoDesc')}
-            </p>
-            <GhostButton
-              className="!py-2.5"
-              onClick={() => {
-                resetPhotoGate();
-                setToast(t('settings.resetPhotoDone'));
-              }}
-            >
-              {t('settings.resetPhoto')}
+            <GhostButton className="!py-2.5" onClick={() => setConfirmingReset(true)}>
+              {t('settings.resetAll')}
             </GhostButton>
           </section>
+        </div>
 
-          <section>
-            <h2 className="mb-0.5 text-sm font-semibold text-ink">{t('settings.resetAll')}</h2>
-            <p className="mb-2 text-[11.5px] leading-snug text-ink-soft">
-              {t('settings.resetAllDesc')}
-            </p>
+        <GhostButton className="mt-3 shrink-0 !py-2.5" onClick={leaveSettings}>
+          {t('common.save')}
+        </GhostButton>
+      </Card>
 
-            {confirmingReset ? (
-              <div className="space-y-2">
-                <p className="text-[12px] font-semibold text-bad">{t('settings.confirmTitle')}</p>
+      {confirmingReset ? (
+        <div className="fixed inset-0 z-50 grid place-items-center bg-black/65 p-5 backdrop-blur-sm">
+          <div className="animate-pop w-full max-w-xs">
+            <Card>
+              <h2 className={`${introTypeClass} mb-4 text-center text-xl text-ink`}>
+                {t('settings.confirmErase')}
+              </h2>
+              <div className="grid grid-cols-2 gap-2">
                 <PrimaryButton
-                  className="!py-2.5"
+                  className={pinButtonClass}
                   onClick={() => {
                     resetAllProgress();
                     setConfirmingReset(false);
@@ -138,22 +189,14 @@ export default function Settings() {
                 >
                   {t('settings.confirmReset')}
                 </PrimaryButton>
-                <GhostButton className="!py-2.5" onClick={() => setConfirmingReset(false)}>
+                <GhostButton className={pinButtonClass} onClick={() => setConfirmingReset(false)}>
                   {t('common.cancel')}
                 </GhostButton>
               </div>
-            ) : (
-              <GhostButton className="!py-2.5" onClick={() => setConfirmingReset(true)}>
-                {t('settings.resetAll')}
-              </GhostButton>
-            )}
-          </section>
+            </Card>
+          </div>
         </div>
-
-        <GhostButton className="mt-3 shrink-0 !py-2.5" onClick={() => navigate('/menu')}>
-          {t('common.back')}
-        </GhostButton>
-      </Card>
+      ) : null}
 
       <Toast message={toast} onDismiss={() => setToast(null)} />
     </div>

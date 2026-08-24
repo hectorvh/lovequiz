@@ -138,7 +138,7 @@ export async function fetchReciprocalQuiz(): Promise<DbResult<ReciprocalQuestion
       .from('reciprocal_quiz_questions')
       .select('*')
       .order('created_at', { ascending: false })
-      .limit(5);
+      .limit(3);
     if (error) throw error;
     return { ok: true, data: mapRows([...(data ?? [])].reverse()) };
   } catch (error) {

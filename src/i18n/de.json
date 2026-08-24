@@ -31,7 +31,7 @@
   "instructions": {
     "m1": "Du hast {{seconds}} Sekunden für jede Frage",
     "m2": "für jede richtige Antwort gewinnst du ein Herz",
-    "m3": "für jede falsche Antwort bekommst du eine der 4 möglichen Strafen:"
+    "m3": "für jede falsche Antwort sammelst du eine der 4 möglichen Strafen:"
   },
   "menu": {
     "prompt": "Wähle eine Fragengruppe",
@@ -41,8 +41,9 @@
     "createQuiz": "Erstellen",
     "startHector": "Hector soll das Spiel starten",
     "results": "Antworten",
-    "lockedCreate": "Beende alle Fragen, um dein eigenes Quiz zu erstellen.",
+    "lockedCreate": "Schließe die 3 Fragengruppen ab, um dein eigenes Quiz zu erstellen.",
     "lockedResults": "Beende alle Fragen, um deine Ergebnisse zu sehen.",
+    "lockedPhoto": "Schließe die 3 Fragengruppen ab, um ein Foto aufzunehmen.",
     "settings": "Einstellungen",
     "photo": "Foto aufnehmen"
   },
@@ -67,12 +68,12 @@
   },
   "bonus": {
     "tag": "Bonusfrage",
-    "prompt": "Wähle auf der Karte aus, wo Héctor derzeit lebt.",
+    "prompt": "Wähle auf der Karte aus, wo Hector derzeit lebt.",
     "hint": "Tippe auf die Karte, um deinen Marker zu setzen, dann Bestätigen drücken.",
     "noScore": "Diese Frage zählt weder für Herzen noch für Strafen und hat kein Zeitlimit.",
     "resultKm": "Dein Marker liegt {{km}} km vom richtigen Ort entfernt.",
     "resultM": "Das sind {{m}} Meter.",
-    "reveal": "Héctor wohnt an diesem Punkt auf der Karte."
+    "reveal": "Hector wohnt an diesem Punkt auf der Karte."
   },
   "partial": {
     "title": "Ergebnisse Gruppe {{n}}",
@@ -146,20 +147,25 @@
     "resetPhoto": "Spiel zurücksetzen (nur Foto)",
     "resetPhotoDesc": "Gibt den Foto-Bildschirm wieder frei, ohne den Fortschritt anzutasten.",
     "resetPhotoDone": "Der Foto-Bildschirm ist wieder verfügbar.",
-    "resetAll": "Gesamten Fortschritt zurücksetzen",
+    "resetAll": "Gesamten Prozess zurücksetzen",
     "resetAllDesc": "Löscht Herzen, Strafen, abgeschlossene Gruppen und das gespeicherte Quiz auf diesem Gerät.",
     "resetAllDone": "Fortschritt zurückgesetzt.",
     "confirmTitle": "Bist du sicher?",
-    "confirmReset": "Ja, zurücksetzen"
+    "confirmErase": "Bist du sicher, dass du den gesamten Prozess löschen willst?",
+    "confirmReset": "Ja, zurücksetzen",
+    "timer": "Zeit pro Frage",
+    "timerDesc": "Sekunden, um jede Frage zu beantworten.",
+    "timerMinus": "Eine Sekunde weniger",
+    "timerPlus": "Eine Sekunde mehr"
   },
   "punishments": {
     "beso": "Kuss",
-    "besoFull": "Französischer Kuss",
+    "besoFull": "Französischer\nKuss",
     "baile": "Tanz",
-    "baileFull": "Sexy Tanz",
+    "baileFull": "Sexy\nTanz",
     "masaje": "Massage",
-    "masajeFull": "Heiße Massage",
+    "masajeFull": "Heiße\nMassage",
     "secreto": "Geheimnis",
-    "secretoFull": "Peinliches Geheimnis"
+    "secretoFull": "Peinliches\nGeheimnis"
   }
 }

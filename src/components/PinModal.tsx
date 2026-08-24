@@ -2,13 +2,12 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { GAME_PIN } from '../config';
-import { Card, GhostButton, PrimaryButton } from './ui';
+import { Card, GhostButton, PrimaryButton, introTypeClass } from './ui';
 
 /**
  * Soft lock only. The PIN is compared client-side by design — it gates Play
  * and Settings on this shared device, nothing more.
  */
-
 export default function PinModal({
   onSuccess,
   onClose,
@@ -29,11 +28,15 @@ export default function PinModal({
     setValue('');
   };
 
+  const pinButtonClass = '!w-full !px-3 !py-2 !text-sm';
+
   return (
     <div className="fixed inset-0 z-50 grid place-items-center bg-black/65 p-5 backdrop-blur-sm">
       <div className="animate-pop w-full max-w-xs">
         <Card>
-          <h2 className="mb-4 text-center text-sm font-semibold text-ink">{t('pin.title')}</h2>
+          <h2 className={`${introTypeClass} mb-4 text-center text-xl text-ink`}>
+            {t('pin.title')}
+          </h2>
 
           <input
             autoFocus
@@ -56,11 +59,13 @@ export default function PinModal({
             <p className="mt-2 text-center text-xs text-bad">{t('pin.wrong')}</p>
           ) : null}
 
-          <div className="mt-4 space-y-2">
-            <PrimaryButton onClick={submit} disabled={value.length !== 4}>
+          <div className="mt-4 grid grid-cols-2 gap-2">
+            <PrimaryButton className={pinButtonClass} onClick={submit} disabled={value.length !== 4}>
               {t('pin.enter')}
             </PrimaryButton>
-            <GhostButton onClick={onClose}>{t('common.cancel')}</GhostButton>
+            <GhostButton className={pinButtonClass} onClick={onClose}>
+              {t('common.cancel')}
+            </GhostButton>
           </div>
         </Card>
       </div>

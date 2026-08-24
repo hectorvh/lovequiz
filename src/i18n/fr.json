@@ -31,7 +31,7 @@
   "instructions": {
     "m1": "Tu as {{seconds}} secondes pour répondre à chaque question",
     "m2": "pour chaque bonne réponse tu gagneras un cœur",
-    "m3": "pour chaque mauvaise réponse tu gagneras l'un des 4 gages possibles :"
+    "m3": "pour chaque mauvaise réponse tu accumuleras l'un des 4 gages possibles :"
   },
   "menu": {
     "prompt": "Sélectionne un groupe de questions",
@@ -41,8 +41,9 @@
     "createQuiz": "Crée",
     "startHector": "Que Hector commence le jeu",
     "results": "Réponses",
-    "lockedCreate": "Termine toutes les questions pour créer ton propre questionnaire.",
+    "lockedCreate": "Termine les 3 groupes de questions pour créer ton propre questionnaire.",
     "lockedResults": "Termine toutes les questions pour voir tes résultats.",
+    "lockedPhoto": "Termine les 3 groupes de questions pour prendre une photo.",
     "settings": "Réglages",
     "photo": "Prendre une photo"
   },
@@ -67,12 +68,12 @@
   },
   "bonus": {
     "tag": "Question bonus",
-    "prompt": "Sélectionne sur la carte l'endroit où Héctor vit actuellement.",
+    "prompt": "Sélectionne sur la carte l'endroit où Hector vit actuellement.",
     "hint": "Touche la carte pour placer ton marqueur, puis appuie sur Accepter.",
     "noScore": "Cette question ne compte ni pour les cœurs ni pour les gages, et il n'y a pas de limite de temps.",
     "resultKm": "Ton marqueur est à {{km}} km du bon endroit.",
     "resultM": "Cela fait {{m}} mètres.",
-    "reveal": "Héctor habite à ce point sur la carte."
+    "reveal": "Hector habite à ce point sur la carte."
   },
   "partial": {
     "title": "Résultats du groupe {{n}}",
@@ -146,20 +147,25 @@
     "resetPhoto": "Réinitialiser le jeu (photo seulement)",
     "resetPhotoDesc": "Réactive l'écran photo sans toucher à la progression.",
     "resetPhotoDone": "L'écran photo est de nouveau disponible.",
-    "resetAll": "Réinitialiser toute la progression",
+    "resetAll": "Réinitialiser tout le processus",
     "resetAllDesc": "Efface les cœurs, les gages, les groupes terminés et le questionnaire enregistré sur cet appareil.",
     "resetAllDone": "Progression réinitialisée.",
     "confirmTitle": "Tu es sûre ?",
-    "confirmReset": "Oui, réinitialiser"
+    "confirmErase": "Es-tu sûre de vouloir tout effacer ?",
+    "confirmReset": "Oui, réinitialiser",
+    "timer": "Temps par question",
+    "timerDesc": "Secondes pour répondre à chaque question.",
+    "timerMinus": "Une seconde de moins",
+    "timerPlus": "Une seconde de plus"
   },
   "punishments": {
     "beso": "Baiser",
-    "besoFull": "Baiser langoureux",
+    "besoFull": "Baiser\nlangoureux",
     "baile": "Danse",
-    "baileFull": "Danse sexy",
+    "baileFull": "Danse\nsexy",
     "masaje": "Massage",
-    "masajeFull": "Massage chaud",
+    "masajeFull": "Massage\nchaud",
     "secreto": "Secret",
-    "secretoFull": "Secret embarrassant"
+    "secretoFull": "Secret\nembarrassant"
   }
 }

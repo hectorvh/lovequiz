@@ -7,14 +7,31 @@ import { chromeButtonClass, introTypeClass } from '../components/ui';
 import {
   selectAllGroupsComplete,
   selectAnyGroupComplete,
-  selectHectorQuizComplete,
   useGameStore,
 } from '../state/gameStore';
 import { FERNANDA_GROUPS, GROUP_LETTERS } from '../types';
 
 const introLabelClass = `${introTypeClass} text-center text-3xl leading-tight text-[#faf1e8] drop-shadow-[0_3px_14px_rgba(0,0,0,0.7)]`;
 
-const menuActionClass = `${introTypeClass} rounded-xl px-6 py-3 text-lg leading-snug whitespace-nowrap transition active:scale-[0.98]`;
+const menuActionClass = `${introTypeClass} rounded-xl px-5 py-3 text-lg leading-snug whitespace-nowrap transition active:scale-[0.98]`;
+
+function CameraGlyph() {
+  return (
+    <svg
+      aria-hidden
+      viewBox="0 0 24 24"
+      className="h-5 w-5"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={1.6}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M4.5 8.5h3l1.2-2h6.6l1.2 2H19.5A1.5 1.5 0 0121 10v8.5a1.5 1.5 0 01-1.5 1.5h-15A1.5 1.5 0 013 18.5V10a1.5 1.5 0 011.5-1.5z" />
+      <circle cx="12" cy="14.2" r="3.2" />
+    </svg>
+  );
+}
 
 export default function MainMenu() {
   const { t } = useTranslation();
@@ -25,13 +42,14 @@ export default function MainMenu() {
   const photoTaken = useGameStore((s) => s.photoTaken);
   const allGroupsComplete = useGameStore(selectAllGroupsComplete);
   const anyGroupComplete = useGameStore(selectAnyGroupComplete);
-  const hectorQuizComplete = useGameStore(selectHectorQuizComplete);
 
   const [toast, setToast] = useState<string | null>(null);
 
-  const photoUnlocked = allGroupsComplete && hectorQuizComplete;
-
   const onCreateQuiz = () => {
+    if (!allGroupsComplete) {
+      setToast(t('menu.lockedCreate'));
+      return;
+    }
     navigate('/create-quiz');
   };
 
@@ -41,6 +59,14 @@ export default function MainMenu() {
       return;
     }
     navigate('/results');
+  };
+
+  const onPhoto = () => {
+    if (!allGroupsComplete) {
+      setToast(t('menu.lockedPhoto'));
+      return;
+    }
+    navigate(photoTaken ? '/summary' : '/photo');
   };
 
   return (
@@ -65,10 +91,10 @@ export default function MainMenu() {
                 }}
                 aria-disabled={done}
                 aria-label={done ? `${label} — ${t('menu.groupDone')}` : label}
-                className={`grid h-20 w-20 place-items-center rounded-full border-2 shadow-md transition active:scale-95 ${
+                className={`grid h-20 w-20 place-items-center border-2 shadow-md transition active:scale-95 ${
                   done
-                    ? 'border-good bg-good text-[#eaf3e7]'
-                    : 'border-wine bg-wine text-[#fbe9ee] hover:bg-wine-deep'
+                    ? 'rounded-full border-good bg-good text-[#eaf3e7]'
+                    : 'rounded-2xl border-wine bg-wine text-[#fbe9ee] hover:bg-wine-deep'
                 }`}
               >
                 {done ? (
@@ -85,7 +111,7 @@ export default function MainMenu() {
                     <path d="M5 12.5l4.5 4.5L19 7" />
                   </svg>
                 ) : (
-                  <span className={`${introTypeClass} text-2xl leading-none`}>
+                  <span className={`${introTypeClass} text-[1.95rem] leading-none`}>
                     {GROUP_LETTERS[groupId]}
                   </span>
                 )}
@@ -93,63 +119,53 @@ export default function MainMenu() {
             );
           })}
         </div>
-
-        {photoUnlocked ? (
-          <button
-            type="button"
-            onClick={() => navigate(photoTaken ? '/summary' : '/photo')}
-            aria-label={t('menu.photo')}
-            className={`${chromeButtonClass} mt-6`}
-          >
-            <svg
-              aria-hidden
-              viewBox="0 0 24 24"
-              className="h-5 w-5"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth={1.6}
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <path d="M4.5 8.5h3l1.2-2h6.6l1.2 2H19.5A1.5 1.5 0 0121 10v8.5a1.5 1.5 0 01-1.5 1.5h-15A1.5 1.5 0 013 18.5V10a1.5 1.5 0 011.5-1.5z" />
-              <circle cx="12" cy="14.2" r="3.2" />
-            </svg>
-          </button>
-        ) : null}
       </div>
 
-      {/*
-        inline-flex + items-stretch sizes the pair to the longer label so both
-        buttons share one width, then they sit on the bottom of the screen.
-      */}
-      <div className="mb-2 inline-flex w-auto flex-col items-stretch gap-2.5">
+      {reciprocalQuizSaved ? (
         <button
           type="button"
-          onClick={onCreateQuiz}
-          className={`${menuActionClass} bg-wine text-[#fbe9ee] hover:bg-wine-deep`}
+          onClick={() => navigate('/play/hector')}
+          className={`${menuActionClass} mb-2.5 bg-wine text-[#fbe9ee] hover:bg-wine-deep`}
         >
-          {t('menu.createQuiz')}
+          {t('menu.startHector')}
         </button>
+      ) : null}
 
-        {reciprocalQuizSaved ? (
+      <div className="relative mb-2 w-full">
+        <div className="grid grid-cols-2 items-center gap-14">
           <button
             type="button"
-            onClick={() => navigate('/play/hector')}
-            className={`${menuActionClass} bg-wine text-[#fbe9ee] hover:bg-wine-deep`}
+            onClick={onResults}
+            aria-disabled={!anyGroupComplete}
+            className={`${menuActionClass} w-full border-[1.5px] border-[#fbe9ee]/70 bg-transparent text-[#fbe9ee] ${
+              anyGroupComplete ? 'hover:bg-white/10' : 'opacity-45'
+            }`}
           >
-            {t('menu.startHector')}
+            {t('menu.results')}
           </button>
-        ) : null}
+
+          <button
+            type="button"
+            onClick={onCreateQuiz}
+            aria-disabled={!allGroupsComplete}
+            className={`${menuActionClass} w-full bg-wine text-[#fbe9ee] ${
+              allGroupsComplete ? 'hover:bg-wine-deep' : 'opacity-45'
+            }`}
+          >
+            {t('menu.createQuiz')}
+          </button>
+        </div>
 
         <button
           type="button"
-          onClick={onResults}
-          aria-disabled={!anyGroupComplete}
-          className={`${menuActionClass} border-[1.5px] border-[#fbe9ee]/70 bg-transparent text-[#fbe9ee] ${
-            anyGroupComplete ? 'hover:bg-white/10' : 'opacity-45'
+          onClick={onPhoto}
+          aria-label={t('menu.photo')}
+          aria-disabled={!allGroupsComplete}
+          className={`absolute top-1/2 left-1/2 z-10 -translate-x-1/2 -translate-y-1/2 ${chromeButtonClass} ${
+            allGroupsComplete ? '' : 'opacity-45'
           }`}
         >
-          {t('menu.results')}
+          <CameraGlyph />
         </button>
       </div>
 

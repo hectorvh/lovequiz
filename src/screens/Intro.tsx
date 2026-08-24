@@ -3,15 +3,15 @@ import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 import { chromeButtonClass, introTypeClass } from '../components/ui';
-import { QUESTION_DURATION_SECONDS } from '../config';
+import { useGameStore } from '../state/gameStore';
 import {
   PUNISHMENT_EMOJI,
   PUNISHMENT_ORDER,
   type PunishmentKey,
 } from '../types';
 
-const EMPHASIS_PATTERN = /(Fernanda|Héctor|Hector|PREGUNTAS|QUESTIONS|FRAGEN)/g;
-const EMPHASIS_TOKEN = /^(Fernanda|Héctor|Hector|PREGUNTAS|QUESTIONS|FRAGEN)$/;
+const EMPHASIS_PATTERN = /(Fernanda|Hector|PREGUNTAS|QUESTIONS|FRAGEN)/g;
+const EMPHASIS_TOKEN = /^(Fernanda|Hector|PREGUNTAS|QUESTIONS|FRAGEN)$/;
 
 /** Names and the QUESTIONS word sit 50% larger than the surrounding intro type. */
 function emphasizeIntroWords(text: string): ReactNode {
@@ -41,6 +41,7 @@ type Step = TimedStep | PunishmentStep;
 const CASTIGO_FLIP_MS = 550;
 const CASTIGO_AUTO_START_MS = 950;
 const CASTIGO_AUTO_STAGGER_MS = 750;
+const CASTIGO_HOLD_TEXT_MS = 1000;
 
 function emptyFlipState(): Record<PunishmentKey, boolean> {
   return {
@@ -64,15 +65,16 @@ function PunishmentFlipCard({
 }) {
   const { t } = useTranslation();
   const label = t(`punishments.${punishmentKey}Full`);
+  const spoken = label.replace(/\n/g, ' ');
 
   return (
     <button
       type="button"
       onClick={onToggle}
       disabled={!interactive}
-      aria-label={label}
+      aria-label={spoken}
       aria-pressed={flipped}
-      className="castigo-scene pointer-events-auto h-36 w-full disabled:opacity-100"
+      className="castigo-scene pointer-events-auto h-[8.1rem] w-full disabled:opacity-100"
     >
       <span className={`castigo-card ${flipped ? 'is-flipped' : ''}`}>
         <span className="castigo-face rounded-2xl border border-white/15 bg-black/40 backdrop-blur">
@@ -80,8 +82,8 @@ function PunishmentFlipCard({
             {PUNISHMENT_EMOJI[punishmentKey]}
           </span>
         </span>
-        <span className="castigo-face castigo-face-back rounded-2xl border border-white/15 bg-black/40 px-2.5 text-center backdrop-blur">
-          <span className="font-display text-[clamp(1.15rem,4.2vw,1.75rem)] leading-tight font-semibold text-[#faf1e8]">
+        <span className="castigo-face castigo-face-back rounded-2xl border border-white/15 bg-black/40 px-2 text-center backdrop-blur">
+          <span className="font-display whitespace-pre-line text-[clamp(1.7rem,6.3vw,2.6rem)] leading-[1.05] font-semibold text-[#faf1e8]">
             {label}
           </span>
         </span>
@@ -98,6 +100,8 @@ function PunishmentBoard() {
   useEffect(() => {
     const timers: number[] = [];
     const lastIndex = PUNISHMENT_ORDER.length - 1;
+    const lastFlipAt = CASTIGO_AUTO_START_MS + lastIndex * CASTIGO_AUTO_STAGGER_MS;
+    const flipBackAt = lastFlipAt + CASTIGO_FLIP_MS + CASTIGO_HOLD_TEXT_MS;
 
     PUNISHMENT_ORDER.forEach((key, index) => {
       timers.push(
@@ -108,10 +112,13 @@ function PunishmentBoard() {
     });
 
     timers.push(
-      window.setTimeout(
-        () => setAutoDone(true),
-        CASTIGO_AUTO_START_MS + lastIndex * CASTIGO_AUTO_STAGGER_MS + CASTIGO_FLIP_MS,
-      ),
+      window.setTimeout(() => {
+        setFlipped(emptyFlipState());
+      }, flipBackAt),
+    );
+
+    timers.push(
+      window.setTimeout(() => setAutoDone(true), flipBackAt + CASTIGO_FLIP_MS),
     );
 
     return () => {
@@ -120,7 +127,7 @@ function PunishmentBoard() {
   }, []);
 
   return (
-    <ul className="animate-scroll-up grid w-full max-w-sm grid-cols-2 gap-3">
+    <ul className="animate-scroll-up grid w-full max-w-[21.6rem] grid-cols-2 gap-3">
       {PUNISHMENT_ORDER.map((key) => (
         <li key={key}>
           <PunishmentFlipCard
@@ -170,6 +177,7 @@ function CircleButton({
 export default function Intro() {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
+  const durationSeconds = useGameStore((s) => s.questionDurationSeconds);
 
   const steps: Step[] = useMemo(
     () => [
@@ -179,14 +187,14 @@ export default function Intro() {
       { kind: 'text', text: t('intro.m4'), ms: 2000 },
       {
         kind: 'text',
-        text: t('instructions.m1', { seconds: QUESTION_DURATION_SECONDS }),
+        text: t('instructions.m1', { seconds: durationSeconds }),
         ms: 2000,
       },
       { kind: 'text', text: t('instructions.m2'), ms: 2800 },
       { kind: 'text', text: t('instructions.m3'), ms: 3000 },
       { kind: 'punishments' },
     ],
-    [t, i18n.language],
+    [t, i18n.language, durationSeconds],
   );
 
   const [index, setIndex] = useState(0);

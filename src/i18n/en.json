@@ -31,7 +31,7 @@
   "instructions": {
     "m1": "You have {{seconds}} seconds to answer each question",
     "m2": "for every correct answer you'll win a heart",
-    "m3": "for every wrong answer you'll earn one of the 4 possible punishments:"
+    "m3": "for every wrong answer you'll accumulate one of the 4 possible punishments:"
   },
   "menu": {
     "prompt": "Select a group of questions",
@@ -41,8 +41,9 @@
     "createQuiz": "Create",
     "startHector": "Let Hector start the game",
     "results": "Answers",
-    "lockedCreate": "Finish all the questions to create your own quiz.",
+    "lockedCreate": "Finish the 3 question groups to create your own quiz.",
     "lockedResults": "Finish all the questions to see your results.",
+    "lockedPhoto": "Finish the 3 question groups to take a photo.",
     "settings": "Settings",
     "photo": "Take a photo"
   },
@@ -67,12 +68,12 @@
   },
   "bonus": {
     "tag": "Bonus question",
-    "prompt": "Select on the map where Héctor currently lives.",
+    "prompt": "Select on the map where Hector currently lives.",
     "hint": "Tap the map to drop your marker, then press Accept.",
     "noScore": "This question doesn't count towards hearts or punishments, and there's no time limit.",
     "resultKm": "Your marker landed {{km}} km from the right spot.",
     "resultM": "That's {{m}} metres.",
-    "reveal": "Héctor lives at that point on the map."
+    "reveal": "Hector lives at that point on the map."
   },
   "partial": {
     "title": "Group {{n}} results",
@@ -146,20 +147,25 @@
     "resetPhoto": "Reset game (photo only)",
     "resetPhotoDesc": "Re-enables the photo screen without touching any progress.",
     "resetPhotoDone": "The photo screen is available again.",
-    "resetAll": "Reset all progress",
+    "resetAll": "Reset the whole process",
     "resetAllDesc": "Clears hearts, punishments, completed groups and the saved quiz on this device.",
     "resetAllDone": "Progress reset.",
     "confirmTitle": "Are you sure?",
-    "confirmReset": "Yes, reset"
+    "confirmErase": "Are you sure you want to erase the whole process?",
+    "confirmReset": "Yes, reset",
+    "timer": "Time per question",
+    "timerDesc": "Seconds to answer each question.",
+    "timerMinus": "One second less",
+    "timerPlus": "One second more"
   },
   "punishments": {
     "beso": "Kiss",
-    "besoFull": "French kiss",
+    "besoFull": "French\nkiss",
     "baile": "Dance",
-    "baileFull": "Sexy dance",
+    "baileFull": "Sexy\ndance",
     "masaje": "Massage",
-    "masajeFull": "Hot massage",
+    "masajeFull": "Hot\nmassage",
     "secreto": "Secret",
-    "secretoFull": "Embarrassing secret"
+    "secretoFull": "Embarrassing\nsecret"
   }
 }

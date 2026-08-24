@@ -14,13 +14,13 @@
    - C: Negra
    - D: Blanca
 
-3. **¿Cuántos idiomas tiene la flor de loto 3d con la que Héctor le pidió que fuera su novia a Fer?**
+3. **¿Cuántos idiomas tiene la flor de loto 3d con la que Hector le pidió que fuera su novia a Fer?**
    - A: 13 ✅
    - B: 15
    - C: 17
    - D: Solo 1: el idioma es el del amor
 
-4. **¿Cuántos vuelos de Dublin-Dusseldorf han tomado sumados entre Héctor y Fer?**
+4. **¿Cuántos vuelos de Dublin-Dusseldorf han tomado sumados entre Hector y Fer?**
    - A: 8
    - B: 10 ✅
    - C: 12
@@ -32,7 +32,7 @@
    - C: Costa Rica
    - D: China
 
-6. **¿En qué año Héctor se tituló de ingeniero?**
+6. **¿En qué año Hector se tituló de ingeniero?**
    - A: 2018
    - B: 2019
    - C: 2020 ✅
@@ -72,7 +72,7 @@
    - C: Guitarra ✅
    - D: Batería
 
-4. **¿Con que número de playera Héctor jugaba fútbol la mayor parte de su vida?**
+4. **¿Con que número de playera Hector jugaba fútbol la mayor parte de su vida?**
    - A: 7 ✅
    - B: 10
    - C: 11
@@ -84,7 +84,7 @@
    - C: Domingo ✅
    - D: Lunes
 
-6. **¿Cuántos legos de Spiderman le regaló Fer a Héctor?**
+6. **¿Cuántos legos de Spiderman le regaló Fer a Hector?**
    - A: 12
    - B: 16
    - C: 18
@@ -106,13 +106,13 @@
 
 ## Grupo 3
 
-1. **¿Cuántos primos del lado materno tiene Héctor?**
+1. **¿Cuántos primos del lado materno tiene Hector?**
    - A: 7
    - B: 9 ✅
    - C: 11
    - D: 15
 
-2. **¿Cuál es el pin favorito de Héctor que le ha regalado Fer?**
+2. **¿Cuál es el pin favorito de Hector que le ha regalado Fer?**
    - A: El queso de Francia
    - B: Los limones de Italia
    - C: El de la obra de Hercules ✅
@@ -124,13 +124,13 @@
    - C: 23 ✅
    - D: 24
 
-4. **¿De qué color es el coche del papá de Héctor que les prestó para moverse en Toluca?**
+4. **¿De qué color es el coche del papá de Hector que les prestó para moverse en Toluca?**
    - A: Azul
    - B: Rojo
    - C: Blanco
    - D: Gris ✅
 
-5. **¿Cuál es la pizza favorita de Héctor?**
+5. **¿Cuál es la pizza favorita de Hector?**
    - A: Peperoni ✅
    - B: Nduja
    - C: Champiñones
@@ -156,5 +156,5 @@
 
 ### Bonus (solo Grupo 3 — sin penalización, no cuenta para el score)
 
-**Selecciona en el mapa donde vive Héctor actualmente.**
+**Selecciona en el mapa donde vive Hector actualmente.**
 Calcula la distancia en metros del punto seleccionado a las coordenadas `51.93828946997965, 7.591595632371097`.

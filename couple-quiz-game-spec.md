@@ -90,7 +90,7 @@ Text: "Por favor selecciona un grupo de preguntas"
 
 ### 5.1 Bonus map question (Group 3 only)
 
-- Prompt: "Selecciona en el mapa donde vive Héctor actualmente."
+- Prompt: "Selecciona en el mapa donde vive Hector actualmente."
 - Map: Leaflet (or equivalent), terrain layer, **no labels** (no country, city, street, or place names).
 - Zoom level: wide enough to show the whole world initially; user can pan/zoom freely.
 - User taps a point on the map, then confirms with an "Aceptar" button.

@@ -21,10 +21,10 @@ export default function PunishmentCounters({
             highlight === key ? 'scale-105 border-wine bg-bad-bg' : 'border-card-line'
           }`}
         >
-          <div className="text-base leading-none" aria-hidden>
+          <div className="text-[1.5rem] leading-none" aria-hidden>
             {PUNISHMENT_EMOJI[key]}
           </div>
-          <div className="font-display text-base font-semibold leading-tight text-wine">
+          <div className="font-display text-[1.15rem] font-semibold leading-tight text-wine">
             {counts[key]}
           </div>
         </div>

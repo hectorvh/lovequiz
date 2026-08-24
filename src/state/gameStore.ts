@@ -17,6 +17,11 @@ import {
   type Tally,
 } from '../types';
 import { ensurePlayQuestionIds } from '../data/questions';
+import {
+  DEFAULT_QUESTION_DURATION_SECONDS,
+  MAX_QUESTION_DURATION_SECONDS,
+  MIN_QUESTION_DURATION_SECONDS,
+} from '../config';
 import { STORE_KEY, flushGroupToDatabase } from './persistence';
 import { setGameFlag, type GroupCommit } from '../lib/db';
 
@@ -29,7 +34,7 @@ export interface QuizDraftItem {
   correctOption: 'A' | 'B' | 'C' | 'D' | null;
 }
 
-export const RECIPROCAL_QUIZ_LENGTH = 5;
+export const RECIPROCAL_QUIZ_LENGTH = 3;
 
 export const emptyDraftItem = (): QuizDraftItem => ({
   questionText: '',
@@ -67,6 +72,7 @@ interface GameState {
   quizDraft: QuizDraftItem[];
 
   photoTaken: boolean;
+  questionDurationSeconds: number;
 }
 
 interface GameActions {
@@ -82,6 +88,7 @@ interface GameActions {
   saveReciprocalQuizLocally: (questions: ReciprocalQuestion[]) => void;
 
   setPhotoTaken: (taken: boolean) => void;
+  setQuestionDurationSeconds: (seconds: number) => void;
 
   clearAnswersLocally: () => void;
   resetPhotoGate: () => void;
@@ -104,6 +111,7 @@ const initialState: GameState = {
   reciprocalQuizSaved: false,
   quizDraft: Array.from({ length: RECIPROCAL_QUIZ_LENGTH }, emptyDraftItem),
   photoTaken: false,
+  questionDurationSeconds: DEFAULT_QUESTION_DURATION_SECONDS,
 };
 
 /**
@@ -356,6 +364,14 @@ export const useGameStore = create<GameStore>()(
         pushFlag('photo_taken', taken);
       },
 
+      setQuestionDurationSeconds: (seconds) =>
+        set({
+          questionDurationSeconds: Math.min(
+            MAX_QUESTION_DURATION_SECONDS,
+            Math.max(MIN_QUESTION_DURATION_SECONDS, Math.round(seconds)),
+          ),
+        }),
+
       /**
        * UI-level only: wipes the answer detail held on this device. Supabase
        * rows are never touched, and completion flags stay intact so the menu
@@ -391,7 +407,7 @@ export const useGameStore = create<GameStore>()(
     }),
     {
       name: STORE_KEY,
-      version: 3,
+      version: 4,
       migrate: (persisted) => {
         const state = persisted as GameState;
         const draft = Array.isArray(state.quizDraft) ? state.quizDraft : [];
@@ -405,10 +421,18 @@ export const useGameStore = create<GameStore>()(
             },
           ]),
         );
+        const duration = Number(state.questionDurationSeconds);
         return {
           ...state,
           inProgress,
           playedQuestionIds: state.playedQuestionIds ?? {},
+          questionDurationSeconds:
+            Number.isFinite(duration) && duration > 0
+              ? Math.min(
+                  MAX_QUESTION_DURATION_SECONDS,
+                  Math.max(MIN_QUESTION_DURATION_SECONDS, Math.round(duration)),
+                )
+              : DEFAULT_QUESTION_DURATION_SECONDS,
           quizDraft: [
             ...draft.slice(0, RECIPROCAL_QUIZ_LENGTH),
             ...Array.from(

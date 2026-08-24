@@ -26,6 +26,7 @@ function getElement(): HTMLAudioElement {
   if (!element) {
     element = new Audio(PLAYLIST[trackIndex]);
     element.preload = 'auto';
+    element.loop = false;
     element.volume = 0.45;
     element.addEventListener('ended', queueNextTrack);
   }
@@ -37,9 +38,13 @@ function queueNextTrack() {
 
   gapTimer = window.setTimeout(() => {
     gapTimer = null;
+    const nextIndex = trackIndex + 1;
+    // After the last song, start the playlist again from the first track.
+    trackIndex = nextIndex >= PLAYLIST.length ? 0 : nextIndex;
     const audio = getElement();
-    trackIndex = (trackIndex + 1) % PLAYLIST.length;
+    audio.loop = false;
     audio.src = PLAYLIST[trackIndex];
+    audio.currentTime = 0;
     if (!paused) playWhenAllowed(audio);
   }, GAP_MS);
 }

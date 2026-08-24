@@ -6,7 +6,6 @@ import HeartCounter from '../components/HeartCounter';
 import PunishmentCounters from '../components/PunishmentCounters';
 import TimerBar from '../components/TimerBar';
 import { Card, PrimaryButton, Tag } from '../components/ui';
-import { QUESTION_DURATION_MS } from '../config';
 import { GROUP_WITH_BONUS, questionsForIds } from '../data/questions';
 import { playSfx } from '../lib/sfx';
 import { useGameStore } from '../state/gameStore';
@@ -47,6 +46,7 @@ export default function QuestionPlay() {
   const groupId = (rawGroupId ?? '1') as GroupId;
   const player = playerForGroup(groupId);
   const tally = useGameStore((s) => s.tallies[player]);
+  const durationMs = useGameStore((s) => s.questionDurationSeconds) * 1000;
 
   const questionIds = useGameStore((s) => s.inProgress[groupId]?.questionIds);
 
@@ -174,16 +174,19 @@ export default function QuestionPlay() {
     groupId === 'hector' ? t('play.hectorTitle') : t('play.group', { n: groupLetter(groupId) });
 
   return (
-    <div className="flex min-h-0 flex-1 flex-col justify-start">
-      <Card className="flex w-full max-h-full min-h-0 flex-col overflow-hidden !p-3.5">
-        <div className="mb-2 flex shrink-0 items-center justify-between gap-2">
-          <Tag>{heading}</Tag>
-          <span className="font-display text-sm font-semibold tabular-nums text-ink-soft">
+    <div className="flex min-h-0 flex-1 flex-col justify-start pt-[7vh]">
+      <Card className="flex w-full max-h-full min-h-0 flex-col overflow-hidden !p-[5%]">
+        <div className="mb-2 grid shrink-0 grid-cols-[1fr_auto_1fr] items-center gap-1">
+          <span />
+          <div className="justify-self-center">
+            <Tag>{heading}</Tag>
+          </div>
+          <span className="font-display justify-self-end text-[1rem] font-semibold tabular-nums text-ink-soft">
             {t('play.progress', { current: cursor + 1, total: questions.length })}
           </span>
         </div>
 
-        <div className="mb-2 min-h-6 shrink-0">
+        <div className="mb-2 min-h-8 shrink-0">
           <HeartCounter hearts={tally.hearts} />
         </div>
 
@@ -193,14 +196,14 @@ export default function QuestionPlay() {
 
         <div className="mb-2 shrink-0">
           <TimerBar
-            durationMs={QUESTION_DURATION_MS}
+            durationMs={durationMs}
             running={feedback === null}
             resetKey={question.id}
             onTimeout={() => resolve(null)}
           />
         </div>
 
-        <p className="font-display mb-2 shrink-0 text-[clamp(0.95rem,2.5vh,1.2rem)] leading-snug text-ink">
+        <p className="font-display mb-2 shrink-0 text-[clamp(1.045rem,2.75vh,1.32rem)] leading-snug text-ink">
           {question.text}
         </p>
 
@@ -222,7 +225,7 @@ export default function QuestionPlay() {
                 type="button"
                 disabled={feedback !== null}
                 onClick={() => resolve(index)}
-                className={`rounded-xl border-[1.5px] px-3 py-[clamp(0.45rem,1.4vh,0.75rem)] text-left text-[clamp(0.8rem,1.8vh,0.95rem)] leading-snug text-ink transition ${tone}`}
+                className={`rounded-xl border-[1.5px] px-3 py-[clamp(0.45rem,1.4vh,0.75rem)] text-left text-[clamp(0.88rem,1.98vh,1.045rem)] leading-snug text-ink transition ${tone}`}
               >
                 {option}
               </button>
@@ -255,7 +258,7 @@ export default function QuestionPlay() {
                     {t('play.punishmentAdded', {
                       name: `${PUNISHMENT_EMOJI[feedback.punishment]} ${t(
                         `punishments.${feedback.punishment}Full`,
-                      )}`,
+                      ).replace(/\n/g, ' ')}`,
                     })}
                   </span>
                 ) : null}

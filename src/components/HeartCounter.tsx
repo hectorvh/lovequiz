@@ -7,12 +7,12 @@ export default function HeartCounter({ hearts }: { hearts: number }) {
   return (
     <div className="flex flex-wrap items-center gap-0.5" aria-label={`${t('play.hearts')}: ${hearts}`}>
       {hearts === 0 ? (
-        <span className="text-lg opacity-30" aria-hidden>
+        <span className="text-[1.6875rem] opacity-30" aria-hidden>
           ❤️
         </span>
       ) : (
         Array.from({ length: hearts }, (_, i) => (
-          <span key={i} className="animate-pop text-lg" aria-hidden>
+          <span key={i} className="animate-pop text-[1.6875rem]" aria-hidden>
             ❤️
           </span>
         ))
