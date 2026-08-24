@@ -38,7 +38,9 @@ export interface GroupCommit {
 export async function commitGroup(commit: GroupCommit): Promise<DbResult> {
   if (!supabase) return skipped;
   try {
+    const runId = crypto.randomUUID();
     const rows = commit.answers.map((a) => ({
+      run_id: runId,
       player: commit.player,
       group_id: a.groupId,
       question_id: a.questionId,
@@ -48,12 +50,8 @@ export async function commitGroup(commit: GroupCommit): Promise<DbResult> {
       answered_at: a.answeredAt,
     }));
 
-    if (rows.length > 0) {
-      const { error } = await supabase.from('answers').insert(rows);
-      if (error) throw error;
-    }
-
     const { error: summaryError } = await supabase.from('group_summaries').insert({
+      run_id: runId,
       player: commit.player,
       group_id: commit.groupId,
       hearts_earned: commit.hearts,
@@ -63,6 +61,11 @@ export async function commitGroup(commit: GroupCommit): Promise<DbResult> {
       completed_at: commit.completedAt,
     });
     if (summaryError) throw summaryError;
+
+    if (rows.length > 0) {
+      const { error } = await supabase.from('answers').insert(rows);
+      if (error) throw error;
+    }
 
     return { ok: true };
   } catch (error) {
@@ -105,23 +108,23 @@ export async function fetchReciprocalQuiz(): Promise<DbResult<ReciprocalQuestion
       .limit(1);
     if (latestError) throw latestError;
 
-    const batchId = latest?.[0]?.batch_id as string | null | undefined;
+    const batchId = latest?.[0]?.batch_id;
 
     const mapRows = (
       data: {
-        id: unknown;
-        question_text: unknown;
-        options: unknown;
-        correct_option: unknown;
-        created_at: unknown;
+        id: number;
+        question_text: string;
+        options: ReciprocalQuestion['options'] | unknown;
+        correct_option: ReciprocalQuestion['correctOption'];
+        created_at: string;
       }[] | null,
     ): ReciprocalQuestion[] =>
       (data ?? []).map((row) => ({
         id: String(row.id),
-        questionText: row.question_text as string,
+        questionText: row.question_text,
         options: row.options as ReciprocalQuestion['options'],
-        correctOption: row.correct_option as ReciprocalQuestion['correctOption'],
-        createdAt: row.created_at as string,
+        correctOption: row.correct_option,
+        createdAt: row.created_at,
       }));
 
     if (batchId) {
@@ -199,9 +202,9 @@ export async function uploadPhoto(
       ok: true,
       data: {
         id: String(data.id),
-        storagePath: data.storage_path as string,
-        caricatureStoragePath: data.caricature_storage_path as string | null,
-        createdAt: data.created_at as string,
+        storagePath: data.storage_path,
+        caricatureStoragePath: data.caricature_storage_path,
+        createdAt: data.created_at,
       },
     };
   } catch (error) {
@@ -222,9 +225,9 @@ export async function listPhotos(): Promise<DbResult<StoredPhoto[]>> {
       ok: true,
       data: (data ?? []).map((row) => ({
         id: String(row.id),
-        storagePath: row.storage_path as string,
-        caricatureStoragePath: row.caricature_storage_path as string | null,
-        createdAt: row.created_at as string,
+        storagePath: row.storage_path,
+        caricatureStoragePath: row.caricature_storage_path,
+        createdAt: row.created_at,
       })),
     };
   } catch (error) {

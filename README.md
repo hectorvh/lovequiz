@@ -47,22 +47,28 @@ in each `src/i18n/*.json`.
 Clear the site data (or use **Reiniciar todo el progreso** in Settings) before
 Fernanda plays, so test runs don't leave stale hearts and punishments behind.
 
-## Connecting Supabase
+## Connecting Supabase (PostgreSQL)
 
-1. Create a project, then run `supabase/schema.sql` in the SQL editor. It creates
-   the five tables, opens up RLS for the anon key, and creates the `photos`
-   storage bucket.
-2. Copy `.env.example` to `.env.local` and fill in the URL and anon key.
+The game stays in **local mode** until both env vars are set. Writes still
+happen only at group boundaries; `localStorage` remains the live source of
+truth, and Postgres keeps a durable copy (including each replay as a new run).
+
+1. Create a project at [supabase.com](https://supabase.com) (this provisions PostgreSQL).
+2. Open **SQL Editor**, paste and run `supabase/schema.sql`. That creates the
+   tables (`answers`, `group_summaries`, `reciprocal_quiz_questions`, `photos`,
+   `game_state`), grants for the anon key, RLS policies, and the public
+   `photos` storage bucket.
+3. Copy `.env.example` to `.env.local` and fill in **Project URL** and **anon
+   public** key from **Project Settings → API**.
+4. Restart `npm run dev` so Vite loads the new env.
 
 There is no authentication, by design — the app assumes one shared device. The
 policies therefore allow anonymous read/write, so the project URL and anon key
 are the only things protecting the data. Keep them out of public repos.
 
-Writes happen at group boundaries, never per question: in-progress answers live
-in `localStorage` (so a mid-group refresh resumes exactly where she left off) and
-flush to `answers` + `group_summaries` when a group completes. Every remote write
-is best-effort — a failure logs a warning and the game continues on the local
-mirror.
+Every remote write is best-effort — a failure logs a warning and the game
+continues on the local mirror. Replays insert a new `run_id` rather than
+overwriting previous rows.
 
 ## Layout
 
