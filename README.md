@@ -1,4 +1,4 @@
-# ¿Cuánto sabes de nosotros?
+# Love Quiz
 
 A mobile-first couple's trivia game: Fernanda answers three pre-written question
 groups, builds a reciprocal quiz for Hector, and the session closes with a photo
