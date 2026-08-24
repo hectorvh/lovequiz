@@ -1,7 +1,7 @@
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
-import { Card, GhostButton, ScreenTitle } from '../components/ui';
+import { Card, GhostButton, PrimaryButton, ScreenTitle } from '../components/ui';
 import { questionsForIds } from '../data/questions';
 import { formatKilometers } from '../lib/distance';
 import { useGameStore } from '../state/gameStore';
@@ -82,19 +82,12 @@ export default function Results() {
                   </p>
 
                   <p className="text-[12.5px] text-ink-soft">
-                    {groupId === 'hector' ? t('results.hectorAnswer') : t('results.yourAnswer')}:{' '}
+                    {t('results.yourAnswer')}:{' '}
                     <span className={row.isCorrect ? 'text-good' : 'text-bad'}>{given}</span>
                   </p>
 
-                  {!row.isCorrect && question ? (
-                    <p className="text-[12.5px] text-ink-soft">
-                      {t('results.correctAnswer')}:{' '}
-                      <span className="text-good">{question.options[question.correctIndex]}</span>
-                    </p>
-                  ) : null}
-
                   <span
-                    className={`mt-2 inline-block rounded-full px-2 py-0.5 text-[10.5px] font-semibold uppercase ${
+                    className={`mt-2 inline-block rounded-full px-2 py-0.5 text-[13px] font-semibold uppercase ${
                       row.isCorrect ? 'bg-good-bg text-good' : 'bg-bad-bg text-bad'
                     }`}
                   >
@@ -112,7 +105,15 @@ export default function Results() {
           </p>
         ) : null}
 
-        <div className="mt-5">
+        <div className="mt-5 space-y-2">
+          {groupId === 'hector' ? (
+            <PrimaryButton onClick={() => navigate('/create-quiz')}>
+              {t('menu.createQuiz')}
+            </PrimaryButton>
+          ) : null}
+          <PrimaryButton onClick={() => navigate(`/play/${groupId}`)}>
+            {t('results.playAgain')}
+          </PrimaryButton>
           <GhostButton onClick={() => navigate('/menu')}>{t('common.back')}</GhostButton>
         </div>
       </Card>

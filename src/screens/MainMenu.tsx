@@ -42,7 +42,6 @@ export default function MainMenu() {
   const groupStickers = useGameStore((s) => s.groupStickers);
   const ensureGroupStickers = useGameStore((s) => s.ensureGroupStickers);
   const reciprocalQuizSaved = useGameStore((s) => s.reciprocalQuizSaved);
-  const photoTaken = useGameStore((s) => s.photoTaken);
   const allGroupsComplete = useGameStore(selectAllGroupsComplete);
   const hectorQuizComplete = useGameStore(selectHectorQuizComplete);
 
@@ -65,15 +64,17 @@ export default function MainMenu() {
       setToast(t('menu.lockedPhoto'));
       return;
     }
-    navigate(photoTaken ? '/summary' : '/photo');
+    navigate('/photo');
   };
+
+  const hectorStickerSrc = groupStickerSrc(groupStickers.hector);
 
   return (
     <div className="flex h-full min-h-0 flex-col items-center overflow-hidden px-2 text-center">
       <div className="flex min-h-0 flex-1 flex-col items-center justify-center">
         <p className={`${introLabelClass} mb-8`}>{t('menu.prompt')}</p>
 
-        <div className="flex justify-center gap-4">
+        <div className="flex justify-center gap-3">
           {FERNANDA_GROUPS.map((groupId) => {
             const done = completedGroups.includes(groupId);
             const label = t('menu.group', { n: GROUP_LETTERS[groupId] });
@@ -110,6 +111,23 @@ export default function MainMenu() {
               </button>
             );
           })}
+
+          {hectorQuizComplete ? (
+            <button
+              type="button"
+              onClick={() => navigate('/results/hector')}
+              aria-label={t('menu.hectorCycle')}
+              className="grid h-20 w-20 place-items-center overflow-hidden rounded-full border-2 border-[#1d9fd0] bg-[#5ec8f0] shadow-md transition active:scale-95"
+            >
+              {hectorStickerSrc ? (
+                <img
+                  src={hectorStickerSrc}
+                  alt=""
+                  className="pointer-events-none h-full w-full object-cover"
+                />
+              ) : null}
+            </button>
+          ) : null}
         </div>
 
         {hectorQuizComplete ? (

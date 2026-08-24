@@ -35,9 +35,19 @@ function pickFile(files: string[]): string {
   return files[Math.floor(Math.random() * files.length)];
 }
 
-/** 4 or 5 correct → positive sticker; 3 or fewer → negative. */
-export function pickGroupSticker(correctCount: number): GroupStickerRef | null {
-  const kind: StickerKind = correctCount >= 4 ? 'positive' : 'negative';
+/** 4–5 of 5 correct (or ≥80% on a shorter set, e.g. 3/3 for Hector) → positive. */
+export function pickGroupSticker(
+  correctCount: number,
+  totalCount = 5,
+): GroupStickerRef | null {
+  const kind: StickerKind =
+    totalCount <= 3
+      ? correctCount >= totalCount
+        ? 'positive'
+        : 'negative'
+      : correctCount >= 4
+        ? 'positive'
+        : 'negative';
   const files = Object.keys(kind === 'positive' ? POSITIVE : NEGATIVE);
   if (files.length === 0) return null;
   return { kind, file: pickFile(files) };

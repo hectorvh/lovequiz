@@ -148,6 +148,18 @@ function subtractTally(from: Tally, amount: Tally): Tally {
   };
 }
 
+export function addTally(base: Tally, amount: Tally): Tally {
+  return {
+    hearts: base.hearts + amount.hearts,
+    punishments: {
+      beso: base.punishments.beso + amount.punishments.beso,
+      baile: base.punishments.baile + amount.punishments.baile,
+      masaje: base.punishments.masaje + amount.punishments.masaje,
+      secreto: base.punishments.secreto + amount.punishments.secreto,
+    },
+  };
+}
+
 export const useGameStore = create<GameStore>()(
   persist(
     (set, get) => ({
@@ -158,71 +170,27 @@ export const useGameStore = create<GameStore>()(
       toggleMuted: () => set((state) => ({ muted: !state.muted })),
 
       /**
-       * Replaying a finished group rolls back its previous hearts and
-       * punishments first, so cumulative totals can't be inflated by a retry.
-       * The round-robin pointer intentionally does not rewind.
+       * Replaying a finished group keeps the previous answers, sticker and
+       * totals until the new run is completed, so backing out does not lose
+       * the last saved result.
        */
-      startGroup: (groupId) =>
+      startGroup: (groupId) => {
         set((state) => {
           const alreadyPlaying = state.inProgress[groupId];
           if (alreadyPlaying?.questionIds?.length) return state;
 
           const questionIds = isFernandaGroup(groupId)
-            ? ensurePlayQuestionIds(
-                groupId,
-                alreadyPlaying?.questionIds,
-                alreadyPlaying?.answers.map((answer) => answer.questionId) ?? [],
-              )
-            : alreadyPlaying?.questionIds?.length
-              ? alreadyPlaying.questionIds
-              : state.reciprocalQuiz.map((question) => question.id);
-
-          if (alreadyPlaying) {
-            const keptAnswers = questionIds.flatMap((id) => {
-              const row = alreadyPlaying.answers.find((answer) => answer.questionId === id);
-              return row ? [row] : [];
-            });
-            return {
-              inProgress: {
-                ...state.inProgress,
-                [groupId]: { ...alreadyPlaying, questionIds, answers: keptAnswers },
-              },
-            };
-          }
-
-          const previous = state.answers[groupId];
-          if (!previous) {
-            return {
-              inProgress: {
-                ...state.inProgress,
-                [groupId]: { answers: [], bonusDistanceMeters: null, questionIds },
-              },
-            };
-          }
-
-          const player = playerForGroup(groupId);
-          const remainingAnswers = { ...state.answers };
-          delete remainingAnswers[groupId];
-          const remainingPlayed = { ...state.playedQuestionIds };
-          delete remainingPlayed[groupId];
-          const remainingStickers = { ...state.groupStickers };
-          delete remainingStickers[groupId];
+            ? ensurePlayQuestionIds(groupId, undefined, [])
+            : state.reciprocalQuiz.map((question) => question.id);
 
           return {
-            tallies: {
-              ...state.tallies,
-              [player]: subtractTally(state.tallies[player], computeTally(previous)),
-            },
-            completedGroups: state.completedGroups.filter((id) => id !== groupId),
-            answers: remainingAnswers,
-            playedQuestionIds: remainingPlayed,
-            groupStickers: remainingStickers,
             inProgress: {
               ...state.inProgress,
               [groupId]: { answers: [], bonusDistanceMeters: null, questionIds },
             },
           };
-        }),
+        });
+      },
 
       answerQuestion: (groupId, question, selectedIndex) => {
         const state = get();
@@ -253,13 +221,17 @@ export const useGameStore = create<GameStore>()(
           answeredAt: new Date().toISOString(),
         };
 
+        const isReplay = (state.answers[groupId]?.length ?? 0) > 0;
+
         const tally = state.tallies[player];
-        const nextTally: Tally = {
-          hearts: tally.hearts + (isCorrect ? 1 : 0),
-          punishments: punishment
-            ? { ...tally.punishments, [punishment]: tally.punishments[punishment] + 1 }
-            : { ...tally.punishments },
-        };
+        const nextTally: Tally = isReplay
+          ? tally
+          : {
+              hearts: tally.hearts + (isCorrect ? 1 : 0),
+              punishments: punishment
+                ? { ...tally.punishments, [punishment]: tally.punishments[punishment] + 1 }
+                : { ...tally.punishments },
+            };
 
         set({
           punishmentPointer: { ...state.punishmentPointer, [player]: pointer },
@@ -303,7 +275,20 @@ export const useGameStore = create<GameStore>()(
             : inProgress.answers.map((answer) => answer.questionId);
 
         const correctCount = inProgress.answers.filter((answer) => answer.isCorrect).length;
-        const sticker = isFernandaGroup(groupId) ? pickGroupSticker(correctCount) : null;
+        const sticker = pickGroupSticker(correctCount, inProgress.answers.length);
+
+        const previous = state.answers[groupId];
+        const groupTally = computeTally(inProgress.answers);
+        const nextTallies =
+          previous && previous.length > 0
+            ? {
+                ...state.tallies,
+                [player]: addTally(
+                  subtractTally(state.tallies[player], computeTally(previous)),
+                  groupTally,
+                ),
+              }
+            : state.tallies;
 
         set({
           answers: { ...state.answers, [groupId]: inProgress.answers },
@@ -319,6 +304,7 @@ export const useGameStore = create<GameStore>()(
           groupStickers: sticker
             ? { ...state.groupStickers, [groupId]: sticker }
             : state.groupStickers,
+          tallies: nextTallies,
         });
 
         const completed = get().completedGroups;
@@ -327,7 +313,6 @@ export const useGameStore = create<GameStore>()(
           pushFlag('all_groups_complete', true);
         }
 
-        const groupTally = computeTally(inProgress.answers);
         const commit: GroupCommit = {
           player,
           groupId,
@@ -347,11 +332,14 @@ export const useGameStore = create<GameStore>()(
         let next = state.groupStickers;
         let changed = false;
 
-        for (const groupId of FERNANDA_GROUPS) {
+        for (const groupId of [...FERNANDA_GROUPS, 'hector'] as const) {
           if (!state.completedGroups.includes(groupId) || next[groupId]) continue;
           const answers = state.answers[groupId];
           if (!answers?.length) continue;
-          const sticker = pickGroupSticker(answers.filter((answer) => answer.isCorrect).length);
+          const sticker = pickGroupSticker(
+            answers.filter((answer) => answer.isCorrect).length,
+            answers.length,
+          );
           if (!sticker) continue;
           if (!changed) next = { ...state.groupStickers };
           next[groupId] = sticker;
@@ -376,6 +364,7 @@ export const useGameStore = create<GameStore>()(
           const { hector: _hectorBonus, ...otherBonus } = state.bonusDistances;
           const { hector: _hectorProgress, ...otherProgress } = state.inProgress;
           const { hector: _hectorPlayed, ...otherPlayed } = state.playedQuestionIds;
+          const { hector: _hectorSticker, ...otherStickers } = state.groupStickers;
           return {
             reciprocalQuiz: questions,
             reciprocalQuizSaved: true,
@@ -385,6 +374,7 @@ export const useGameStore = create<GameStore>()(
             bonusDistances: otherBonus,
             inProgress: otherProgress,
             playedQuestionIds: otherPlayed,
+            groupStickers: otherStickers,
             tallies: { ...state.tallies, hector: emptyTally() },
           };
         });
@@ -490,11 +480,11 @@ export const selectAnyGroupComplete = (state: GameStore) =>
 export const selectHectorQuizComplete = (state: GameStore) =>
   state.completedGroups.includes('hector');
 
-/** Stable-reference selector for one group's answers, committed or in progress. */
+/** Prefer the live run when a group is being replayed; otherwise the last saved answers. */
 export const selectGroupAnswers =
   (groupId: GroupId) =>
   (state: GameStore): AnswerRecord[] | undefined =>
-    state.answers[groupId] ?? state.inProgress[groupId]?.answers;
+    state.inProgress[groupId]?.answers ?? state.answers[groupId];
 
 export const isDraftItemComplete = (item: QuizDraftItem) =>
   item.questionText.trim().length > 0 &&

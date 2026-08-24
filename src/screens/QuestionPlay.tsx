@@ -8,7 +8,7 @@ import TimerBar from '../components/TimerBar';
 import { Card, PrimaryButton, Tag } from '../components/ui';
 import { GROUP_WITH_BONUS, questionsForIds } from '../data/questions';
 import { playSfx } from '../lib/sfx';
-import { computeTally, selectGroupAnswers, useGameStore } from '../state/gameStore';
+import { addTally, computeTally, selectGroupAnswers, useGameStore } from '../state/gameStore';
 import {
   OPTION_KEYS,
   PUNISHMENT_EMOJI,
@@ -46,8 +46,13 @@ export default function QuestionPlay() {
   const groupId = (rawGroupId ?? '1') as GroupId;
   const player = playerForGroup(groupId);
   const tally = useGameStore((s) => s.tallies[player]);
+  const committedAnswers = useGameStore((s) => s.answers[groupId]);
   const groupAnswers = useGameStore(selectGroupAnswers(groupId));
   const groupHearts = useMemo(() => computeTally(groupAnswers ?? []).hearts, [groupAnswers]);
+  const punishmentCounts = useMemo(() => {
+    if (!committedAnswers?.length) return tally.punishments;
+    return addTally(tally, computeTally(groupAnswers ?? [])).punishments;
+  }, [committedAnswers, groupAnswers, tally]);
   const durationMs = useGameStore((s) => s.questionDurationSeconds) * 1000;
 
   const questionIds = useGameStore((s) => s.inProgress[groupId]?.questionIds);
@@ -78,7 +83,6 @@ export default function QuestionPlay() {
 
   const [hydrated, setHydrated] = useState(() => useGameStore.persist.hasHydrated());
   const cursorSynced = useRef(false);
-  const sealedRef = useRef(false);
 
   useEffect(() => {
     const unsub = useGameStore.persist.onFinishHydration(() => setHydrated(true));
@@ -88,10 +92,7 @@ export default function QuestionPlay() {
 
   useEffect(() => {
     if (!hydrated) return;
-    sealedRef.current =
-      isFernandaGroup(groupId) &&
-      useGameStore.getState().completedGroups.includes(groupId);
-    if (!isValidGroup || sealedRef.current) {
+    if (!isValidGroup) {
       navigate('/menu', { replace: true });
       return;
     }
@@ -114,7 +115,6 @@ export default function QuestionPlay() {
     if (
       groupId === 'hector' &&
       isValidGroup &&
-      !sealedRef.current &&
       reciprocalQuiz.length === 0
     ) {
       navigate('/menu', { replace: true });
@@ -201,7 +201,7 @@ export default function QuestionPlay() {
         </div>
 
         <div className="mb-2 shrink-0">
-          <PunishmentCounters counts={tally.punishments} highlight={feedback?.punishment} />
+          <PunishmentCounters counts={punishmentCounts} highlight={feedback?.punishment} />
         </div>
 
         <div className="mb-2 shrink-0">

@@ -26,7 +26,6 @@ export default function TakePhoto() {
   const { t } = useTranslation();
   const navigate = useNavigate();
 
-  const photoTaken = useGameStore((s) => s.photoTaken);
   const setPhotoTaken = useGameStore((s) => s.setPhotoTaken);
   const allGroupsComplete = useGameStore(selectAllGroupsComplete);
 
@@ -50,7 +49,7 @@ export default function TakePhoto() {
   }, [allGroupsComplete, navigate]);
 
   useEffect(() => {
-    if (photoTaken || captured) return;
+    if (captured) return;
 
     let cancelled = false;
 
@@ -81,7 +80,7 @@ export default function TakePhoto() {
       cancelled = true;
       stopStream();
     };
-  }, [facing, photoTaken, captured, stopStream]);
+  }, [facing, captured, stopStream]);
 
   useEffect(() => stopStream, [stopStream]);
 
@@ -140,23 +139,6 @@ export default function TakePhoto() {
     }
   };
 
-  if (photoTaken && !captured) {
-    return (
-      <div className="flex h-full min-h-0 flex-col overflow-hidden pt-1">
-        <ScreenTitle title={t('photo.title')} />
-        <Card>
-          <p className="mb-5 text-sm leading-relaxed text-ink-soft">{t('photo.alreadyTaken')}</p>
-          <div className="space-y-2.5">
-            <PrimaryButton onClick={() => navigate('/summary')}>
-              {t('photo.finish')}
-            </PrimaryButton>
-            <GhostButton onClick={() => navigate('/menu')}>{t('common.back')}</GhostButton>
-          </div>
-        </Card>
-      </div>
-    );
-  }
-
   return (
     <div className="flex h-full min-h-0 flex-col overflow-hidden pt-1">
       <ScreenTitle eyebrow={t('photo.subtitle')} title={t('photo.title')} />
@@ -203,7 +185,7 @@ export default function TakePhoto() {
               >
                 {t('photo.saveLocal')}
               </GhostButton>
-              <PrimaryButton onClick={() => navigate('/summary')} disabled={busy}>
+              <PrimaryButton onClick={() => navigate('/menu')} disabled={busy}>
                 {busy ? t('photo.uploading') : t('photo.finish')}
               </PrimaryButton>
             </div>
