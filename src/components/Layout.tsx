@@ -18,7 +18,7 @@ import { isSupabaseEnabled } from '../lib/supabaseClient';
 export default function Layout({ children }: { children: ReactNode }) {
   const { t } = useTranslation();
   const { pathname } = useLocation();
-  const allowScroll = pathname === '/results';
+  const allowScroll = pathname.startsWith('/results');
 
   return (
     <div className="relative flex h-dvh flex-col overflow-hidden">

@@ -51,7 +51,7 @@ export default function App() {
           <Route path="/menu" element={<MainMenu />} />
           <Route path="/play/:groupId" element={<QuestionPlay />} />
           <Route path="/partial-results/:groupId" element={<PartialResults />} />
-          <Route path="/results" element={<Results />} />
+          <Route path="/results/:groupId" element={<Results />} />
           <Route path="/create-quiz" element={<QuizCreation />} />
           <Route path="/photo" element={<TakePhoto />} />
           <Route path="/summary" element={<FinalSummary />} />

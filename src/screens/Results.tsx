@@ -1,5 +1,4 @@
-import { useMemo, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 import { Card, GhostButton, ScreenTitle } from '../components/ui';
@@ -7,12 +6,13 @@ import { questionsForIds } from '../data/questions';
 import { formatKilometers } from '../lib/distance';
 import { useGameStore } from '../state/gameStore';
 import {
-  FERNANDA_GROUPS,
   OPTION_KEYS,
   groupLetter,
   isFernandaGroup,
   type GroupId,
+  type Locale,
   type Question,
+  type ReciprocalQuestion,
 } from '../types';
 
 /**
@@ -21,6 +21,7 @@ import {
  * the same rows, and the mirror keeps the screen usable offline.
  */
 export default function Results() {
+  const { groupId: rawGroupId } = useParams<{ groupId: string }>();
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
 
@@ -31,149 +32,85 @@ export default function Results() {
   const completedGroups = useGameStore((s) => s.completedGroups);
   const reciprocalQuiz = useGameStore((s) => s.reciprocalQuiz);
 
-  const [selected, setSelected] = useState<GroupId | null>(null);
+  const groupId = rawGroupId as GroupId | undefined;
+  if (!groupId || !completedGroups.includes(groupId)) {
+    return <Navigate to="/menu" replace />;
+  }
 
-  const available = useMemo(
-    () =>
-      ([...FERNANDA_GROUPS, 'hector'] as GroupId[]).filter((id) =>
-        completedGroups.includes(id),
-      ),
-    [completedGroups],
+  const questions = questionsForGroup(
+    groupId,
+    locale,
+    playedQuestionIds[groupId] ?? (answers[groupId] ?? []).map((row) => row.questionId),
+    reciprocalQuiz,
   );
-
-  const questionsFor = (groupId: GroupId): Question[] => {
-    const ids =
-      playedQuestionIds[groupId] ??
-      (answers[groupId] ?? []).map((row) => row.questionId);
-
-    if (groupId === 'hector') {
-      const byId = new Map(
-        reciprocalQuiz.map((q) => [
-          q.id,
-          {
-            id: q.id,
-            text: q.questionText,
-            options: OPTION_KEYS.map((key) => q.options[key]),
-            correctIndex: OPTION_KEYS.indexOf(q.correctOption),
-          } satisfies Question,
-        ]),
-      );
-      return ids.flatMap((id) => {
-        const question = byId.get(id);
-        return question ? [question] : [];
-      });
-    }
-
-    return isFernandaGroup(groupId) ? questionsForIds(groupId, locale, ids) : [];
-  };
-
-  const labelFor = (groupId: GroupId) =>
+  const rows = answers[groupId] ?? [];
+  const playOrder = playedQuestionIds[groupId] ?? rows.map((row) => row.questionId);
+  const orderedRows = playOrder.flatMap((id) => {
+    const row = rows.find((entry) => entry.questionId === id);
+    return row ? [row] : [];
+  });
+  const resultRows = orderedRows.length > 0 ? orderedRows : rows;
+  const bonus = bonusDistances[groupId];
+  const title =
     groupId === 'hector'
       ? t('results.hectorLabel')
       : t('results.groupLabel', { letter: groupLetter(groupId) });
 
-  if (selected) {
-    const questions = questionsFor(selected);
-    const rows = answers[selected] ?? [];
-    const bonus = bonusDistances[selected];
-    const playOrder =
-      playedQuestionIds[selected] ?? rows.map((row) => row.questionId);
-    const orderedRows = playOrder.flatMap((id) => {
-      const row = rows.find((entry) => entry.questionId === id);
-      return row ? [row] : [];
-    });
-    const resultRows = orderedRows.length > 0 ? orderedRows : rows;
-
-    return (
-      <div className="pt-2">
-        <ScreenTitle title={labelFor(selected)} />
-
-        <Card>
-          {resultRows.length === 0 ? (
-            <p className="text-sm text-ink-soft">{t('results.cleared')}</p>
-          ) : (
-            <ul className="space-y-3">
-              {resultRows.map((row) => {
-                const question = questions.find((q) => q.id === row.questionId);
-                const given =
-                  row.selectedIndex === null
-                    ? t('results.noAnswer')
-                    : (question?.options[row.selectedIndex] ?? '—');
-
-                return (
-                  <li
-                    key={row.questionId}
-                    className="rounded-xl border border-card-line bg-white p-3.5"
-                  >
-                    <p className="mb-2 text-[13.5px] leading-snug font-semibold text-ink">
-                      {question?.text ?? row.questionId}
-                    </p>
-
-                    <p className="text-[12.5px] text-ink-soft">
-                      {selected === 'hector' ? t('results.hectorAnswer') : t('results.yourAnswer')}:{' '}
-                      <span className={row.isCorrect ? 'text-good' : 'text-bad'}>{given}</span>
-                    </p>
-
-                    {!row.isCorrect && question ? (
-                      <p className="text-[12.5px] text-ink-soft">
-                        {t('results.correctAnswer')}:{' '}
-                        <span className="text-good">{question.options[question.correctIndex]}</span>
-                      </p>
-                    ) : null}
-
-                    <span
-                      className={`mt-2 inline-block rounded-full px-2 py-0.5 text-[10.5px] font-semibold uppercase ${
-                        row.isCorrect ? 'bg-good-bg text-good' : 'bg-bad-bg text-bad'
-                      }`}
-                    >
-                      {row.isCorrect ? t('results.correct') : t('results.incorrect')}
-                    </span>
-                  </li>
-                );
-              })}
-            </ul>
-          )}
-
-          {typeof bonus === 'number' ? (
-            <p className="mt-3 rounded-xl bg-card-line/40 px-3.5 py-2.5 text-[12.5px] text-ink-soft">
-              {t('bonus.tag')}:{' '}
-              {t('bonus.resultKm', { km: formatKilometers(bonus, i18n.language) })}
-            </p>
-          ) : null}
-
-          <div className="mt-5">
-            <GhostButton onClick={() => setSelected(null)}>{t('common.back')}</GhostButton>
-          </div>
-        </Card>
-      </div>
-    );
-  }
-
   return (
     <div className="pt-2">
-      <ScreenTitle title={t('results.title')} />
+      <ScreenTitle title={title} />
 
       <Card>
-        {available.length === 0 ? (
-          <p className="text-sm text-ink-soft">{t('results.empty')}</p>
+        {resultRows.length === 0 ? (
+          <p className="text-sm text-ink-soft">{t('results.cleared')}</p>
         ) : (
-          <>
-            <p className="mb-3 text-[12.5px] text-ink-soft">{t('results.pick')}</p>
-            <ul className="space-y-2.5">
-              {available.map((groupId) => (
-                <li key={groupId}>
-                  <button
-                    type="button"
-                    onClick={() => setSelected(groupId)}
-                    className="w-full rounded-xl border border-card-line bg-white px-4 py-3 text-left text-sm font-semibold text-ink transition hover:border-wine active:scale-[0.99]"
+          <ul className="space-y-3">
+            {resultRows.map((row) => {
+              const question = questions.find((q) => q.id === row.questionId);
+              const given =
+                row.selectedIndex === null
+                  ? t('results.noAnswer')
+                  : (question?.options[row.selectedIndex] ?? '—');
+
+              return (
+                <li
+                  key={row.questionId}
+                  className="rounded-xl border border-card-line bg-white p-3.5"
+                >
+                  <p className="mb-2 text-[13.5px] leading-snug font-semibold text-ink">
+                    {question?.text ?? row.questionId}
+                  </p>
+
+                  <p className="text-[12.5px] text-ink-soft">
+                    {groupId === 'hector' ? t('results.hectorAnswer') : t('results.yourAnswer')}:{' '}
+                    <span className={row.isCorrect ? 'text-good' : 'text-bad'}>{given}</span>
+                  </p>
+
+                  {!row.isCorrect && question ? (
+                    <p className="text-[12.5px] text-ink-soft">
+                      {t('results.correctAnswer')}:{' '}
+                      <span className="text-good">{question.options[question.correctIndex]}</span>
+                    </p>
+                  ) : null}
+
+                  <span
+                    className={`mt-2 inline-block rounded-full px-2 py-0.5 text-[10.5px] font-semibold uppercase ${
+                      row.isCorrect ? 'bg-good-bg text-good' : 'bg-bad-bg text-bad'
+                    }`}
                   >
-                    {labelFor(groupId)}
-                  </button>
+                    {row.isCorrect ? t('results.correct') : t('results.incorrect')}
+                  </span>
                 </li>
-              ))}
-            </ul>
-          </>
+              );
+            })}
+          </ul>
         )}
+
+        {typeof bonus === 'number' ? (
+          <p className="mt-3 rounded-xl bg-card-line/40 px-3.5 py-2.5 text-[12.5px] text-ink-soft">
+            {t('bonus.tag')}: {t('bonus.resultKm', { km: formatKilometers(bonus, i18n.language) })}
+          </p>
+        ) : null}
 
         <div className="mt-5">
           <GhostButton onClick={() => navigate('/menu')}>{t('common.back')}</GhostButton>
@@ -181,4 +118,31 @@ export default function Results() {
       </Card>
     </div>
   );
+}
+
+function questionsForGroup(
+  groupId: GroupId,
+  locale: Locale,
+  ids: string[],
+  reciprocalQuiz: ReciprocalQuestion[],
+): Question[] {
+  if (groupId === 'hector') {
+    const byId = new Map(
+      reciprocalQuiz.map((q) => [
+        q.id,
+        {
+          id: q.id,
+          text: q.questionText,
+          options: OPTION_KEYS.map((key) => q.options[key]),
+          correctIndex: OPTION_KEYS.indexOf(q.correctOption),
+        } satisfies Question,
+      ]),
+    );
+    return ids.flatMap((id) => {
+      const question = byId.get(id);
+      return question ? [question] : [];
+    });
+  }
+
+  return isFernandaGroup(groupId) ? questionsForIds(groupId, locale, ids) : [];
 }

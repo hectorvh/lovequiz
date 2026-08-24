@@ -7,7 +7,6 @@ import { chromeButtonClass, introTypeClass } from '../components/ui';
 import { groupStickerSrc } from '../data/groupStickers';
 import {
   selectAllGroupsComplete,
-  selectAnyGroupComplete,
   selectHectorQuizComplete,
   useGameStore,
 } from '../state/gameStore';
@@ -22,7 +21,7 @@ function CameraGlyph() {
     <svg
       aria-hidden
       viewBox="0 0 24 24"
-      className="h-[27px] w-[27px]"
+      className="h-[35px] w-[35px]"
       fill="none"
       stroke="currentColor"
       strokeWidth={1.6}
@@ -45,7 +44,6 @@ export default function MainMenu() {
   const reciprocalQuizSaved = useGameStore((s) => s.reciprocalQuizSaved);
   const photoTaken = useGameStore((s) => s.photoTaken);
   const allGroupsComplete = useGameStore(selectAllGroupsComplete);
-  const anyGroupComplete = useGameStore(selectAnyGroupComplete);
   const hectorQuizComplete = useGameStore(selectHectorQuizComplete);
 
   const [toast, setToast] = useState<string | null>(null);
@@ -60,14 +58,6 @@ export default function MainMenu() {
       return;
     }
     navigate('/create-quiz');
-  };
-
-  const onResults = () => {
-    if (!anyGroupComplete) {
-      setToast(t('menu.lockedResults'));
-      return;
-    }
-    navigate('/results');
   };
 
   const onPhoto = () => {
@@ -94,12 +84,11 @@ export default function MainMenu() {
                 type="button"
                 onClick={() => {
                   if (done) {
-                    setToast(t('menu.groupLocked'));
+                    navigate(`/results/${groupId}`);
                     return;
                   }
                   navigate(`/play/${groupId}`);
                 }}
-                aria-disabled={done}
                 aria-label={done ? `${label} — ${t('menu.groupDone')}` : label}
                 className={`grid h-20 w-20 place-items-center border-2 shadow-md transition active:scale-95 ${
                   done
@@ -122,63 +111,48 @@ export default function MainMenu() {
             );
           })}
         </div>
-      </div>
 
-      {hectorQuizComplete ? (
-        <button
-          type="button"
-          onClick={() => navigate('/summary')}
-          className={`${menuActionClass} mb-2.5 bg-wine text-[#fbe9ee] hover:bg-wine-deep`}
-        >
-          {t('menu.summary')}
-        </button>
-      ) : reciprocalQuizSaved ? (
-        <button
-          type="button"
-          onClick={() => navigate('/play/hector')}
-          className={`${menuActionClass} mb-2.5 bg-wine text-[#fbe9ee] hover:bg-wine-deep`}
-        >
-          {t('menu.startHector')}
-        </button>
-      ) : null}
-
-      <div className="relative mb-2 w-full">
-        <div className="grid grid-cols-2 items-center gap-20">
+        {hectorQuizComplete ? (
           <button
             type="button"
-            onClick={onResults}
-            aria-disabled={!anyGroupComplete}
-            className={`${menuActionClass} w-full border-[1.5px] border-[#fbe9ee]/70 bg-transparent text-[#fbe9ee] ${
-              anyGroupComplete ? 'hover:bg-white/10' : 'opacity-45'
-            }`}
+            onClick={() => navigate('/summary')}
+            className={`${menuActionClass} mt-6 bg-wine text-[#fbe9ee] hover:bg-wine-deep`}
           >
-            {t('menu.results')}
+            {t('menu.summary')}
           </button>
-
+        ) : reciprocalQuizSaved ? (
+          <button
+            type="button"
+            onClick={() => navigate('/play/hector')}
+            className={`${menuActionClass} mt-6 bg-wine text-[#fbe9ee] hover:bg-wine-deep`}
+          >
+            {t('menu.startHector')}
+          </button>
+        ) : (
           <button
             type="button"
             onClick={onCreateQuiz}
             aria-disabled={!allGroupsComplete}
-            className={`${menuActionClass} w-full bg-wine text-[#fbe9ee] ${
+            className={`${menuActionClass} mt-6 bg-wine text-[#fbe9ee] ${
               allGroupsComplete ? 'hover:bg-wine-deep' : 'opacity-45'
             }`}
           >
             {t('menu.createQuiz')}
           </button>
-        </div>
-
-        <button
-          type="button"
-          onClick={onPhoto}
-          aria-label={t('menu.photo')}
-          aria-disabled={!allGroupsComplete}
-          className={`absolute top-1/2 left-1/2 z-10 -translate-x-1/2 -translate-y-1/2 ${chromeButtonClass} !h-[59px] !w-[59px] ${
-            allGroupsComplete ? '' : 'opacity-45'
-          }`}
-        >
-          <CameraGlyph />
-        </button>
+        )}
       </div>
+
+      <button
+        type="button"
+        onClick={onPhoto}
+        aria-label={t('menu.photo')}
+        aria-disabled={!allGroupsComplete}
+        className={`mb-2 ${chromeButtonClass} !h-[77px] !w-[77px] ${
+          allGroupsComplete ? '' : 'opacity-45'
+        }`}
+      >
+        <CameraGlyph />
+      </button>
 
       <Toast message={toast} onDismiss={() => setToast(null)} />
     </div>
