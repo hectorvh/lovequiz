@@ -36,16 +36,6 @@ which option carries the ✅ and that the position matches the `correctIndex` in
 the data file. Run it after any content edit. Group sizes are data-driven, so
 adding or removing questions needs no code changes.
 
-Two small edits were made while transcribing: a few Spanish accents were
-corrected (`espero` → `esperó`, `entro` → `entró`, `Con que` → `Con qué`), and
-the redundant `su ... de Hector` in the animated-movie question was tidied. The
-facts, options and answers are untouched.
-
-Still worth a look before the real run: the closing message in `summary.message`
-in each `src/i18n/*.json`.
-
-Clear the site data (or use **Reiniciar todo el progreso** in Settings) before
-Fernanda plays, so test runs don't leave stale hearts and punishments behind.
 
 ## Connecting Supabase (PostgreSQL)
 
@@ -69,6 +59,25 @@ are the only things protecting the data. Keep them out of public repos.
 Every remote write is best-effort — a failure logs a warning and the game
 continues on the local mirror. Replays insert a new `run_id` rather than
 overwriting previous rows.
+
+## Cartoon photos (Gemini)
+
+After a photo is taken, the app calls the `caricature` Edge Function, which
+sends the JPEG to Gemini and returns a cartoon. If Gemini is down, times out,
+or is not deployed, the **original photo is still saved** (Supabase Storage
+when connected, otherwise localStorage) and a notice is shown.
+
+1. Secret `GEMINI_API_KEY` is already set in **Edge Functions → Secrets**.
+   Optional: `GEMINI_IMAGE_MODEL` (defaults to `gemini-3.1-flash-image-preview`).
+2. Deploy once from the repo root (JWT off — this app has no login):
+
+```bash
+npx supabase login
+npx supabase link --project-ref <your-project-ref>
+npx supabase functions deploy caricature --no-verify-jwt
+```
+
+The project ref is the subdomain of `https://<ref>.supabase.co`.
 
 ## Layout
 

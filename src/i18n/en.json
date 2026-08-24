@@ -121,7 +121,7 @@
     "retake": "Take another",
     "saveLocal": "Save to device",
     "generating": "Creating your caricature...",
-    "caricatureFailed": "We couldn't create the caricature, but your original photo is saved.",
+    "caricatureFailed": "We couldn't create the caricature, but your original photo is saved",
     "original": "Original photo",
     "caricature": "Caricature",
     "alreadyTaken": "You already took your photo. You can enable another one from Settings.",

@@ -30,8 +30,8 @@
   },
   "instructions": {
     "m1": "Tienes {{seconds}} segundos para responder cada pregunta",
-    "m2": "por cada pregunta correcta ganarás un corazón",
-    "m3": "por cada pregunta incorrecta acumularás uno de los 4 posibles castigos:"
+    "m2": "por cada respuesta correcta ganarás un corazón",
+    "m3": "por cada respuesta incorrecta acumularás uno de los 4 posibles castigos:"
   },
   "menu": {
     "prompt": "Selecciona un grupo de preguntas",
@@ -121,7 +121,7 @@
     "retake": "Tomar otra",
     "saveLocal": "Guardar en dispositivo",
     "generating": "Creando tu caricatura...",
-    "caricatureFailed": "No pudimos crear la caricatura, pero tu foto original está guardada.",
+    "caricatureFailed": "No pudimos crear la caricatura, pero tu foto original está guardada",
     "original": "Foto original",
     "caricature": "Caricatura",
     "alreadyTaken": "Ya tomaste tu foto. Puedes habilitar otra desde Ajustes.",

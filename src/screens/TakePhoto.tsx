@@ -107,7 +107,7 @@ export default function TakePhoto() {
       setCaptured({ dataUrl, blob });
       stopStream();
 
-      // A caricature failure must never cost us the original photo.
+      // Always keep the original. Gemini is optional and must not block saving.
       let caricatureBlob: Blob | null = null;
       let caricatureDataUrl: string | null = null;
       try {

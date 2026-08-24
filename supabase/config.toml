@@ -1,0 +1,7 @@
+# Used by `npx supabase functions deploy`. This app has no user login, so the
+# caricature function accepts the project's anon key instead of a user JWT.
+project_id = "fer-quiz"
+
+[functions.caricature]
+enabled = true
+verify_jwt = false

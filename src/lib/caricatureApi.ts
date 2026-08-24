@@ -1,22 +1,19 @@
 /**
- * Caricature generation — STUB.
- *
- * Real Gemini wiring is out of scope for this pass. `generateCaricature` keeps
- * the shape a real call would have (async, may reject, returns a Blob), so the
- * body can be swapped for a fetch to Gemini without touching TakePhoto.
- *
- * The stub applies a posterise + saturation pass on a canvas so the result is
- * visibly different from the original, making the flow easy to demo.
+ * Asks the Supabase `caricature` Edge Function to turn a photo into a cartoon
+ * via Gemini. Callers must treat rejection as non-blocking: keep and save the
+ * original photo, show a soft notice, and carry on.
  */
+
+import { supabase } from './supabaseClient';
 
 export interface CaricatureResult {
   blob: Blob;
   dataUrl: string;
-  /** False while the stub is in place, so the UI can label it honestly. */
   isReal: boolean;
 }
 
-const POSTERIZE_LEVELS = 5;
+const MAX_EDGE = 1280;
+const TIMEOUT_MS = 55_000;
 
 function loadImage(dataUrl: string): Promise<HTMLImageElement> {
   return new Promise((resolve, reject) => {
@@ -27,40 +24,53 @@ function loadImage(dataUrl: string): Promise<HTMLImageElement> {
   });
 }
 
-async function stubCaricature(photoDataUrl: string): Promise<CaricatureResult> {
+/** Shrinks the capture so the Edge Function payload stays reasonable. */
+async function toJpegBase64(photoDataUrl: string): Promise<string> {
   const img = await loadImage(photoDataUrl);
+  const scale = Math.min(1, MAX_EDGE / Math.max(img.naturalWidth, img.naturalHeight));
   const canvas = document.createElement('canvas');
-  canvas.width = img.naturalWidth;
-  canvas.height = img.naturalHeight;
+  canvas.width = Math.max(1, Math.round(img.naturalWidth * scale));
+  canvas.height = Math.max(1, Math.round(img.naturalHeight * scale));
 
   const ctx = canvas.getContext('2d');
   if (!ctx) throw new Error('Canvas 2D context unavailable');
+  ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
 
-  ctx.filter = 'saturate(1.7) contrast(1.25)';
-  ctx.drawImage(img, 0, 0);
-  ctx.filter = 'none';
-
-  const frame = ctx.getImageData(0, 0, canvas.width, canvas.height);
-  const step = 255 / (POSTERIZE_LEVELS - 1);
-  for (let i = 0; i < frame.data.length; i += 4) {
-    frame.data[i] = Math.round(frame.data[i] / step) * step;
-    frame.data[i + 1] = Math.round(frame.data[i + 1] / step) * step;
-    frame.data[i + 2] = Math.round(frame.data[i + 2] / step) * step;
-  }
-  ctx.putImageData(frame, 0, 0);
-
-  const blob = await new Promise<Blob | null>((resolve) =>
-    canvas.toBlob(resolve, 'image/jpeg', 0.9),
-  );
-  if (!blob) throw new Error('Could not encode the caricature');
-
-  return { blob, dataUrl: canvas.toDataURL('image/jpeg', 0.9), isReal: false };
+  const dataUrl = canvas.toDataURL('image/jpeg', 0.86);
+  const comma = dataUrl.indexOf(',');
+  return comma >= 0 ? dataUrl.slice(comma + 1) : dataUrl;
 }
 
-/**
- * Callers must treat rejection as non-blocking: keep and save the original
- * photo, show a soft notice, and carry on.
- */
+function decodeImage(base64: string, mimeType: string): CaricatureResult {
+  const dataUrl = `data:${mimeType};base64,${base64}`;
+  const binary = atob(base64);
+  const bytes = new Uint8Array(binary.length);
+  for (let i = 0; i < binary.length; i += 1) bytes[i] = binary.charCodeAt(i);
+  return {
+    blob: new Blob([bytes], { type: mimeType }),
+    dataUrl,
+    isReal: true,
+  };
+}
+
 export async function generateCaricature(photoDataUrl: string): Promise<CaricatureResult> {
-  return stubCaricature(photoDataUrl);
+  if (!supabase) throw new Error('supabase-unavailable');
+
+  const imageBase64 = await toJpegBase64(photoDataUrl);
+
+  const { data, error } = await supabase.functions.invoke<{
+    caricatureBase64?: string;
+    mimeType?: string;
+    error?: string;
+  }>('caricature', {
+    body: { imageBase64 },
+    timeout: TIMEOUT_MS,
+  });
+
+  if (error) throw error;
+  if (data?.error || !data?.caricatureBase64) {
+    throw new Error(data?.error ?? 'empty-caricature');
+  }
+
+  return decodeImage(data.caricatureBase64, data.mimeType || 'image/jpeg');
 }
