@@ -123,13 +123,13 @@ Correct answer marked with ✅ in every language.
 ### 3
 
 - 🇪🇸 **¿Cuál fue el primer instrumento que aprendió a tocar Hector?**
-  A: Ukulele | B: Flauta | C: Guitarra ✅ | D: Batería
+  A: Ukulele | B: Flauta ✅ | C: Guitarra | D: Batería
 - 🇬🇧 **What was the first instrument Hector learned to play?**
-  A: Ukulele | B: Flute | C: Guitar ✅ | D: Drums
+  A: Ukulele | B: Flute ✅ | C: Guitar | D: Drums
 - 🇫🇷 **Quel a été le premier instrument que Hector a appris à jouer ?**
-  A: Ukulélé | B: Flûte | C: Guitare ✅ | D: Batterie
+  A: Ukulélé | B: Flûte ✅ | C: Guitare | D: Batterie
 - 🇩🇪 **Welches Instrument hat Hector zuerst spielen gelernt?**
-  A: Ukulele | B: Flöte | C: Gitarre ✅ | D: Schlagzeug
+  A: Ukulele | B: Flöte ✅ | C: Gitarre | D: Schlagzeug
 
 ### 4
 

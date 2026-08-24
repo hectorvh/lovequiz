@@ -257,7 +257,7 @@ const GROUP_2: QuestionSeed[] = [
   },
   {
     id: 'g2q3',
-    correctIndex: 2,
+    correctIndex: 1,
     i18n: {
       es: {
         text: '¿Cuál fue el primer instrumento que aprendió a tocar Hector?',

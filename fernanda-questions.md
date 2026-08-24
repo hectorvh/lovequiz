@@ -68,8 +68,8 @@
 
 3. **¿Cuál fue el primer instrumento que aprendió a tocar Hector?**
    - A: Ukulele
-   - B: Flauta
-   - C: Guitarra ✅
+   - B: Flauta ✅
+   - C: Guitarra
    - D: Batería
 
 4. **¿Con que número de playera Hector jugaba fútbol la mayor parte de su vida?**

@@ -224,7 +224,7 @@ export default function QuestionPlay() {
 
             let tone = 'border-card-line bg-white hover:border-wine';
             if (feedback) {
-              if (isRight) tone = 'border-good bg-good-bg text-[#204623]';
+              if (feedback.isCorrect && isRight) tone = 'border-good bg-good-bg text-[#204623]';
               else if (isChosen) tone = 'border-bad bg-bad-bg text-[#5c1416]';
               else tone = 'border-card-line bg-white opacity-45';
             }
@@ -258,22 +258,15 @@ export default function QuestionPlay() {
             </b>
             {feedback.isCorrect ? (
               <span>{t('play.correctSub')}</span>
-            ) : (
-              <>
-                <span>
-                  {t('play.correctWas', { answer: question.options[question.correctIndex] })}
-                </span>
-                {feedback.punishment ? (
-                  <span className="mt-0.5 block font-semibold">
-                    {t('play.punishmentAdded', {
-                      name: `${PUNISHMENT_EMOJI[feedback.punishment]} ${t(
-                        `punishments.${feedback.punishment}Full`,
-                      ).replace(/\n/g, ' ')}`,
-                    })}
-                  </span>
-                ) : null}
-              </>
-            )}
+            ) : feedback.punishment ? (
+              <span className="mt-0.5 block font-semibold">
+                {t('play.punishmentAdded', {
+                  name: `${PUNISHMENT_EMOJI[feedback.punishment]} ${t(
+                    `punishments.${feedback.punishment}Full`,
+                  ).replace(/\n/g, ' ')}`,
+                })}
+              </span>
+            ) : null}
           </div>
         ) : null}
 

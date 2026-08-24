@@ -43,9 +43,9 @@
     "startHector": "Hector Juega",
     "summary": "Resumen",
     "results": "Respuestas",
-    "lockedCreate": "Finaliza los 3 grupos de preguntas para poder hacer tu propio cuestionario.",
+    "lockedCreate": "Finaliza los 3 grupos de preguntas para poder hacer tu propio cuestionario",
     "lockedResults": "Finaliza todas las preguntas para poder ver tus resultados.",
-    "lockedPhoto": "Finaliza los 3 grupos de preguntas para tomar una foto.",
+    "lockedPhoto": "Finaliza los 3 grupos de preguntas para tomar una foto",
     "settings": "Ajustes",
     "photo": "Tomar foto"
   },
@@ -70,12 +70,12 @@
   },
   "bonus": {
     "tag": "Pregunta bonus",
-    "prompt": "Selecciona en el mapa donde vive Hector actualmente.",
-    "hint": "Toca el mapa para poner tu marcador, luego pulsa Aceptar.",
+    "prompt": "Selecciona en el mapa donde vive Hector actualmente",
+    "hint": "Toca el mapa para poner tu marcador, luego pulsa Aceptar",
     "noScore": "Esta pregunta no cuenta para corazones ni castigos, y no tiene tiempo límite.",
-    "resultKm": "Tu marcador quedó a {{km}} km del lugar correcto.",
-    "resultM": "Eso son {{m}} metros.",
-    "reveal": "Hector vive en ese punto del mapa."
+    "resultKm": "Tu marcador quedó a {{km}} km del lugar correcto",
+    "resultM": "Eso son {{m}} metros",
+    "reveal": "Hector vive en ese punto del mapa"
   },
   "partial": {
     "title": "Resultados del Grupo {{n}}",
@@ -144,7 +144,7 @@
     "deleteAnswersDesc": "Oculta las respuestas de la app y borra lo guardado en este dispositivo. Los registros de la base de datos nunca se borran.",
     "deleteAnswersDone": "Respuestas eliminadas de este dispositivo.",
     "savePhotos": "Guardar fotos en el dispositivo",
-    "savePhotosDesc": "Descarga las fotos guardadas.",
+    "savePhotosDesc": "Descarga las fotos guardadas",
     "noPhotos": "Todavía no hay fotos.",
     "download": "Descargar",
     "resetPhoto": "Reiniciar juego (solo la foto)",
@@ -157,7 +157,7 @@
     "confirmErase": "¿Estás seguro de borrar todo el proceso?",
     "confirmReset": "Sí, reiniciar",
     "timer": "Tiempo por pregunta",
-    "timerDesc": "Segundos para responder cada pregunta.",
+    "timerDesc": "Segundos para responder cada pregunta",
     "timerMinus": "Un segundo menos",
     "timerPlus": "Un segundo más"
   },

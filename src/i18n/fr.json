@@ -43,9 +43,9 @@
     "startHector": "Hector joue",
     "summary": "Résumé",
     "results": "Réponses",
-    "lockedCreate": "Termine les 3 groupes de questions pour créer ton propre questionnaire.",
+    "lockedCreate": "Termine les 3 groupes de questions pour créer ton propre questionnaire",
     "lockedResults": "Termine toutes les questions pour voir tes résultats.",
-    "lockedPhoto": "Termine les 3 groupes de questions pour prendre une photo.",
+    "lockedPhoto": "Termine les 3 groupes de questions pour prendre une photo",
     "settings": "Réglages",
     "photo": "Prendre une photo"
   },
@@ -70,12 +70,12 @@
   },
   "bonus": {
     "tag": "Question bonus",
-    "prompt": "Sélectionne sur la carte l'endroit où Hector vit actuellement.",
-    "hint": "Touche la carte pour placer ton marqueur, puis appuie sur Accepter.",
+    "prompt": "Sélectionne sur la carte l'endroit où Hector vit actuellement",
+    "hint": "Touche la carte pour placer ton marqueur, puis appuie sur Accepter",
     "noScore": "Cette question ne compte ni pour les cœurs ni pour les gages, et il n'y a pas de limite de temps.",
-    "resultKm": "Ton marqueur est à {{km}} km du bon endroit.",
-    "resultM": "Cela fait {{m}} mètres.",
-    "reveal": "Hector habite à ce point sur la carte."
+    "resultKm": "Ton marqueur est à {{km}} km du bon endroit",
+    "resultM": "Cela fait {{m}} mètres",
+    "reveal": "Hector habite à ce point sur la carte"
   },
   "partial": {
     "title": "Résultats du groupe {{n}}",
@@ -144,7 +144,7 @@
     "deleteAnswersDesc": "Masque les réponses dans l'app et efface ce qui est stocké sur cet appareil. Les enregistrements de la base de données ne sont jamais supprimés.",
     "deleteAnswersDone": "Réponses supprimées de cet appareil.",
     "savePhotos": "Enregistrer les photos sur l'appareil",
-    "savePhotosDesc": "Télécharge les photos enregistrées.",
+    "savePhotosDesc": "Télécharge les photos enregistrées",
     "noPhotos": "Aucune photo pour le moment.",
     "download": "Télécharger",
     "resetPhoto": "Réinitialiser le jeu (photo seulement)",
@@ -157,7 +157,7 @@
     "confirmErase": "Es-tu sûre de vouloir tout effacer ?",
     "confirmReset": "Oui, réinitialiser",
     "timer": "Temps par question",
-    "timerDesc": "Secondes pour répondre à chaque question.",
+    "timerDesc": "Secondes pour répondre à chaque question",
     "timerMinus": "Une seconde de moins",
     "timerPlus": "Une seconde de plus"
   },

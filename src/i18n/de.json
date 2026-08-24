@@ -43,9 +43,9 @@
     "startHector": "Hector spielt",
     "summary": "Zusammenfassung",
     "results": "Antworten",
-    "lockedCreate": "Schließe die 3 Fragengruppen ab, um dein eigenes Quiz zu erstellen.",
+    "lockedCreate": "Schließe die 3 Fragengruppen ab, um dein eigenes Quiz zu erstellen",
     "lockedResults": "Beende alle Fragen, um deine Ergebnisse zu sehen.",
-    "lockedPhoto": "Schließe die 3 Fragengruppen ab, um ein Foto aufzunehmen.",
+    "lockedPhoto": "Schließe die 3 Fragengruppen ab, um ein Foto aufzunehmen",
     "settings": "Einstellungen",
     "photo": "Foto aufnehmen"
   },
@@ -70,12 +70,12 @@
   },
   "bonus": {
     "tag": "Bonusfrage",
-    "prompt": "Wähle auf der Karte aus, wo Hector derzeit lebt.",
-    "hint": "Tippe auf die Karte, um deinen Marker zu setzen, dann Bestätigen drücken.",
+    "prompt": "Wähle auf der Karte aus, wo Hector derzeit lebt",
+    "hint": "Tippe auf die Karte, um deinen Marker zu setzen, dann Bestätigen drücken",
     "noScore": "Diese Frage zählt weder für Herzen noch für Strafen und hat kein Zeitlimit.",
-    "resultKm": "Dein Marker liegt {{km}} km vom richtigen Ort entfernt.",
-    "resultM": "Das sind {{m}} Meter.",
-    "reveal": "Hector wohnt an diesem Punkt auf der Karte."
+    "resultKm": "Dein Marker liegt {{km}} km vom richtigen Ort entfernt",
+    "resultM": "Das sind {{m}} Meter",
+    "reveal": "Hector wohnt an diesem Punkt auf der Karte"
   },
   "partial": {
     "title": "Ergebnisse Gruppe {{n}}",
@@ -144,7 +144,7 @@
     "deleteAnswersDesc": "Versteckt die Antworten in der App und löscht die Daten auf diesem Gerät. Datenbankeinträge werden nie gelöscht.",
     "deleteAnswersDone": "Antworten von diesem Gerät entfernt.",
     "savePhotos": "Fotos auf dem Gerät speichern",
-    "savePhotosDesc": "Lade die gespeicherten Fotos herunter.",
+    "savePhotosDesc": "Lade die gespeicherten Fotos herunter",
     "noPhotos": "Noch keine Fotos.",
     "download": "Herunterladen",
     "resetPhoto": "Spiel zurücksetzen (nur Foto)",
@@ -157,7 +157,7 @@
     "confirmErase": "Bist du sicher, dass du den gesamten Prozess löschen willst?",
     "confirmReset": "Ja, zurücksetzen",
     "timer": "Zeit pro Frage",
-    "timerDesc": "Sekunden, um jede Frage zu beantworten.",
+    "timerDesc": "Sekunden, um jede Frage zu beantworten",
     "timerMinus": "Eine Sekunde weniger",
     "timerPlus": "Eine Sekunde mehr"
   },
