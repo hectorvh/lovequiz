@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 import { chromeButtonClass } from './ui';
 
-/** Opens the intro sequence from the menu. Same chrome as mute / power / settings. */
+/** Opens the intro sequence. Hidden on the intro screen itself. */
 export default function InfoButton() {
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -17,7 +17,7 @@ export default function InfoButton() {
     >
       <span
         aria-hidden
-        className="font-display text-[1.35rem] leading-none font-semibold italic"
+        className="font-display text-[1.62rem] leading-none font-semibold italic"
       >
         i
       </span>

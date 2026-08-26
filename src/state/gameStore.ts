@@ -16,7 +16,7 @@ import {
   type ReciprocalQuestion,
   type Tally,
 } from '../types';
-import { pickGroupSticker, type GroupStickerRef } from '../data/groupStickers';
+import { pickUniquePositiveSticker, type GroupStickerRef } from '../data/groupStickers';
 import { ensurePlayQuestionIds } from '../data/questions';
 import {
   DEFAULT_QUESTION_DURATION_SECONDS,
@@ -274,8 +274,13 @@ export const useGameStore = create<GameStore>()(
             ? inProgress.questionIds
             : inProgress.answers.map((answer) => answer.questionId);
 
-        const correctCount = inProgress.answers.filter((answer) => answer.isCorrect).length;
-        const sticker = pickGroupSticker(correctCount, inProgress.answers.length);
+        const usedPositiveFiles = FERNANDA_GROUPS.filter((id) => id !== groupId)
+          .map((id) => state.groupStickers[id])
+          .filter((ref): ref is GroupStickerRef => ref?.kind === 'positive')
+          .map((ref) => ref.file);
+        const sticker = isFernandaGroup(groupId)
+          ? pickUniquePositiveSticker(usedPositiveFiles)
+          : null;
 
         const previous = state.answers[groupId];
         const groupTally = computeTally(inProgress.answers);
@@ -329,20 +334,21 @@ export const useGameStore = create<GameStore>()(
 
       ensureGroupStickers: () => {
         const state = get();
-        let next = state.groupStickers;
+        const next: Record<string, GroupStickerRef> = { ...state.groupStickers };
+        const used = new Set<string>();
         let changed = false;
 
-        for (const groupId of [...FERNANDA_GROUPS, 'hector'] as const) {
-          if (!state.completedGroups.includes(groupId) || next[groupId]) continue;
-          const answers = state.answers[groupId];
-          if (!answers?.length) continue;
-          const sticker = pickGroupSticker(
-            answers.filter((answer) => answer.isCorrect).length,
-            answers.length,
-          );
+        for (const groupId of FERNANDA_GROUPS) {
+          if (!state.completedGroups.includes(groupId)) continue;
+          const current = next[groupId];
+          if (current?.kind === 'positive' && !used.has(current.file)) {
+            used.add(current.file);
+            continue;
+          }
+          const sticker = pickUniquePositiveSticker(used);
           if (!sticker) continue;
-          if (!changed) next = { ...state.groupStickers };
           next[groupId] = sticker;
+          used.add(sticker.file);
           changed = true;
         }
 

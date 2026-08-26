@@ -34,7 +34,7 @@
     "m3": "por cada respuesta incorrecta acumularás uno de los 4 posibles castigos:"
   },
   "menu": {
-    "prompt": "Selecciona un grupo de preguntas",
+    "prompt": "Selecciona\nuna opción",
     "group": "Grupo {{n}}",
     "groupDone": "Completado",
     "groupLocked": "Ya completaste este grupo. Reinicia el juego en ajustes para volver a jugarlo.",
@@ -42,6 +42,7 @@
     "hectorCycle": "Resultados de Hector",
     "startHector": "Hector Juega",
     "summary": "Resumen",
+    "lego": "lego",
     "results": "Respuestas",
     "lockedCreate": "Finaliza los 3 grupos de preguntas para poder hacer tu propio cuestionario",
     "lockedResults": "Finaliza todas las preguntas para poder ver tus resultados.",
@@ -104,7 +105,7 @@
     "title": "Tu cuestionario",
     "subtitle": "",
     "step": "Pregunta {{n}} de {{total}}",
-    "questionLabel": "Tu pregunta",
+    "questionLabel": "Pregunta",
     "questionPlaceholder": "Escribe tu pregunta aquí",
     "answerPlaceholder": "Respuesta {{letter}}",
     "markCorrect": "Marca la respuesta correcta",
@@ -131,9 +132,9 @@
   },
   "summary": {
     "title": "Gracias por jugar",
-    "message": "Gracias por jugar Amor! Ahora toca pagar lo que debes!",
-    "fernandaOwes": "Lo que debe Fernanda",
-    "hectorOwes": "Lo que debe Hector",
+    "message": "Ahora toca pagar lo que debes!",
+    "fernandaOwes": "Fernanda",
+    "hectorOwes": "Hector",
     "hearts": "Corazones ganados",
     "nothingOwed": "Nada que pagar",
     "closing": "Con amor, Hector"
@@ -150,7 +151,8 @@
     "resetPhoto": "Reiniciar juego (solo la foto)",
     "resetPhotoDesc": "Vuelve a habilitar la pantalla de foto sin tocar el progreso.",
     "resetPhotoDone": "La pantalla de foto está habilitada otra vez.",
-    "resetAll": "Reiniciar",
+    "restartGame": "Reiniciar juego",
+    "resetAll": "Reiniciar preguntas",
     "resetAllDesc": "Borra corazones, castigos, grupos completados y el cuestionario guardado en este dispositivo.",
     "resetAllDone": "Progreso reiniciado.",
     "confirmTitle": "¿Seguro?",

@@ -34,7 +34,7 @@
     "m3": "für jede falsche Antwort sammelst du eine der 4 möglichen Strafen:"
   },
   "menu": {
-    "prompt": "Wähle eine Fragengruppe",
+    "prompt": "Wähle\neine Option",
     "group": "Gruppe {{n}}",
     "groupDone": "Abgeschlossen",
     "groupLocked": "Diese Gruppe hast du schon abgeschlossen. Setze das Spiel in den Einstellungen zurück, um sie erneut zu spielen.",
@@ -42,6 +42,7 @@
     "hectorCycle": "Hectors Ergebnisse",
     "startHector": "Hector spielt",
     "summary": "Zusammenfassung",
+    "lego": "lego",
     "results": "Antworten",
     "lockedCreate": "Schließe die 3 Fragengruppen ab, um dein eigenes Quiz zu erstellen",
     "lockedResults": "Beende alle Fragen, um deine Ergebnisse zu sehen.",
@@ -104,7 +105,7 @@
     "title": "Dein Quiz",
     "subtitle": "",
     "step": "Frage {{n}} von {{total}}",
-    "questionLabel": "Deine Frage",
+    "questionLabel": "Frage",
     "questionPlaceholder": "Schreibe hier deine Frage",
     "answerPlaceholder": "Antwort {{letter}}",
     "markCorrect": "Markiere die richtige Antwort",
@@ -131,9 +132,9 @@
   },
   "summary": {
     "title": "Danke fürs Mitspielen",
-    "message": "Danke fürs Spielen, Amor! Jetzt wird bezahlt, was du schuldest!",
-    "fernandaOwes": "Was Fernanda schuldet",
-    "hectorOwes": "Was Hector schuldet",
+    "message": "Jetzt wird bezahlt, was du schuldest!",
+    "fernandaOwes": "Fernanda",
+    "hectorOwes": "Hector",
     "hearts": "Gewonnene Herzen",
     "nothingOwed": "Nichts zu bezahlen",
     "closing": "Mit Liebe, Hector"
@@ -150,7 +151,8 @@
     "resetPhoto": "Spiel zurücksetzen (nur Foto)",
     "resetPhotoDesc": "Gibt den Foto-Bildschirm wieder frei, ohne den Fortschritt anzutasten.",
     "resetPhotoDone": "Der Foto-Bildschirm ist wieder verfügbar.",
-    "resetAll": "Zurücksetzen",
+    "restartGame": "Spiel neu starten",
+    "resetAll": "Fragen zurücksetzen",
     "resetAllDesc": "Löscht Herzen, Strafen, abgeschlossene Gruppen und das gespeicherte Quiz auf diesem Gerät.",
     "resetAllDone": "Fortschritt zurückgesetzt.",
     "confirmTitle": "Bist du sicher?",

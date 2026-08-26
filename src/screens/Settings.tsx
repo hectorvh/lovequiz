@@ -166,6 +166,12 @@ export default function Settings() {
           </section>
 
           <section>
+            <GhostButton className="!py-2.5" onClick={() => navigate('/')}>
+              {t('settings.restartGame')}
+            </GhostButton>
+          </section>
+
+          <section>
             <GhostButton className="!py-2.5" onClick={() => setConfirmingReset(true)}>
               {t('settings.resetAll')}
             </GhostButton>

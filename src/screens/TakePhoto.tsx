@@ -141,7 +141,7 @@ export default function TakePhoto() {
 
   return (
     <div className="flex h-full min-h-0 flex-col overflow-hidden pt-1">
-      <ScreenTitle eyebrow={t('photo.subtitle')} title={t('photo.title')} />
+      <ScreenTitle title={t('photo.title')} subtitle={t('photo.subtitle')} />
 
       <Card className="flex min-h-0 flex-1 flex-col overflow-hidden !p-3.5">
         {captured ? (

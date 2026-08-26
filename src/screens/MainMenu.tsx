@@ -1,27 +1,31 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, type ReactNode } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 import Toast from '../components/Toast';
-import { chromeButtonClass, introTypeClass } from '../components/ui';
-import { groupStickerSrc } from '../data/groupStickers';
+import { chromeButtonClass, introTypeClass, unavailableButtonClass } from '../components/ui';
+import { CREATE_QUIZ_STICKER, groupStickerSrc } from '../data/groupStickers';
 import {
+  computeTally,
   selectAllGroupsComplete,
+  selectAnyGroupComplete,
   selectHectorQuizComplete,
   useGameStore,
 } from '../state/gameStore';
-import { FERNANDA_GROUPS, GROUP_LETTERS } from '../types';
+import { FERNANDA_GROUPS, GROUP_LETTERS, PUNISHMENT_EMOJI } from '../types';
 
-const introLabelClass = `${introTypeClass} text-center text-3xl leading-tight text-[#faf1e8] drop-shadow-[0_3px_14px_rgba(0,0,0,0.7)]`;
+/** 40% larger than text-3xl, forced to two lines. */
+const introLabelClass = `${introTypeClass} whitespace-pre-line text-center text-[2.625rem] leading-[1.05] text-[#faf1e8] drop-shadow-[0_3px_14px_rgba(0,0,0,0.7)]`;
 
-const menuActionClass = `${introTypeClass} rounded-xl px-5 py-3 text-lg leading-snug whitespace-nowrap transition active:scale-[0.98]`;
+/** Previous 140px tiles reduced 20%. */
+const TILE_SIZE_CLASS = 'h-28 w-28';
 
 function CameraGlyph() {
   return (
     <svg
       aria-hidden
       viewBox="0 0 24 24"
-      className="h-[35px] w-[35px]"
+      className="h-[53.55px] w-[53.55px]"
       fill="none"
       stroke="currentColor"
       strokeWidth={1.6}
@@ -34,15 +38,103 @@ function CameraGlyph() {
   );
 }
 
+/** Hearts sit on the top rim of a finished sticker circle. */
+function TopHearts({ count }: { count: number }) {
+  if (count <= 0) return null;
+
+  const radius = 58;
+  const step = 24;
+  const start = -((count - 1) * step) / 2;
+
+  return (
+    <div className="pointer-events-none absolute inset-0 z-10">
+      {Array.from({ length: count }, (_, i) => {
+        const angleRad = ((start + i * step) * Math.PI) / 180;
+        const x = Math.sin(angleRad) * radius;
+        const y = -Math.cos(angleRad) * radius;
+        return (
+          <span
+            key={i}
+            className="absolute top-1/2 left-1/2 text-[1.575rem] leading-none drop-shadow-[0_1px_2px_rgba(0,0,0,0.55)]"
+            style={{ transform: `translate(-50%, -50%) translate(${x}px, ${y}px)` }}
+            aria-hidden
+          >
+            ❤️
+          </span>
+        );
+      })}
+    </div>
+  );
+}
+
+function MenuTile({
+  variant,
+  faded,
+  label,
+  stickerSrc,
+  hearts,
+  onClick,
+  children,
+}: {
+  variant: 'pending' | 'boxSticker' | 'circle';
+  faded?: boolean;
+  label: string;
+  stickerSrc?: string;
+  hearts?: number;
+  onClick: () => void;
+  children: ReactNode;
+}) {
+  const { t } = useTranslation();
+  const isCircle = variant === 'circle';
+  const showSticker =
+    (variant === 'circle' || variant === 'boxSticker') && Boolean(stickerSrc);
+  const heartCount = hearts ?? 0;
+
+  return (
+    <div className="relative">
+      <button
+        type="button"
+        onClick={onClick}
+        aria-label={
+          faded
+            ? t('menu.lockedCreate')
+            : isCircle
+              ? `${label} — ${t('play.hearts')}: ${heartCount}`
+              : label
+        }
+        aria-disabled={faded}
+        className={`grid ${TILE_SIZE_CLASS} place-items-center border-[3px] shadow-md transition active:scale-95 ${
+          isCircle
+            ? 'overflow-hidden rounded-full border-[#355c38] bg-good text-white'
+            : 'overflow-hidden rounded-3xl border-wine bg-wine text-[#fbe9ee]'
+        } ${faded ? unavailableButtonClass : isCircle ? '' : 'hover:bg-wine-deep'}`}
+      >
+        {showSticker ? (
+          <img
+            src={stickerSrc}
+            alt=""
+            className="pointer-events-none h-full w-full object-cover"
+          />
+        ) : (
+          <span className={`${introTypeClass} text-[2.72rem] leading-none`}>{children}</span>
+        )}
+      </button>
+      {isCircle ? <TopHearts count={heartCount} /> : null}
+    </div>
+  );
+}
+
 export default function MainMenu() {
   const { t } = useTranslation();
   const navigate = useNavigate();
 
   const completedGroups = useGameStore((s) => s.completedGroups);
   const groupStickers = useGameStore((s) => s.groupStickers);
+  const answers = useGameStore((s) => s.answers);
   const ensureGroupStickers = useGameStore((s) => s.ensureGroupStickers);
   const reciprocalQuizSaved = useGameStore((s) => s.reciprocalQuizSaved);
   const allGroupsComplete = useGameStore(selectAllGroupsComplete);
+  const anyGroupComplete = useGameStore(selectAnyGroupComplete);
   const hectorQuizComplete = useGameStore(selectHectorQuizComplete);
 
   const [toast, setToast] = useState<string | null>(null);
@@ -51,9 +143,17 @@ export default function MainMenu() {
     ensureGroupStickers();
   }, [ensureGroupStickers, completedGroups]);
 
-  const onCreateQuiz = () => {
+  const onCreateTile = () => {
     if (!allGroupsComplete) {
       setToast(t('menu.lockedCreate'));
+      return;
+    }
+    if (hectorQuizComplete) {
+      navigate('/results/hector');
+      return;
+    }
+    if (reciprocalQuizSaved) {
+      navigate('/play/hector');
       return;
     }
     navigate('/create-quiz');
@@ -67,110 +167,116 @@ export default function MainMenu() {
     navigate('/photo');
   };
 
-  const hectorStickerSrc = groupStickerSrc(groupStickers.hector);
+  const onSummary = () => {
+    if (!anyGroupComplete) {
+      setToast(t('menu.lockedResults'));
+      return;
+    }
+    navigate('/summary');
+  };
+
+  const createStickerSrc = groupStickerSrc(CREATE_QUIZ_STICKER);
+
+  const createVariant: 'pending' | 'boxSticker' | 'circle' = hectorQuizComplete
+    ? 'circle'
+    : reciprocalQuizSaved
+      ? 'boxSticker'
+      : 'pending';
+
+  const createLabel = hectorQuizComplete
+    ? t('menu.hectorCycle')
+    : reciprocalQuizSaved
+      ? t('menu.startHector')
+      : t('menu.createQuiz');
 
   return (
     <div className="flex h-full min-h-0 flex-col items-center overflow-hidden px-2 text-center">
-      <div className="flex min-h-0 flex-1 flex-col items-center justify-center">
-        <p className={`${introLabelClass} mb-8`}>{t('menu.prompt')}</p>
+      <div className="flex min-h-0 w-full flex-1 flex-col items-center justify-center">
+        <p className={`${introLabelClass} mb-11`}>{t('menu.prompt')}</p>
+        <div className="grid grid-cols-2 gap-x-4 gap-y-8">
+            {FERNANDA_GROUPS.map((groupId) => {
+              const done = completedGroups.includes(groupId);
+              const label = t('menu.group', { n: GROUP_LETTERS[groupId] });
+              const stickerSrc = groupStickerSrc(groupStickers[groupId]);
+              const hearts = computeTally(answers[groupId] ?? []).hearts;
+              return (
+                <MenuTile
+                  key={groupId}
+                  variant={done ? 'circle' : 'pending'}
+                  label={done ? `${label} — ${t('menu.groupDone')}` : label}
+                  stickerSrc={stickerSrc}
+                  hearts={done ? hearts : undefined}
+                  onClick={() => {
+                    if (done) {
+                      navigate(`/results/${groupId}`);
+                      return;
+                    }
+                    navigate(`/play/${groupId}`);
+                  }}
+                >
+                  {GROUP_LETTERS[groupId]}
+                </MenuTile>
+              );
+            })}
 
-        <div className="flex justify-center gap-3">
-          {FERNANDA_GROUPS.map((groupId) => {
-            const done = completedGroups.includes(groupId);
-            const label = t('menu.group', { n: GROUP_LETTERS[groupId] });
-            const stickerSrc = groupStickerSrc(groupStickers[groupId]);
-            return (
-              <button
-                key={groupId}
-                type="button"
-                onClick={() => {
-                  if (done) {
-                    navigate(`/results/${groupId}`);
-                    return;
-                  }
-                  navigate(`/play/${groupId}`);
-                }}
-                aria-label={done ? `${label} — ${t('menu.groupDone')}` : label}
-                className={`grid h-20 w-20 place-items-center border-2 shadow-md transition active:scale-95 ${
-                  done
-                    ? 'overflow-hidden rounded-full border-[#355c38] bg-good text-white'
-                    : 'rounded-2xl border-wine bg-wine text-[#fbe9ee] hover:bg-wine-deep'
-                }`}
-              >
-                {done && stickerSrc ? (
-                  <img
-                    src={stickerSrc}
-                    alt=""
-                    className="pointer-events-none h-full w-full object-cover"
-                  />
-                ) : done ? null : (
-                  <span className={`${introTypeClass} text-[1.95rem] leading-none`}>
-                    {GROUP_LETTERS[groupId]}
-                  </span>
-                )}
-              </button>
-            );
-          })}
-
-          {hectorQuizComplete ? (
-            <button
-              type="button"
-              onClick={() => navigate('/results/hector')}
-              aria-label={t('menu.hectorCycle')}
-              className="grid h-20 w-20 place-items-center overflow-hidden rounded-full border-2 border-[#1d9fd0] bg-[#5ec8f0] shadow-md transition active:scale-95"
+            <MenuTile
+              variant={createVariant}
+              faded={!allGroupsComplete}
+              label={createLabel}
+              stickerSrc={createStickerSrc}
+              hearts={
+                createVariant === 'circle'
+                  ? computeTally(answers.hector ?? []).hearts
+                  : undefined
+              }
+              onClick={onCreateTile}
             >
-              {hectorStickerSrc ? (
-                <img
-                  src={hectorStickerSrc}
-                  alt=""
-                  className="pointer-events-none h-full w-full object-cover"
-                />
-              ) : null}
-            </button>
-          ) : null}
+              ?
+            </MenuTile>
         </div>
-
-        {hectorQuizComplete ? (
-          <button
-            type="button"
-            onClick={() => navigate('/summary')}
-            className={`${menuActionClass} mt-6 bg-wine text-[#fbe9ee] hover:bg-wine-deep`}
-          >
-            {t('menu.summary')}
-          </button>
-        ) : reciprocalQuizSaved ? (
-          <button
-            type="button"
-            onClick={() => navigate('/play/hector')}
-            className={`${menuActionClass} mt-6 bg-wine text-[#fbe9ee] hover:bg-wine-deep`}
-          >
-            {t('menu.startHector')}
-          </button>
-        ) : (
-          <button
-            type="button"
-            onClick={onCreateQuiz}
-            aria-disabled={!allGroupsComplete}
-            className={`${menuActionClass} mt-6 bg-wine text-[#fbe9ee] ${
-              allGroupsComplete ? 'hover:bg-wine-deep' : 'opacity-45'
-            }`}
-          >
-            {t('menu.createQuiz')}
-          </button>
-        )}
       </div>
 
-      <button
-        type="button"
-        onClick={onPhoto}
-        aria-label={t('menu.photo')}
-        aria-disabled={!allGroupsComplete}
-        className={`mb-2 ${chromeButtonClass} !h-[77px] !w-[77px] ${
-          allGroupsComplete ? '' : 'opacity-45'
-        }`}
-      >
-        <CameraGlyph />
-      </button>
+      <div className="mb-2 grid w-full grid-cols-3 items-center">
+        <div className="flex justify-end pr-4">
+          <button
+            type="button"
+            onClick={onSummary}
+            aria-label={t('menu.summary')}
+            aria-disabled={!anyGroupComplete}
+            className={`${chromeButtonClass} !h-[69.3px] !w-[69.3px] !rounded-2xl ${
+              anyGroupComplete ? '' : unavailableButtonClass
+            }`}
+          >
+            <span className="text-[1.8rem] leading-none opacity-[0.85]" aria-hidden>
+              {PUNISHMENT_EMOJI.beso}
+            </span>
+          </button>
+        </div>
+
+        <div className="flex justify-center">
+          <button
+            type="button"
+            onClick={onPhoto}
+            aria-label={t('menu.photo')}
+            aria-disabled={!allGroupsComplete}
+            className={`${chromeButtonClass} !h-[83.16px] !w-[83.16px] ${
+              allGroupsComplete ? '' : unavailableButtonClass
+            }`}
+          >
+            <CameraGlyph />
+          </button>
+        </div>
+
+        <div className="flex justify-start pl-4">
+          <button
+            type="button"
+            aria-label={t('menu.lego')}
+            className={`${chromeButtonClass} !h-[69.3px] !w-[69.3px] !rounded-2xl`}
+          >
+            <span className={`${introTypeClass} text-[1.125rem] leading-none`}>{t('menu.lego')}</span>
+          </button>
+        </div>
+      </div>
 
       <Toast message={toast} onDismiss={() => setToast(null)} />
     </div>

@@ -34,7 +34,7 @@
     "m3": "pour chaque mauvaise réponse tu accumuleras l'un des 4 gages possibles :"
   },
   "menu": {
-    "prompt": "Sélectionne un groupe de questions",
+    "prompt": "Sélectionne\nune option",
     "group": "Groupe {{n}}",
     "groupDone": "Terminé",
     "groupLocked": "Tu as déjà terminé ce groupe. Réinitialise le jeu dans les réglages pour y rejouer.",
@@ -42,6 +42,7 @@
     "hectorCycle": "Résultats de Hector",
     "startHector": "Hector joue",
     "summary": "Résumé",
+    "lego": "lego",
     "results": "Réponses",
     "lockedCreate": "Termine les 3 groupes de questions pour créer ton propre questionnaire",
     "lockedResults": "Termine toutes les questions pour voir tes résultats.",
@@ -104,7 +105,7 @@
     "title": "Ton questionnaire",
     "subtitle": "",
     "step": "Question {{n}} sur {{total}}",
-    "questionLabel": "Ta question",
+    "questionLabel": "Question",
     "questionPlaceholder": "Écris ta question ici",
     "answerPlaceholder": "Réponse {{letter}}",
     "markCorrect": "Marque la bonne réponse",
@@ -131,9 +132,9 @@
   },
   "summary": {
     "title": "Merci d'avoir joué",
-    "message": "Merci d'avoir joué, Amor ! Maintenant, il faut payer ce que tu dois !",
-    "fernandaOwes": "Ce que doit Fernanda",
-    "hectorOwes": "Ce que doit Hector",
+    "message": "Maintenant, il faut payer ce que tu dois !",
+    "fernandaOwes": "Fernanda",
+    "hectorOwes": "Hector",
     "hearts": "Cœurs gagnés",
     "nothingOwed": "Rien à payer",
     "closing": "Avec amour, Hector"
@@ -150,7 +151,8 @@
     "resetPhoto": "Réinitialiser le jeu (photo seulement)",
     "resetPhotoDesc": "Réactive l'écran photo sans toucher à la progression.",
     "resetPhotoDone": "L'écran photo est de nouveau disponible.",
-    "resetAll": "Réinitialiser",
+    "restartGame": "Relancer le jeu",
+    "resetAll": "Réinitialiser les questions",
     "resetAllDesc": "Efface les cœurs, les gages, les groupes terminés et le questionnaire enregistré sur cet appareil.",
     "resetAllDone": "Progression réinitialisée.",
     "confirmTitle": "Tu es sûre ?",

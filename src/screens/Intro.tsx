@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
-import { chromeButtonClass, introTypeClass } from '../components/ui';
+import { chromeButtonClass, introTypeClass, unavailableButtonClass } from '../components/ui';
 import { useGameStore } from '../state/gameStore';
 import {
   PUNISHMENT_EMOJI,
@@ -144,15 +144,17 @@ function PunishmentBoard() {
   );
 }
 
-function CircleButton({
+function ChromeControl({
   label,
   disabled,
   onClick,
+  boxClass,
   children,
 }: {
   label: string;
   disabled?: boolean;
   onClick: () => void;
+  boxClass: string;
   children: ReactNode;
 }) {
   return (
@@ -161,7 +163,7 @@ function CircleButton({
       onClick={onClick}
       disabled={disabled}
       aria-label={label}
-      className={`${chromeButtonClass} text-2xl leading-none`}
+      className={`${chromeButtonClass} ${boxClass} ${disabled ? unavailableButtonClass : ''}`}
     >
       <span aria-hidden className="grid place-items-center">
         {children}
@@ -256,42 +258,60 @@ export default function Intro() {
         )}
       </div>
 
-      <div className="fixed bottom-14 left-1/2 z-30 flex -translate-x-1/2 gap-3">
-        <CircleButton label={t('intro.previous')} disabled={index === 0} onClick={goBack}>
-          ‹
-        </CircleButton>
-        <CircleButton
-          label={paused ? t('intro.resume') : t('intro.pause')}
-          disabled={isLast}
-          onClick={() => setPaused((value) => !value)}
-        >
-          {paused ? (
-            <svg viewBox="0 0 24 24" className="h-5 w-5" fill="currentColor" aria-hidden>
-              <path d="M8 5.14v13.72c0 .7.76 1.13 1.35.76l10.4-6.86a.9.9 0 000-1.52L9.35 4.38A.9.9 0 008 5.14z" />
-            </svg>
-          ) : (
-            <svg viewBox="0 0 24 24" className="h-5 w-5" fill="currentColor" aria-hidden>
-              <rect x="6.5" y="5" width="3.5" height="14" rx="1" />
-              <rect x="14" y="5" width="3.5" height="14" rx="1" />
-            </svg>
-          )}
-        </CircleButton>
-        <CircleButton label={t('intro.toMenu')} onClick={() => navigate('/menu')}>
-          <svg
-            viewBox="0 0 24 24"
-            className="h-5 w-5"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth={1.6}
-            strokeLinecap="round"
-            strokeLinejoin="round"
+      <div className="fixed bottom-14 left-0 right-0 z-30 grid grid-cols-3 items-center px-4">
+        <div className="flex justify-end pr-4">
+          <ChromeControl
+            label={t('intro.previous')}
+            disabled={index === 0}
+            onClick={goBack}
+            boxClass="!h-[69.3px] !w-[69.3px] !rounded-2xl"
           >
-            <rect x="4" y="4" width="7" height="7" rx="1.6" />
-            <rect x="13" y="4" width="7" height="7" rx="1.6" />
-            <rect x="4" y="13" width="7" height="7" rx="1.6" />
-            <rect x="13" y="13" width="7" height="7" rx="1.6" />
-          </svg>
-        </CircleButton>
+            <span className="text-[3.24rem] leading-none">‹</span>
+          </ChromeControl>
+        </div>
+
+        <div className="flex justify-center">
+          <ChromeControl
+            label={paused ? t('intro.resume') : t('intro.pause')}
+            disabled={isLast}
+            onClick={() => setPaused((value) => !value)}
+            boxClass="!h-[83.16px] !w-[83.16px]"
+          >
+            {paused ? (
+              <svg viewBox="0 0 24 24" className="h-[53.55px] w-[53.55px]" fill="currentColor" aria-hidden>
+                <path d="M8 5.14v13.72c0 .7.76 1.13 1.35.76l10.4-6.86a.9.9 0 000-1.52L9.35 4.38A.9.9 0 008 5.14z" />
+              </svg>
+            ) : (
+              <svg viewBox="0 0 24 24" className="h-[53.55px] w-[53.55px]" fill="currentColor" aria-hidden>
+                <rect x="6.5" y="5" width="3.5" height="14" rx="1" />
+                <rect x="14" y="5" width="3.5" height="14" rx="1" />
+              </svg>
+            )}
+          </ChromeControl>
+        </div>
+
+        <div className="flex justify-start pl-4">
+          <ChromeControl
+            label={t('intro.toMenu')}
+            onClick={() => navigate('/menu')}
+            boxClass="!h-[69.3px] !w-[69.3px] !rounded-2xl"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              className="h-[32.4px] w-[32.4px]"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth={1.6}
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <rect x="4" y="4" width="7" height="7" rx="1.6" />
+              <rect x="13" y="4" width="7" height="7" rx="1.6" />
+              <rect x="4" y="13" width="7" height="7" rx="1.6" />
+              <rect x="13" y="13" width="7" height="7" rx="1.6" />
+            </svg>
+          </ChromeControl>
+        </div>
       </div>
     </>
   );

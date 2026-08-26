@@ -61,6 +61,17 @@ export default function Results() {
       <ScreenTitle title={title} />
 
       <Card>
+        <div className="mb-5 space-y-2">
+          <PrimaryButton onClick={() => navigate(`/play/${groupId}`)}>
+            {t('results.playAgain')}
+          </PrimaryButton>
+          {groupId === 'hector' ? (
+            <PrimaryButton onClick={() => navigate('/create-quiz')}>
+              {t('menu.createQuiz')}
+            </PrimaryButton>
+          ) : null}
+        </div>
+
         {resultRows.length === 0 ? (
           <p className="text-sm text-ink-soft">{t('results.cleared')}</p>
         ) : (
@@ -105,15 +116,7 @@ export default function Results() {
           </p>
         ) : null}
 
-        <div className="mt-5 space-y-2">
-          {groupId === 'hector' ? (
-            <PrimaryButton onClick={() => navigate('/create-quiz')}>
-              {t('menu.createQuiz')}
-            </PrimaryButton>
-          ) : null}
-          <PrimaryButton onClick={() => navigate(`/play/${groupId}`)}>
-            {t('results.playAgain')}
-          </PrimaryButton>
+        <div className="mt-5">
           <GhostButton onClick={() => navigate('/menu')}>{t('common.back')}</GhostButton>
         </div>
       </Card>

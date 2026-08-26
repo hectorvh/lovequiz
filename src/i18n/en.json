@@ -34,7 +34,7 @@
     "m3": "for every wrong answer you'll accumulate one of the 4 possible punishments:"
   },
   "menu": {
-    "prompt": "Select a group of questions",
+    "prompt": "Select\nan option",
     "group": "Group {{n}}",
     "groupDone": "Completed",
     "groupLocked": "You already finished this group. Reset the game in settings to play it again.",
@@ -42,6 +42,7 @@
     "hectorCycle": "Hector's results",
     "startHector": "Hector Play",
     "summary": "Summary",
+    "lego": "lego",
     "results": "Answers",
     "lockedCreate": "Finish the 3 question groups to create your own quiz",
     "lockedResults": "Finish all the questions to see your results.",
@@ -104,7 +105,7 @@
     "title": "Your quiz",
     "subtitle": "",
     "step": "Question {{n}} of {{total}}",
-    "questionLabel": "Your question",
+    "questionLabel": "Question",
     "questionPlaceholder": "Write your question here",
     "answerPlaceholder": "Answer {{letter}}",
     "markCorrect": "Mark the correct answer",
@@ -131,9 +132,9 @@
   },
   "summary": {
     "title": "Thank you for playing",
-    "message": "Thanks for playing Amor! Now it's time to pay what you owe!",
-    "fernandaOwes": "What Fernanda owes",
-    "hectorOwes": "What Hector owes",
+    "message": "Now it's time to pay what you owe!",
+    "fernandaOwes": "Fernanda",
+    "hectorOwes": "Hector",
     "hearts": "Hearts earned",
     "nothingOwed": "Nothing to pay",
     "closing": "With love, Hector"
@@ -150,7 +151,8 @@
     "resetPhoto": "Reset game (photo only)",
     "resetPhotoDesc": "Re-enables the photo screen without touching any progress.",
     "resetPhotoDone": "The photo screen is available again.",
-    "resetAll": "Reset",
+    "restartGame": "Restart game",
+    "resetAll": "Reset questions",
     "resetAllDesc": "Clears hearts, punishments, completed groups and the saved quiz on this device.",
     "resetAllDone": "Progress reset.",
     "confirmTitle": "Are you sure?",

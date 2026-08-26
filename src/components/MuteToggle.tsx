@@ -18,7 +18,7 @@ export default function MuteToggle() {
       <svg
         aria-hidden
         viewBox="0 0 24 24"
-        className="h-5 w-5"
+        className="h-[28.8px] w-[28.8px]"
         fill="none"
         stroke="currentColor"
         strokeWidth={1.6}

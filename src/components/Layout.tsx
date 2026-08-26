@@ -5,7 +5,6 @@ import { useTranslation } from 'react-i18next';
 import PhotoCollageBackground from './PhotoCollageBackground';
 import MuteToggle from './MuteToggle';
 import HomeButton from './HomeButton';
-import PowerButton from './PowerButton';
 import InfoButton from './InfoButton';
 import SettingsButton from './SettingsButton';
 import LanguageSwitcher from './LanguageSwitcher';
@@ -19,6 +18,9 @@ export default function Layout({ children }: { children: ReactNode }) {
   const { t } = useTranslation();
   const { pathname } = useLocation();
   const allowScroll = pathname.startsWith('/results');
+  const showInfo = pathname !== '/intro' && pathname !== '/';
+  const showSettings = pathname === '/intro' || pathname === '/menu';
+  const showHome = !showSettings && pathname !== '/';
 
   return (
     <div className="relative flex h-dvh flex-col overflow-hidden">
@@ -26,17 +28,11 @@ export default function Layout({ children }: { children: ReactNode }) {
 
       <header className="z-30 flex shrink-0 items-start justify-between p-3">
         <div className="flex items-start gap-2">
-          <MuteToggle />
-          {/* Menu already is home, so it offers a way out to the start screen instead. */}
-          {pathname === '/menu' ? (
-            <PowerButton />
-          ) : pathname === '/' || pathname === '/intro' ? null : (
-            <HomeButton />
-          )}
+          {showSettings ? <SettingsButton /> : showHome ? <HomeButton /> : null}
+          {showInfo ? <InfoButton /> : null}
         </div>
         <div className="flex items-start gap-2">
-          {pathname === '/menu' ? <InfoButton /> : null}
-          <SettingsButton />
+          <MuteToggle />
           <LanguageSwitcher />
         </div>
       </header>

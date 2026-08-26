@@ -16,7 +16,17 @@ export function Card({
   );
 }
 
-export function ScreenTitle({ eyebrow, title }: { eyebrow?: string; title: string }) {
+export function ScreenTitle({
+  eyebrow,
+  title,
+  subtitle,
+  className = '',
+}: {
+  eyebrow?: string;
+  title: string;
+  subtitle?: string;
+  className?: string;
+}) {
   return (
     <div className="mb-3 text-center">
       {eyebrow ? (
@@ -24,9 +34,16 @@ export function ScreenTitle({ eyebrow, title }: { eyebrow?: string; title: strin
           {eyebrow}
         </p>
       ) : null}
-      <h1 className="font-display text-2xl leading-tight font-semibold text-[#faf1e8] italic">
+      <h1
+        className={`font-display text-2xl leading-tight font-semibold text-[#faf1e8] italic ${className}`}
+      >
         {title}
       </h1>
+      {subtitle ? (
+        <p className="font-display mt-1 text-2xl leading-tight font-semibold text-[#faf1e8] italic">
+          {subtitle}
+        </p>
+      ) : null}
     </div>
   );
 }
@@ -56,7 +73,10 @@ export const introTypeClass = 'font-display font-semibold italic';
 
 /** Shared chrome for mute / settings / language — 70% opaque circular buttons. */
 export const chromeButtonClass =
-  'grid h-11 w-11 place-items-center rounded-full border border-white/15 bg-black/35 text-[#faf1e8] opacity-70 backdrop-blur transition active:scale-95 hover:bg-black/50 disabled:cursor-not-allowed disabled:opacity-35 disabled:active:scale-100';
+  'grid h-[52.8px] w-[52.8px] place-items-center rounded-full border border-white/15 bg-black/35 text-[#faf1e8] opacity-70 backdrop-blur transition active:scale-95 hover:bg-black/50 disabled:cursor-not-allowed disabled:opacity-65 disabled:saturate-50 disabled:active:scale-100';
+
+/** Locked / unavailable controls: 50% saturation and 35% transparency. */
+export const unavailableButtonClass = '!opacity-65 saturate-50';
 
 export function Tag({
   children,

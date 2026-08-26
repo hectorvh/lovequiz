@@ -6,7 +6,7 @@ import { Card, GhostButton, PrimaryButton, introTypeClass } from './ui';
 
 /**
  * Soft lock only. The PIN is compared client-side by design — it gates Play
- * and Settings on this shared device, nothing more.
+ * on this shared device, nothing more.
  */
 export default function PinModal({
   onSuccess,

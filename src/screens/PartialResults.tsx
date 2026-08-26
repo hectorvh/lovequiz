@@ -40,9 +40,6 @@ export default function PartialResults() {
           {t('partial.runningTotal', { n: totals.hearts })}
         </p>
 
-        <p className="mb-2 text-xs font-semibold tracking-wide text-ink-soft uppercase">
-          {t('partial.punishmentsTotal')}
-        </p>
         <PunishmentCounters counts={totals.punishments} />
 
         <div className="mt-6">

@@ -34,7 +34,7 @@ export default function LanguageSwitcher() {
         onClick={() => setOpen((v) => !v)}
         aria-label={t('common.language')}
         aria-expanded={open}
-        className={`${chromeButtonClass} text-lg`}
+        className={`${chromeButtonClass} text-[1.35rem]`}
       >
         <span aria-hidden>{LOCALE_LABELS[locale].flag}</span>
       </button>

@@ -35,22 +35,21 @@ function pickFile(files: string[]): string {
   return files[Math.floor(Math.random() * files.length)];
 }
 
-/** 4–5 of 5 correct (or ≥80% on a shorter set, e.g. 3/3 for Hector) → positive. */
-export function pickGroupSticker(
-  correctCount: number,
-  totalCount = 5,
+/** Fixed sticker for the completed create-quiz (?) circle. */
+export const CREATE_QUIZ_STICKER: GroupStickerRef = {
+  kind: 'negative',
+  file: 'a6bc64c7-9748-4eb0-beea-f0f13533176c.webp',
+};
+
+/** Random positive sticker not already used by another ABC circle. */
+export function pickUniquePositiveSticker(
+  usedFiles: Iterable<string>,
 ): GroupStickerRef | null {
-  const kind: StickerKind =
-    totalCount <= 3
-      ? correctCount >= totalCount
-        ? 'positive'
-        : 'negative'
-      : correctCount >= 4
-        ? 'positive'
-        : 'negative';
-  const files = Object.keys(kind === 'positive' ? POSITIVE : NEGATIVE);
-  if (files.length === 0) return null;
-  return { kind, file: pickFile(files) };
+  const used = new Set(usedFiles);
+  const available = Object.keys(POSITIVE).filter((file) => !used.has(file));
+  const pool = available.length > 0 ? available : Object.keys(POSITIVE);
+  if (pool.length === 0) return null;
+  return { kind: 'positive', file: pickFile(pool) };
 }
 
 export function groupStickerSrc(ref: GroupStickerRef | undefined): string | undefined {
