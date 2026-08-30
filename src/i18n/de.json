@@ -78,12 +78,11 @@
   },
   "bonus": {
     "tag": "Bonusfrage",
-    "prompt": "Wähle auf der Karte aus, wo Hector derzeit lebt",
+    "prompt": "Wähle aus, wo Hector derzeit lebt",
     "hint": "Tippe auf die Karte, um deinen Marker zu setzen, dann Bestätigen drücken",
     "noScore": "Diese Frage zählt weder für Herzen noch für Strafen und hat kein Zeitlimit.",
     "resultKm": "Dein Marker liegt {{km}} km vom richtigen Ort entfernt",
-    "resultM": "Das sind {{m}} Meter",
-    "reveal": "Hector wohnt an diesem Punkt auf der Karte"
+    "resultM": "Das sind {{m}} Meter"
   },
   "partial": {
     "title": "Ergebnisse",
@@ -91,7 +90,8 @@
     "heartsThisGroup": "Herzen aus dieser Gruppe",
     "punishmentsTotal": "Bisherige Strafen",
     "noHearts": "Diesmal kein Herz",
-    "runningTotal": "Gesamt: {{n}} Herzen"
+    "runningTotal": "Gesamt: {{n}} Herzen",
+    "runningTotalHector": "Gesamt: Un chingo"
   },
   "results": {
     "title": "Antworten",
@@ -141,8 +141,10 @@
   "summary": {
     "title": "Jetzt wird gezahlt",
     "message": "Jetzt wird bezahlt, was du schuldest!",
-    "fernandaOwes": "Fer",
-    "hectorOwes": "Hector",
+    "fernandaOwes": "Fer debe...",
+    "hectorOwes": "Hector debe",
+    "hectorHearts": "Un chingo ❤️",
+    "hectorPrize": "Nadaaa... se merece un premio",
     "hearts": "Gewonnene Herzen",
     "nothingOwed": "Nichts zu bezahlen",
     "closing": "Mit Liebe, Hector"
@@ -156,6 +158,7 @@
     "savePhotosDesc": "Lade die gespeicherten Fotos herunter",
     "noPhotos": "Noch keine Fotos.",
     "download": "Herunterladen",
+    "deletePhoto": "Löschen",
     "resetPhoto": "Spiel zurücksetzen (nur Foto)",
     "resetPhotoDesc": "Gibt den Foto-Bildschirm wieder frei, ohne den Fortschritt anzutasten.",
     "resetPhotoDone": "Der Foto-Bildschirm ist wieder verfügbar.",

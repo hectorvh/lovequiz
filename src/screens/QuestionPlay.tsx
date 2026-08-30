@@ -94,14 +94,23 @@ export default function QuestionPlay() {
 
   useEffect(() => {
     cursorSynced.current = false;
-  }, [groupId]);
+    setShowBonus(false);
+    setFeedback(null);
+    setFinishing(false);
+  }, [groupId, questionIds?.join('|')]);
 
   useEffect(() => {
-    if (cursorSynced.current || questions.length === 0) return;
-    cursorSynced.current = true;
+    if (questions.length === 0) return;
     const answered = useGameStore.getState().inProgress[groupId]?.answers.length ?? 0;
-    setCursor(Math.min(answered, questions.length));
-  }, [groupId, questions.length]);
+    if (groupId === GROUP_WITH_BONUS && answered >= questions.length) {
+      setShowBonus(true);
+      setCursor(Math.max(0, questions.length - 1));
+      cursorSynced.current = true;
+      return;
+    }
+    setCursor(Math.min(answered, Math.max(0, questions.length - 1)));
+    cursorSynced.current = true;
+  }, [groupId, questions.length, questionIds?.join('|')]);
 
   useEffect(() => {
     if (!hydrated) return;
@@ -155,15 +164,19 @@ export default function QuestionPlay() {
     return <BonusMapQuestion onContinue={(meters) => void finishGroup(meters)} />;
   }
 
-  if (!question) return null;
+  if (!question) {
+    if (!hydrated || questions.length === 0) return null;
+    if (hasBonus) return <BonusMapQuestion onContinue={(meters) => void finishGroup(meters)} />;
+    return null;
+  }
 
   const heading =
     groupId === 'hector' ? t('play.hectorTitle') : t('play.group', { n: groupLetter(groupId) });
 
   return (
-    <div className="grid min-h-0 flex-1 grid-rows-[17fr_auto_23fr] pt-1">
-      <div />
-      <Card className="flex w-full max-h-full min-h-0 flex-col overflow-hidden !p-[5%]">
+    <div className="flex min-h-0 flex-1 flex-col pt-1">
+      <div className="min-h-0 flex-[17]" />
+      <Card className="flex w-full min-h-0 max-h-full shrink flex-col overflow-hidden !p-[5%]">
         <div className="mb-2 grid shrink-0 grid-cols-[1fr_auto_1fr] items-center gap-1">
           <span />
           <div className="justify-self-center">
@@ -203,7 +216,7 @@ export default function QuestionPlay() {
           {question.text}
         </p>
 
-        <div className="flex min-h-0 flex-col gap-1.5 overflow-hidden">
+        <div className="flex min-h-0 flex-1 flex-col gap-1.5 overflow-y-auto">
           {question.options.map((option, index) => {
             const isChosen = feedback?.selectedIndex === index;
             const isRight = index === question.correctIndex;
@@ -264,7 +277,7 @@ export default function QuestionPlay() {
           </div>
         ) : null}
       </Card>
-      <div />
+      <div className="min-h-0 flex-[23]" />
     </div>
   );
 }

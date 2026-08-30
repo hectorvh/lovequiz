@@ -2,6 +2,8 @@
  * Asks the Supabase `caricature` Edge Function to turn a photo into a cartoon
  * via Gemini. Callers must treat rejection as non-blocking: keep and save the
  * original photo, show a soft notice, and carry on.
+ *
+ * Currently unused while ENABLE_PHOTO_CARICATURE is false in config.ts.
  */
 
 import { supabase } from './supabaseClient';

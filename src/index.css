@@ -163,6 +163,10 @@ body {
   height: 100%;
 }
 
+.leaflet-control-attribution {
+  display: none;
+}
+
 @keyframes celebrate-fly {
   0% {
     opacity: 1;

@@ -78,12 +78,11 @@
   },
   "bonus": {
     "tag": "Question bonus",
-    "prompt": "Sélectionne sur la carte l'endroit où Hector vit actuellement",
+    "prompt": "Sélectionne où Hector vit actuellement",
     "hint": "Touche la carte pour placer ton marqueur, puis appuie sur Accepter",
     "noScore": "Cette question ne compte ni pour les cœurs ni pour les gages, et il n'y a pas de limite de temps.",
     "resultKm": "Ton marqueur est à {{km}} km du bon endroit",
-    "resultM": "Cela fait {{m}} mètres",
-    "reveal": "Hector habite à ce point sur la carte"
+    "resultM": "Cela fait {{m}} mètres"
   },
   "partial": {
     "title": "Résultats",
@@ -91,7 +90,8 @@
     "heartsThisGroup": "Cœurs de ce groupe",
     "punishmentsTotal": "Gages accumulés",
     "noHearts": "Aucun cœur cette fois",
-    "runningTotal": "Total cumulé : {{n}} cœurs"
+    "runningTotal": "Total cumulé : {{n}} cœurs",
+    "runningTotalHector": "Total cumulé : Un chingo"
   },
   "results": {
     "title": "Réponses",
@@ -141,8 +141,10 @@
   "summary": {
     "title": "Maintenant, il faut payer",
     "message": "Maintenant, il faut payer ce que tu dois !",
-    "fernandaOwes": "Fer",
-    "hectorOwes": "Hector",
+    "fernandaOwes": "Fer debe...",
+    "hectorOwes": "Hector debe",
+    "hectorHearts": "Un chingo ❤️",
+    "hectorPrize": "Nadaaa... se merece un premio",
     "hearts": "Cœurs gagnés",
     "nothingOwed": "Rien à payer",
     "closing": "Avec amour, Hector"
@@ -156,6 +158,7 @@
     "savePhotosDesc": "Télécharge les photos enregistrées",
     "noPhotos": "Aucune photo pour le moment.",
     "download": "Télécharger",
+    "deletePhoto": "Supprimer",
     "resetPhoto": "Réinitialiser le jeu (photo seulement)",
     "resetPhotoDesc": "Réactive l'écran photo sans toucher à la progression.",
     "resetPhotoDone": "L'écran photo est de nouveau disponible.",

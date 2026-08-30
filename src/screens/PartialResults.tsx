@@ -37,8 +37,10 @@ export default function PartialResults() {
             </div>
           )}
 
-          <p className="mb-3 text-sm text-ink-soft">
-            {t('partial.runningTotal', { n: totals.hearts })}
+          <p className="mb-3 text-[1.1rem] text-ink-soft">
+            {groupId === 'hector'
+              ? t('partial.runningTotalHector')
+              : t('partial.runningTotal', { n: totals.hearts })}
           </p>
 
           <PunishmentCounters counts={totals.punishments} />

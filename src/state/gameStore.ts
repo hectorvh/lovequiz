@@ -86,6 +86,7 @@ interface GameActions {
   toggleMuted: () => void;
 
   startGroup: (groupId: GroupId) => void;
+  restartGroup: (groupId: GroupId) => void;
   answerQuestion: (groupId: GroupId, question: Question, selectedIndex: number | null) => PunishmentKey | null;
   recordBonusDistance: (groupId: GroupId, meters: number) => void;
   completeGroup: (groupId: GroupId) => Promise<void>;
@@ -183,8 +184,31 @@ export const useGameStore = create<GameStore>()(
       startGroup: (groupId) => {
         set((state) => {
           const alreadyPlaying = state.inProgress[groupId];
-          if (alreadyPlaying?.questionIds?.length) return state;
+          const questionCount = alreadyPlaying?.questionIds?.length ?? 0;
+          const answeredCount = alreadyPlaying?.answers.length ?? 0;
+          const resumeMidRun = questionCount > 0 && answeredCount < questionCount;
+          const pendingBonus =
+            groupId === '3' &&
+            questionCount > 0 &&
+            answeredCount >= questionCount &&
+            alreadyPlaying?.bonusDistanceMeters == null;
+          if (resumeMidRun || pendingBonus) return state;
 
+          const questionIds = isFernandaGroup(groupId)
+            ? ensurePlayQuestionIds(groupId, undefined, [])
+            : state.reciprocalQuiz.map((question) => question.id);
+
+          return {
+            inProgress: {
+              ...state.inProgress,
+              [groupId]: { answers: [], bonusDistanceMeters: null, questionIds },
+            },
+          };
+        });
+      },
+
+      restartGroup: (groupId) => {
+        set((state) => {
           const questionIds = isFernandaGroup(groupId)
             ? ensurePlayQuestionIds(groupId, undefined, [])
             : state.reciprocalQuiz.map((question) => question.id);

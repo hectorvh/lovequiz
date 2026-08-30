@@ -8,8 +8,8 @@ import {
   MAX_QUESTION_DURATION_SECONDS,
   MIN_QUESTION_DURATION_SECONDS,
 } from '../config';
-import { getPhotoUrl, listPhotos } from '../lib/db';
-import { readLocalPhotos } from '../state/persistence';
+import { deletePhoto as deleteRemotePhoto, getPhotoUrl, listPhotos } from '../lib/db';
+import { readLocalPhotos, removeLocalPhoto } from '../state/persistence';
 import { useGameStore } from '../state/gameStore';
 import type { StoredPhoto } from '../types';
 
@@ -72,6 +72,16 @@ export default function Settings() {
     link.download = `fer-quiz-${photo.id}.jpg`;
     link.target = '_blank';
     link.click();
+  };
+
+  const deletePhoto = async (photo: StoredPhoto) => {
+    const isLocal = Boolean(photo.localDataUrl) || photo.storagePath === 'local';
+    if (isLocal) removeLocalPhoto(photo.id);
+    if (photo.storagePath !== 'local') {
+      const result = await deleteRemotePhoto(photo);
+      if (!result.ok && result.error !== 'local-mode') return;
+    }
+    setPhotos((current) => current.filter((item) => item.id !== photo.id));
   };
 
   const pinButtonClass = '!w-full !px-3 !py-2 !text-sm';
@@ -149,13 +159,20 @@ export default function Settings() {
                         🖼️
                       </span>
                     )}
-                    <span className="flex-1 truncate text-[11px] text-ink-soft">
+                    <span className="min-w-0 flex-1 truncate text-[11px] text-ink-soft">
                       {new Date(photo.createdAt).toLocaleString(i18n.language)}
                     </span>
                     <button
                       type="button"
+                      onClick={() => void deletePhoto(photo)}
+                      className="shrink-0 rounded-lg border border-wine px-2 py-1 text-[11px] font-semibold text-wine"
+                    >
+                      {t('settings.deletePhoto')}
+                    </button>
+                    <button
+                      type="button"
                       onClick={() => void downloadPhoto(photo)}
-                      className="rounded-lg border border-wine px-2 py-1 text-[11px] font-semibold text-wine"
+                      className="shrink-0 rounded-lg border border-wine px-2 py-1 text-[11px] font-semibold text-wine"
                     >
                       {t('settings.download')}
                     </button>

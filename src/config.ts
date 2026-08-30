@@ -12,5 +12,8 @@ export const QUESTION_DURATION_SECONDS = DEFAULT_QUESTION_DURATION_SECONDS;
 
 export const RECIPROCAL_QUIZ_LENGTH = 3;
 
+/** Set to true to request a cartoon caricature after the camera capture. */
+export const ENABLE_PHOTO_CARICATURE = false;
+
 /** Soft lock on Play and Settings. Compared client-side on this shared device. */
 export const GAME_PIN = '1996';

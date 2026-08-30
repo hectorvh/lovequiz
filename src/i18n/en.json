@@ -78,12 +78,11 @@
   },
   "bonus": {
     "tag": "Bonus question",
-    "prompt": "Select on the map where Hector currently lives",
+    "prompt": "Select where Hector currently lives",
     "hint": "Tap the map to drop your marker, then press Accept",
     "noScore": "This question doesn't count towards hearts or punishments, and there's no time limit.",
     "resultKm": "Your marker landed {{km}} km from the right spot",
-    "resultM": "That's {{m}} metres",
-    "reveal": "Hector lives at that point on the map"
+    "resultM": "That's {{m}} metres"
   },
   "partial": {
     "title": "Results",
@@ -91,7 +90,8 @@
     "heartsThisGroup": "Hearts from this group",
     "punishmentsTotal": "Punishments so far",
     "noHearts": "No hearts this time",
-    "runningTotal": "Running total: {{n}} hearts"
+    "runningTotal": "Running total: {{n}} hearts",
+    "runningTotalHector": "Running total: Un chingo"
   },
   "results": {
     "title": "Answers",
@@ -141,8 +141,10 @@
   "summary": {
     "title": "Now it's time to pay",
     "message": "Now it's time to pay what you owe!",
-    "fernandaOwes": "Fer",
-    "hectorOwes": "Hector",
+    "fernandaOwes": "Fer debe...",
+    "hectorOwes": "Hector debe",
+    "hectorHearts": "Un chingo ❤️",
+    "hectorPrize": "Nadaaa... se merece un premio",
     "hearts": "Hearts earned",
     "nothingOwed": "Nothing to pay",
     "closing": "With love, Hector"
@@ -156,6 +158,7 @@
     "savePhotosDesc": "Download the saved photos",
     "noPhotos": "No photos yet.",
     "download": "Download",
+    "deletePhoto": "Delete",
     "resetPhoto": "Reset game (photo only)",
     "resetPhotoDesc": "Re-enables the photo screen without touching any progress.",
     "resetPhotoDone": "The photo screen is available again.",

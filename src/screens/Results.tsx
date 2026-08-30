@@ -33,6 +33,7 @@ export default function Results() {
   const bonusDistances = useGameStore((s) => s.bonusDistances);
   const completedGroups = useGameStore((s) => s.completedGroups);
   const reciprocalQuiz = useGameStore((s) => s.reciprocalQuiz);
+  const restartGroup = useGameStore((s) => s.restartGroup);
   const beginNewReciprocalQuiz = useGameStore((s) => s.beginNewReciprocalQuiz);
   const [createConfirmOpen, setCreateConfirmOpen] = useState(false);
 
@@ -66,7 +67,12 @@ export default function Results() {
 
       <Card>
         <div className="mb-5 space-y-2">
-          <PrimaryButton onClick={() => navigate(`/play/${groupId}`)}>
+          <PrimaryButton
+            onClick={() => {
+              restartGroup(groupId);
+              navigate(`/play/${groupId}`);
+            }}
+          >
             {t('results.playAgain')}
           </PrimaryButton>
           {groupId === 'hector' ? (

@@ -327,19 +327,19 @@ const GROUP_2: QuestionSeed[] = [
     i18n: {
       es: {
         text: '¿Cuántos legos de Spiderman le regaló Fer a Hector?',
-        options: ['12', '16', '18', '20'],
+        options: ['12', '16', '18', '19'],
       },
       en: {
         text: 'How many Spiderman Lego sets did Fer give Hector?',
-        options: ['12', '16', '18', '20'],
+        options: ['12', '16', '18', '19'],
       },
       fr: {
         text: 'Combien de Lego Spiderman Fer a-t-elle offerts à Hector ?',
-        options: ['12', '16', '18', '20'],
+        options: ['12', '16', '18', '19'],
       },
       de: {
         text: 'Wie viele Spiderman-Legos hat Fer Hector geschenkt?',
-        options: ['12', '16', '18', '20'],
+        options: ['12', '16', '18', '19'],
       },
     },
   },

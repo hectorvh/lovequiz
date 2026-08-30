@@ -244,4 +244,27 @@ export async function getPhotoUrl(path: string): Promise<string | null> {
   return error ? null : data.signedUrl;
 }
 
+export async function deletePhoto(photo: StoredPhoto): Promise<DbResult> {
+  if (!supabase) return skipped;
+  try {
+    const paths = [photo.storagePath, photo.caricatureStoragePath].filter(
+      (path): path is string => Boolean(path) && path !== 'local',
+    );
+    if (paths.length > 0) {
+      const { error: storageError } = await supabase.storage.from(PHOTO_BUCKET).remove(paths);
+      if (storageError) throw storageError;
+    }
+
+    const numericId = Number(photo.id);
+    if (Number.isFinite(numericId)) {
+      const { error } = await supabase.from('photos').delete().eq('id', numericId);
+      if (error) throw error;
+    }
+
+    return { ok: true };
+  } catch (error) {
+    return { ok: false, error: message(error) };
+  }
+}
+
 export { isSupabaseEnabled };

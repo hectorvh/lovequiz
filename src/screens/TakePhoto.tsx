@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 import { Card, GhostButton, PrimaryButton, ScreenTitle } from '../components/ui';
+import { ENABLE_PHOTO_CARICATURE } from '../config';
 import { generateCaricature } from '../lib/caricatureApi';
 import { uploadPhoto } from '../lib/db';
 import { appendLocalPhoto } from '../state/persistence';
@@ -110,13 +111,15 @@ export default function TakePhoto() {
       // Always keep the original. Gemini is optional and must not block saving.
       let caricatureBlob: Blob | null = null;
       let caricatureDataUrl: string | null = null;
-      try {
-        const caricature = await generateCaricature(dataUrl);
-        caricatureBlob = caricature.blob;
-        caricatureDataUrl = caricature.dataUrl;
-        setCaricatureUrl(caricature.dataUrl);
-      } catch {
-        setCaricatureFailed(true);
+      if (ENABLE_PHOTO_CARICATURE) {
+        try {
+          const caricature = await generateCaricature(dataUrl);
+          caricatureBlob = caricature.blob;
+          caricatureDataUrl = caricature.dataUrl;
+          setCaricatureUrl(caricature.dataUrl);
+        } catch {
+          setCaricatureFailed(true);
+        }
       }
 
       const uploaded = await uploadPhoto(blob, caricatureBlob);
@@ -149,12 +152,9 @@ export default function TakePhoto() {
             <figure className="min-h-0 flex-1 overflow-hidden">
               <img
                 src={captured.dataUrl}
-                alt={t('photo.original')}
+                alt=""
                 className="h-full max-h-40 w-full rounded-2xl border border-card-line object-cover"
               />
-              <figcaption className="mt-1 text-center text-[11px] text-ink-soft">
-                {t('photo.original')}
-              </figcaption>
             </figure>
 
             {caricatureUrl ? (
@@ -210,7 +210,11 @@ export default function TakePhoto() {
 
             <div className="space-y-2.5">
               <PrimaryButton onClick={() => void capture()} disabled={cameraError || busy}>
-                {busy ? t('photo.generating') : t('photo.capture')}
+                {busy
+                  ? ENABLE_PHOTO_CARICATURE
+                    ? t('photo.generating')
+                    : t('photo.uploading')
+                  : t('photo.capture')}
               </PrimaryButton>
               <GhostButton
                 onClick={() => setFacing((f) => (f === 'user' ? 'environment' : 'user'))}

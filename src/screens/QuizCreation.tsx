@@ -104,7 +104,7 @@ export default function QuizCreation() {
           value={item.questionText}
           onChange={(event) => update({ questionText: event.target.value })}
           placeholder={t('create.questionPlaceholder')}
-          className="mb-4 h-1/2 w-full shrink-0 resize-none rounded-xl border-[1.5px] border-card-line bg-white px-3.5 py-4 text-[14.5px] leading-snug text-ink outline-none placeholder:text-ink-soft/50 focus:border-wine"
+          className="mb-4 h-[27%] w-full shrink-0 resize-none rounded-xl border-[1.5px] border-card-line bg-white px-3.5 py-4 text-[14.5px] leading-snug text-ink outline-none placeholder:text-ink-soft/50 focus:border-wine"
         />
 
         <p className="mb-2 shrink-0 text-xs font-semibold tracking-wide text-ink-soft uppercase">

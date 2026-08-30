@@ -41,12 +41,11 @@ export default function BonusMapQuestion({ onContinue }: { onContinue: (meters: 
       zoom: 1,
       minZoom: 1,
       worldCopyJump: true,
-      attributionControl: true,
+      attributionControl: false,
     });
 
     L.tileLayer(TERRAIN_TILES, {
       maxZoom: 13,
-      attribution: 'Tiles &copy; Esri — Source: Esri, USGS, NOAA',
     }).addTo(map);
 
     map.on('click', (event: L.LeafletMouseEvent) => {
@@ -102,8 +101,8 @@ export default function BonusMapQuestion({ onContinue }: { onContinue: (meters: 
   const answered = distance !== null;
 
   return (
-    <div className="flex min-h-0 flex-1 flex-col">
-      <Card className="flex min-h-0 flex-1 flex-col overflow-hidden !p-3.5">
+    <div className="flex h-full min-h-0 flex-1 flex-col">
+      <Card className="flex h-full min-h-0 flex-1 flex-col overflow-hidden !p-3.5">
         <div className="mb-2 flex shrink-0 justify-center">
           <Tag className="px-3 py-1.5 text-[15.4px] tracking-normal">{t('bonus.tag')}</Tag>
         </div>
@@ -114,21 +113,20 @@ export default function BonusMapQuestion({ onContinue }: { onContinue: (meters: 
 
         <div
           ref={containerRef}
-          className="min-h-[min(50vh,22rem)] w-full flex-1 overflow-hidden rounded-2xl border border-card-line"
+          className="min-h-0 w-full flex-1 overflow-hidden rounded-2xl border border-card-line"
         />
 
-        {answered ? (
-          <div className="animate-rise mt-2 shrink-0 rounded-xl bg-good-bg px-3 py-2 text-[12.5px] leading-snug text-[#204623]">
-            <p className="font-semibold">
-              {t('bonus.resultKm', { km: formatKilometers(distance, i18n.language) })}
-            </p>
-            <p className="mt-1 opacity-80">{t('bonus.reveal')}</p>
-          </div>
-        ) : (
-          <p className="mt-2 shrink-0 text-center text-[11.5px] text-ink-soft">{t('bonus.hint')}</p>
-        )}
+        <div className="mt-2 flex shrink-0 flex-col">
+          {answered ? (
+            <div className="animate-rise mb-2 rounded-xl bg-good-bg px-3 py-2 text-[12.5px] leading-snug text-[#204623]">
+              <p className="font-semibold">
+                {t('bonus.resultKm', { km: formatKilometers(distance, i18n.language) })}
+              </p>
+            </div>
+          ) : (
+            <p className="mb-2 text-center text-[11.5px] text-ink-soft">{t('bonus.hint')}</p>
+          )}
 
-        <div className="mt-2 shrink-0">
           {answered ? (
             <PrimaryButton onClick={() => onContinue(distance)}>
               {t('common.continue')}

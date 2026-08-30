@@ -54,6 +54,19 @@ export function appendLocalPhoto(photo: StoredPhoto) {
   }
 }
 
+export function removeLocalPhoto(id: string) {
+  try {
+    const remaining = readLocalPhotos().filter((photo) => photo.id !== id);
+    if (remaining.length === 0) {
+      localStorage.removeItem(LOCAL_PHOTOS_KEY);
+      return;
+    }
+    localStorage.setItem(LOCAL_PHOTOS_KEY, JSON.stringify(remaining));
+  } catch (error) {
+    console.warn('[persistence] could not remove photo locally:', error);
+  }
+}
+
 export function clearLocalPhotos() {
   localStorage.removeItem(LOCAL_PHOTOS_KEY);
 }
