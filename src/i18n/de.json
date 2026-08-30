@@ -77,12 +77,15 @@
     "resumed": "Wir machen da weiter, wo du warst"
   },
   "bonus": {
-    "tag": "Bonusfrage",
+    "tag": "Bonus-Challenge",
     "prompt": "Wähle aus, wo Hector derzeit lebt",
     "hint": "Tippe auf die Karte, um deinen Marker zu setzen, dann Bestätigen drücken",
     "noScore": "Diese Frage zählt weder für Herzen noch für Strafen und hat kein Zeitlimit.",
     "resultKm": "Dein Marker liegt {{km}} km vom richtigen Ort entfernt",
-    "resultM": "Das sind {{m}} Meter"
+    "resultM": "Das sind {{m}} Meter",
+    "giftPrompt": "Stell dir vor, jemand wird am 14. November 30. Welches Geschenk würde dieser Person gefallen?",
+    "giftHint": "Schreib deine Antwort und tippe dann auf Weiter",
+    "giftPlaceholder": "Deine Antwort"
   },
   "partial": {
     "title": "Ergebnisse",

@@ -28,6 +28,7 @@ export interface GroupCommit {
   hearts: number;
   punishments: Record<PunishmentKey, number>;
   bonusDistanceMeters: number | null;
+  bonusText: string | null;
   completedAt: string;
 }
 
@@ -65,6 +66,16 @@ export async function commitGroup(commit: GroupCommit): Promise<DbResult> {
     if (rows.length > 0) {
       const { error } = await supabase.from('answers').insert(rows);
       if (error) throw error;
+    }
+
+    const giftAnswer = commit.bonusText?.trim();
+    if (giftAnswer) {
+      const { error: giftError } = await supabase.from('bonus_gift_answers').insert({
+        run_id: runId,
+        group_id: commit.groupId,
+        answer_text: giftAnswer,
+      });
+      if (giftError) throw giftError;
     }
 
     return { ok: true };

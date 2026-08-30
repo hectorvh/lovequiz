@@ -77,12 +77,15 @@
     "resumed": "On reprend où tu t'étais arrêtée"
   },
   "bonus": {
-    "tag": "Question bonus",
+    "tag": "Défi bonus",
     "prompt": "Sélectionne où Hector vit actuellement",
     "hint": "Touche la carte pour placer ton marqueur, puis appuie sur Accepter",
     "noScore": "Cette question ne compte ni pour les cœurs ni pour les gages, et il n'y a pas de limite de temps.",
     "resultKm": "Ton marqueur est à {{km}} km du bon endroit",
-    "resultM": "Cela fait {{m}} mètres"
+    "resultM": "Cela fait {{m}} mètres",
+    "giftPrompt": "Imagine que quelqu'un fête ses 30 ans le 14 novembre. Quel cadeau ferait plaisir à cette personne ?",
+    "giftHint": "Écris ta réponse, puis appuie sur Continuer",
+    "giftPlaceholder": "Ta réponse"
   },
   "partial": {
     "title": "Résultats",

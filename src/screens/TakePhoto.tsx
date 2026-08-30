@@ -23,12 +23,13 @@ function download(dataUrl: string, filename: string) {
   link.click();
 }
 
-export default function TakePhoto() {
+export default function TakePhoto({ onContinue }: { onContinue?: () => void } = {}) {
   const { t } = useTranslation();
   const navigate = useNavigate();
 
   const setPhotoTaken = useGameStore((s) => s.setPhotoTaken);
   const allGroupsComplete = useGameStore(selectAllGroupsComplete);
+  const fromPlay = Boolean(onContinue);
 
   const videoRef = useRef<HTMLVideoElement>(null);
   const streamRef = useRef<MediaStream | null>(null);
@@ -46,8 +47,8 @@ export default function TakePhoto() {
   }, []);
 
   useEffect(() => {
-    if (!allGroupsComplete) navigate('/menu', { replace: true });
-  }, [allGroupsComplete, navigate]);
+    if (!fromPlay && !allGroupsComplete) navigate('/menu', { replace: true });
+  }, [allGroupsComplete, fromPlay, navigate]);
 
   useEffect(() => {
     if (captured) return;
@@ -185,7 +186,10 @@ export default function TakePhoto() {
               >
                 {t('photo.saveLocal')}
               </GhostButton>
-              <PrimaryButton onClick={() => navigate('/menu')} disabled={busy}>
+              <PrimaryButton
+                onClick={() => (onContinue ? onContinue() : navigate('/menu'))}
+                disabled={busy}
+              >
                 {busy ? t('photo.uploading') : t('photo.finish')}
               </PrimaryButton>
             </div>

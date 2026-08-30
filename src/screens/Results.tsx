@@ -31,6 +31,7 @@ export default function Results() {
   const answers = useGameStore((s) => s.answers);
   const playedQuestionIds = useGameStore((s) => s.playedQuestionIds);
   const bonusDistances = useGameStore((s) => s.bonusDistances);
+  const bonusTexts = useGameStore((s) => s.bonusTexts);
   const completedGroups = useGameStore((s) => s.completedGroups);
   const reciprocalQuiz = useGameStore((s) => s.reciprocalQuiz);
   const restartGroup = useGameStore((s) => s.restartGroup);
@@ -56,6 +57,7 @@ export default function Results() {
   });
   const resultRows = orderedRows.length > 0 ? orderedRows : rows;
   const bonus = bonusDistances[groupId];
+  const giftAnswer = bonusTexts[groupId];
   const title =
     groupId === 'hector'
       ? t('results.hectorLabel')
@@ -123,6 +125,12 @@ export default function Results() {
         {typeof bonus === 'number' ? (
           <p className="mt-3 rounded-xl bg-card-line/40 px-3.5 py-2.5 text-[12.5px] text-ink-soft">
             {t('bonus.tag')}: {t('bonus.resultKm', { km: formatKilometers(bonus, i18n.language) })}
+          </p>
+        ) : null}
+
+        {giftAnswer ? (
+          <p className="mt-3 rounded-xl bg-card-line/40 px-3.5 py-2.5 text-[12.5px] text-ink-soft">
+            {t('bonus.tag')}: {giftAnswer}
           </p>
         ) : null}
 

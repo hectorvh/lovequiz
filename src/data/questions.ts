@@ -688,8 +688,15 @@ export function questionsForIds(
   });
 }
 
-/** Group 3 closes with the untimed, unscored map question. */
-export const GROUP_WITH_BONUS = '3' as const;
+export type FernandaBonusKind = 'map' | 'gift' | 'photo';
+
+/** Untimed, unscored steps after each Fernanda group's five questions. */
+export function fernandaBonusKind(groupId: string): FernandaBonusKind | null {
+  if (groupId === '1') return 'map';
+  if (groupId === '2') return 'gift';
+  if (groupId === '3') return 'photo';
+  return null;
+}
 
 export const HECTOR_HOME_COORDS = {
   lat: 51.93828946997965,

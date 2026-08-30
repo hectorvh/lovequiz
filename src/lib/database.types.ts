@@ -132,6 +132,29 @@ export interface Database {
         };
         Relationships: [];
       };
+      bonus_gift_answers: {
+        Row: {
+          id: number;
+          run_id: string;
+          group_id: string;
+          answer_text: string;
+          created_at: string;
+        };
+        Insert: {
+          id?: never;
+          run_id: string;
+          group_id?: string;
+          answer_text: string;
+          created_at?: string;
+        };
+        Update: {
+          run_id?: string;
+          group_id?: string;
+          answer_text?: string;
+          created_at?: string;
+        };
+        Relationships: [];
+      };
       game_state: {
         Row: {
           key: string;

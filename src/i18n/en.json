@@ -77,12 +77,15 @@
     "resumed": "Picking up where you left off"
   },
   "bonus": {
-    "tag": "Bonus question",
+    "tag": "Bonus challenge",
     "prompt": "Select where Hector currently lives",
     "hint": "Tap the map to drop your marker, then press Accept",
     "noScore": "This question doesn't count towards hearts or punishments, and there's no time limit.",
     "resultKm": "Your marker landed {{km}} km from the right spot",
-    "resultM": "That's {{m}} metres"
+    "resultM": "That's {{m}} metres",
+    "giftPrompt": "Imagine someone turns 30 on 14 November. What gift would that someone like?",
+    "giftHint": "Write your answer, then press Continue",
+    "giftPlaceholder": "Your answer"
   },
   "partial": {
     "title": "Results",

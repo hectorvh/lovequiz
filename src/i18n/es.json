@@ -77,12 +77,15 @@
     "resumed": "Retomamos donde te quedaste"
   },
   "bonus": {
-    "tag": "Pregunta bonus",
+    "tag": "Reto bonus",
     "prompt": "Selecciona donde vive Hector actualmente",
     "hint": "Toca el mapa para poner tu marcador, luego pulsa Aceptar",
     "noScore": "Esta pregunta no cuenta para corazones ni castigos, y no tiene tiempo límite.",
     "resultKm": "Tu marcador quedó a {{km}} km del lugar correcto",
-    "resultM": "Eso son {{m}} metros"
+    "resultM": "Eso son {{m}} metros",
+    "giftPrompt": "Imagina que alguien cumple 30 años el 14 de noviembre, ¿Qué regalo le gustaría a ese alguien?",
+    "giftHint": "Escribe tu respuesta, luego pulsa Continuar",
+    "giftPlaceholder": "Tu respuesta"
   },
   "partial": {
     "title": "Resultados",

@@ -108,6 +108,20 @@ create table if not exists photos (
   created_at              timestamptz not null default now()
 );
 
+-- One row per Group B gift-reto answer. Replays insert another row.
+create table if not exists bonus_gift_answers (
+  id          bigint generated always as identity primary key,
+  run_id      uuid not null default gen_random_uuid(),
+  group_id    text not null default '2',
+  answer_text text not null,
+  created_at  timestamptz not null default now()
+);
+
+create index if not exists bonus_gift_answers_run_idx
+  on bonus_gift_answers (run_id);
+create index if not exists bonus_gift_answers_created_idx
+  on bonus_gift_answers (created_at desc);
+
 -- Flags: all_groups_complete, hector_quiz_complete,
 -- reciprocal_quiz_saved, photo_taken.
 create table if not exists game_state (
@@ -134,6 +148,7 @@ alter table answers                   enable row level security;
 alter table group_summaries           enable row level security;
 alter table reciprocal_quiz_questions enable row level security;
 alter table photos                    enable row level security;
+alter table bonus_gift_answers        enable row level security;
 alter table game_state                enable row level security;
 
 drop policy if exists anon_all_answers on answers;
@@ -150,6 +165,10 @@ create policy anon_all_reciprocal_quiz_questions on reciprocal_quiz_questions
 
 drop policy if exists anon_all_photos on photos;
 create policy anon_all_photos on photos
+  for all to anon, authenticated using (true) with check (true);
+
+drop policy if exists anon_all_bonus_gift_answers on bonus_gift_answers;
+create policy anon_all_bonus_gift_answers on bonus_gift_answers
   for all to anon, authenticated using (true) with check (true);
 
 drop policy if exists anon_all_game_state on game_state;

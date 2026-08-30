@@ -6,7 +6,7 @@ import HeartCounter from '../components/HeartCounter';
 import PunishmentCounters from '../components/PunishmentCounters';
 import TimerBar from '../components/TimerBar';
 import { Card, PrimaryButton, Tag } from '../components/ui';
-import { GROUP_WITH_BONUS, questionsForIds } from '../data/questions';
+import { fernandaBonusKind, questionsForIds } from '../data/questions';
 import { playSfx } from '../lib/sfx';
 import { addTally, computeTally, selectGroupAnswers, useGameStore } from '../state/gameStore';
 import {
@@ -19,7 +19,9 @@ import {
   type PunishmentKey,
   type Question,
 } from '../types';
+import BonusGiftQuestion from './BonusGiftQuestion';
 import BonusMapQuestion from './BonusMapQuestion';
+import TakePhoto from './TakePhoto';
 
 interface Feedback {
   selectedIndex: number | null;
@@ -38,6 +40,7 @@ export default function QuestionPlay() {
   const startGroup = useGameStore((s) => s.startGroup);
   const answerQuestion = useGameStore((s) => s.answerQuestion);
   const recordBonusDistance = useGameStore((s) => s.recordBonusDistance);
+  const recordBonusText = useGameStore((s) => s.recordBonusText);
   const completeGroup = useGameStore((s) => s.completeGroup);
 
   const isValidGroup = rawGroupId === 'hector' || isFernandaGroup(rawGroupId ?? '');
@@ -102,7 +105,7 @@ export default function QuestionPlay() {
   useEffect(() => {
     if (questions.length === 0) return;
     const answered = useGameStore.getState().inProgress[groupId]?.answers.length ?? 0;
-    if (groupId === GROUP_WITH_BONUS && answered >= questions.length) {
+    if (fernandaBonusKind(groupId) && answered >= questions.length) {
       setShowBonus(true);
       setCursor(Math.max(0, questions.length - 1));
       cursorSynced.current = true;
@@ -124,13 +127,14 @@ export default function QuestionPlay() {
   }, [hydrated, groupId, isValidGroup, reciprocalQuiz.length, navigate]);
 
   const question = questions[cursor];
-  const hasBonus = groupId === GROUP_WITH_BONUS;
+  const bonusKind = fernandaBonusKind(groupId);
   const isLastQuestion = cursor === questions.length - 1;
 
-  const finishGroup = async (bonusMeters: number | null) => {
+  const finishGroup = async (bonus?: { meters?: number; text?: string }) => {
     if (finishing) return;
     setFinishing(true);
-    if (bonusMeters !== null) recordBonusDistance(groupId, bonusMeters);
+    if (bonus?.meters != null) recordBonusDistance(groupId, bonus.meters);
+    if (bonus?.text != null) recordBonusText(groupId, bonus.text);
     await completeGroup(groupId);
     navigate(`/partial-results/${groupId}`, { replace: true });
   };
@@ -153,20 +157,36 @@ export default function QuestionPlay() {
       setCursor((current) => current + 1);
       return;
     }
-    if (hasBonus) {
+    if (bonusKind) {
       setShowBonus(true);
       return;
     }
-    void finishGroup(null);
+    void finishGroup();
   };
 
   if (showBonus) {
-    return <BonusMapQuestion onContinue={(meters) => void finishGroup(meters)} />;
+    if (bonusKind === 'map') {
+      return <BonusMapQuestion onContinue={(meters) => void finishGroup({ meters })} />;
+    }
+    if (bonusKind === 'gift') {
+      return <BonusGiftQuestion onContinue={(text) => void finishGroup({ text })} />;
+    }
+    if (bonusKind === 'photo') {
+      return <TakePhoto onContinue={() => void finishGroup()} />;
+    }
   }
 
   if (!question) {
     if (!hydrated || questions.length === 0) return null;
-    if (hasBonus) return <BonusMapQuestion onContinue={(meters) => void finishGroup(meters)} />;
+    if (bonusKind === 'map') {
+      return <BonusMapQuestion onContinue={(meters) => void finishGroup({ meters })} />;
+    }
+    if (bonusKind === 'gift') {
+      return <BonusGiftQuestion onContinue={(text) => void finishGroup({ text })} />;
+    }
+    if (bonusKind === 'photo') {
+      return <TakePhoto onContinue={() => void finishGroup()} />;
+    }
     return null;
   }
 
@@ -272,7 +292,7 @@ export default function QuestionPlay() {
         {feedback ? (
           <div className="mt-2 shrink-0">
             <PrimaryButton onClick={goNext} disabled={finishing}>
-              {isLastQuestion && !hasBonus ? t('play.finish') : t('common.continue')}
+              {isLastQuestion && !bonusKind ? t('play.finish') : t('common.continue')}
             </PrimaryButton>
           </div>
         ) : null}

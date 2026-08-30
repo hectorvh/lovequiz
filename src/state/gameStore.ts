@@ -48,9 +48,17 @@ export const emptyDraftItem = (): QuizDraftItem => ({
 interface InProgressGroup {
   answers: AnswerRecord[];
   bonusDistanceMeters: number | null;
+  bonusText: string | null;
   /** Play order for this session. Fernanda groups: 5 unique IDs from the group's 8. */
   questionIds: string[];
 }
+
+const emptyInProgress = (questionIds: string[] = []): InProgressGroup => ({
+  answers: [],
+  bonusDistanceMeters: null,
+  bonusText: null,
+  questionIds,
+});
 
 interface GameState {
   locale: Locale;
@@ -65,6 +73,7 @@ interface GameState {
   /** Committed answers, kept as a local mirror of what went to Supabase. */
   answers: Record<string, AnswerRecord[]>;
   bonusDistances: Record<string, number | null>;
+  bonusTexts: Record<string, string>;
   /** Live answers for a group still being played, so a refresh doesn't lose them. */
   inProgress: Record<string, InProgressGroup>;
   /** Play-order IDs kept after a group finishes, so results match what was asked. */
@@ -89,6 +98,7 @@ interface GameActions {
   restartGroup: (groupId: GroupId) => void;
   answerQuestion: (groupId: GroupId, question: Question, selectedIndex: number | null) => PunishmentKey | null;
   recordBonusDistance: (groupId: GroupId, meters: number) => void;
+  recordBonusText: (groupId: GroupId, text: string) => void;
   completeGroup: (groupId: GroupId) => Promise<void>;
   ensureGroupStickers: () => void;
 
@@ -115,6 +125,7 @@ const initialState: GameState = {
   completedGroups: [],
   answers: {},
   bonusDistances: {},
+  bonusTexts: {},
   inProgress: {},
   playedQuestionIds: {},
   groupStickers: {},
@@ -188,10 +199,9 @@ export const useGameStore = create<GameStore>()(
           const answeredCount = alreadyPlaying?.answers.length ?? 0;
           const resumeMidRun = questionCount > 0 && answeredCount < questionCount;
           const pendingBonus =
-            groupId === '3' &&
+            isFernandaGroup(groupId) &&
             questionCount > 0 &&
-            answeredCount >= questionCount &&
-            alreadyPlaying?.bonusDistanceMeters == null;
+            answeredCount >= questionCount;
           if (resumeMidRun || pendingBonus) return state;
 
           const questionIds = isFernandaGroup(groupId)
@@ -201,7 +211,7 @@ export const useGameStore = create<GameStore>()(
           return {
             inProgress: {
               ...state.inProgress,
-              [groupId]: { answers: [], bonusDistanceMeters: null, questionIds },
+              [groupId]: emptyInProgress(questionIds),
             },
           };
         });
@@ -216,7 +226,7 @@ export const useGameStore = create<GameStore>()(
           return {
             inProgress: {
               ...state.inProgress,
-              [groupId]: { answers: [], bonusDistanceMeters: null, questionIds },
+              [groupId]: emptyInProgress(questionIds),
             },
           };
         });
@@ -225,11 +235,7 @@ export const useGameStore = create<GameStore>()(
       answerQuestion: (groupId, question, selectedIndex) => {
         const state = get();
         const player = playerForGroup(groupId);
-        const current = state.inProgress[groupId] ?? {
-          answers: [],
-          bonusDistanceMeters: null,
-          questionIds: [],
-        };
+        const current = state.inProgress[groupId] ?? emptyInProgress();
 
         if (current.answers.some((a) => a.questionId === question.id)) return null;
 
@@ -277,15 +283,22 @@ export const useGameStore = create<GameStore>()(
 
       recordBonusDistance: (groupId, meters) =>
         set((state) => {
-          const current = state.inProgress[groupId] ?? {
-            answers: [],
-            bonusDistanceMeters: null,
-            questionIds: [],
-          };
+          const current = state.inProgress[groupId] ?? emptyInProgress();
           return {
             inProgress: {
               ...state.inProgress,
               [groupId]: { ...current, bonusDistanceMeters: meters },
+            },
+          };
+        }),
+
+      recordBonusText: (groupId, text) =>
+        set((state) => {
+          const current = state.inProgress[groupId] ?? emptyInProgress();
+          return {
+            inProgress: {
+              ...state.inProgress,
+              [groupId]: { ...current, bonusText: text },
             },
           };
         }),
@@ -332,6 +345,9 @@ export const useGameStore = create<GameStore>()(
             ...state.bonusDistances,
             [groupId]: inProgress.bonusDistanceMeters,
           },
+          bonusTexts: inProgress.bonusText
+            ? { ...state.bonusTexts, [groupId]: inProgress.bonusText }
+            : state.bonusTexts,
           completedGroups: state.completedGroups.includes(groupId)
             ? state.completedGroups
             : [...state.completedGroups, groupId],
@@ -356,6 +372,7 @@ export const useGameStore = create<GameStore>()(
           hearts: groupTally.hearts,
           punishments: groupTally.punishments,
           bonusDistanceMeters: inProgress.bonusDistanceMeters,
+          bonusText: inProgress.bonusText,
           completedAt: new Date().toISOString(),
         };
 
@@ -461,7 +478,7 @@ export const useGameStore = create<GameStore>()(
        * gating and the final summary keep working.
        */
       clearAnswersLocally: () =>
-        set({ answers: {}, bonusDistances: {}, inProgress: {}, playedQuestionIds: {} }),
+        set({ answers: {}, bonusDistances: {}, bonusTexts: {}, inProgress: {}, playedQuestionIds: {} }),
 
       markAbcCongratsShown: () => set({ abcCongratsShown: true }),
 
@@ -481,6 +498,7 @@ export const useGameStore = create<GameStore>()(
           completedGroups: [],
           answers: {},
           bonusDistances: {},
+          bonusTexts: {},
           inProgress: {},
           playedQuestionIds: {},
           groupStickers: {},
@@ -494,7 +512,7 @@ export const useGameStore = create<GameStore>()(
     }),
     {
       name: STORE_KEY,
-      version: 7,
+      version: 8,
       migrate: (persisted, version) => {
         const state = persisted as GameState;
         const draft = Array.isArray(state.quizDraft) ? state.quizDraft : [];
@@ -504,6 +522,7 @@ export const useGameStore = create<GameStore>()(
             {
               answers: group.answers ?? [],
               bonusDistanceMeters: group.bonusDistanceMeters ?? null,
+              bonusText: group.bonusText ?? null,
               questionIds: group.questionIds ?? [],
             },
           ]),
@@ -514,6 +533,7 @@ export const useGameStore = create<GameStore>()(
           inProgress,
           playedQuestionIds: state.playedQuestionIds ?? {},
           groupStickers: state.groupStickers ?? {},
+          bonusTexts: state.bonusTexts ?? {},
           abcCongratsShown: version < 7 ? false : Boolean(state.abcCongratsShown),
           questionDurationSeconds:
             duration === 30
