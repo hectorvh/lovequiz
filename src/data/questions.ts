@@ -115,19 +115,19 @@ const GROUP_1: QuestionSeed[] = [
     correctIndex: 1,
     i18n: {
       es: {
-        text: '¿Cuántos vuelos de Dublín-Düsseldorf han tomado sumados entre Hector y Fer?',
+        text: '¿Cuántos vuelos de Dublín a Düsseldorf han tomado (acumulados) entre Hector y Fer?',
         options: ['8', '10', '12', '16'],
       },
       en: {
-        text: 'How many Dublin–Düsseldorf flights have Hector and Fer taken combined?',
+        text: 'How many Dublin to Düsseldorf flights have Hector and Fer taken (combined)?',
         options: ['8', '10', '12', '16'],
       },
       fr: {
-        text: 'Combien de vols Dublin-Düsseldorf Hector et Fer ont-ils pris au total ?',
+        text: 'Combien de vols de Dublin à Düsseldorf Hector et Fer ont-ils pris (au cumul) ?',
         options: ['8', '10', '12', '16'],
       },
       de: {
-        text: 'Wie viele Flüge Dublin–Düsseldorf haben Hector und Fer zusammen genommen?',
+        text: 'Wie viele Flüge von Dublin nach Düsseldorf haben Hector und Fer (insgesamt) genommen?',
         options: ['8', '10', '12', '16'],
       },
     },
@@ -282,19 +282,19 @@ const GROUP_2: QuestionSeed[] = [
     correctIndex: 0,
     i18n: {
       es: {
-        text: '¿Con qué número de playera Hector jugaba fútbol la mayor parte de su vida?',
+        text: '¿Con qué número de playera Hector solía jugar fútbol?',
         options: ['7', '10', '11', '96'],
       },
       en: {
-        text: 'What jersey number did Hector wear playing soccer for most of his life?',
+        text: 'What jersey number did Hector used to wear playing soccer?',
         options: ['7', '10', '11', '96'],
       },
       fr: {
-        text: 'Quel numéro de maillot Hector portait-il en jouant au football la majeure partie de sa vie ?',
+        text: 'Quel numéro de maillot Hector portait-il d’habitude au football ?',
         options: ['7', '10', '11', '96'],
       },
       de: {
-        text: 'Welche Trikotnummer trug Hector die meiste Zeit seines Lebens beim Fußballspielen?',
+        text: 'Mit welcher Trikotnummer spielte Hector früher Fußball?',
         options: ['7', '10', '11', '96'],
       },
     },

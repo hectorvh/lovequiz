@@ -38,20 +38,27 @@
     "group": "Groupe {{n}}",
     "groupDone": "Terminé",
     "groupLocked": "Tu as déjà terminé ce groupe. Réinitialise le jeu dans les réglages pour y rejouer.",
-    "createQuiz": "Crée",
+    "createQuiz": "Crée-en un nouveau",
     "hectorCycle": "Résultats de Hector",
     "startHector": "Hector joue",
     "summary": "Résumé",
-    "lego": "lego",
+    "lego": "Cadeau",
     "results": "Réponses",
     "lockedCreate": "Termine les 3 groupes de questions pour créer ton propre questionnaire",
-    "lockedResults": "Termine toutes les questions pour voir tes résultats.",
+    "lockedResults": "Termine les 3 groupes de questions pour voir le résumé",
     "lockedPhoto": "Termine les 3 groupes de questions pour prendre une photo",
+    "lockedGift": "Termine les 3 groupes de questions pour voir ton cadeau",
     "settings": "Réglages",
     "photo": "Prendre une photo"
   },
+  "celebrate": {
+    "complete": "Félicitations, tu as terminé le jeu",
+    "hint": "Cherche derrière la photo avec notre cadenas sur le pont de Münster",
+    "love": "Je t'aime !"
+  },
   "pin": {
-    "title": "Saisis le code",
+    "title": "Entre le code",
+    "tip": "Astuce : Cherche derrière la photo avec la fleur de lotus dans l'album",
     "wrong": "Code incorrect",
     "enter": "Entrer"
   },
@@ -79,7 +86,7 @@
     "reveal": "Hector habite à ce point sur la carte"
   },
   "partial": {
-    "title": "Résultats du groupe {{n}}",
+    "title": "Résultats",
     "titleHector": "Résultats de Hector",
     "heartsThisGroup": "Cœurs de ce groupe",
     "punishmentsTotal": "Gages accumulés",
@@ -102,17 +109,18 @@
     "cleared": "Les réponses ont été masquées sur cet écran."
   },
   "create": {
-    "title": "Ton questionnaire",
+    "title": "Crée ton questionnaire",
     "subtitle": "",
     "step": "Question {{n}} sur {{total}}",
     "questionLabel": "Question",
     "questionPlaceholder": "Écris ta question ici",
     "answerPlaceholder": "Réponse {{letter}}",
     "markCorrect": "Marque la bonne réponse",
-    "incomplete": "Remplis la question, les 4 réponses et marque une bonne réponse.",
+    "incomplete": "Remplis la question, les 3 réponses et marque une bonne réponse.",
     "saveAll": "Enregistrer",
     "savedToast": "Ton questionnaire est prêt !",
-    "notTranslated": "Ceci est enregistré exactement comme tu l'écris, sans traduction."
+    "notTranslated": "Ceci est enregistré exactement comme tu l'écris, sans traduction.",
+    "overwriteConfirm": "Tu es sûre ? Les questions précédentes seront effacées"
   },
   "photo": {
     "title": "Une photo souvenir",
@@ -131,9 +139,9 @@
     "uploading": "Enregistrement..."
   },
   "summary": {
-    "title": "Merci d'avoir joué",
+    "title": "Maintenant, il faut payer",
     "message": "Maintenant, il faut payer ce que tu dois !",
-    "fernandaOwes": "Fernanda",
+    "fernandaOwes": "Fer",
     "hectorOwes": "Hector",
     "hearts": "Cœurs gagnés",
     "nothingOwed": "Rien à payer",

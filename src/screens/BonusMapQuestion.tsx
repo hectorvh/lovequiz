@@ -5,7 +5,7 @@ import 'leaflet/dist/leaflet.css';
 
 import { Card, PrimaryButton, Tag } from '../components/ui';
 import { HECTOR_HOME_COORDS } from '../data/questions';
-import { formatKilometers, formatMeters, haversineDistanceMeters } from '../lib/distance';
+import { formatKilometers, haversineDistanceMeters } from '../lib/distance';
 
 /**
  * Esri's shaded relief basemap: terrain only, with no country, city or street
@@ -33,9 +33,10 @@ export default function BonusMapQuestion({ onContinue }: { onContinue: (meters: 
   const [distance, setDistance] = useState<number | null>(null);
 
   useEffect(() => {
-    if (!containerRef.current || mapRef.current) return;
+    const el = containerRef.current;
+    if (!el || mapRef.current) return;
 
-    const map = L.map(containerRef.current, {
+    const map = L.map(el, {
       center: [20, 0],
       zoom: 1,
       minZoom: 1,
@@ -58,9 +59,21 @@ export default function BonusMapQuestion({ onContinue }: { onContinue: (meters: 
     });
 
     mapRef.current = map;
-    requestAnimationFrame(() => map.invalidateSize());
+
+    const invalidate = () => {
+      map.invalidateSize();
+    };
+    const frame = requestAnimationFrame(invalidate);
+    const later = window.setTimeout(invalidate, 250);
+    const muchLater = window.setTimeout(invalidate, 800);
+    const observer = new ResizeObserver(invalidate);
+    observer.observe(el);
 
     return () => {
+      window.cancelAnimationFrame(frame);
+      window.clearTimeout(later);
+      window.clearTimeout(muchLater);
+      observer.disconnect();
       map.remove();
       mapRef.current = null;
       markerRef.current = null;
@@ -91,8 +104,8 @@ export default function BonusMapQuestion({ onContinue }: { onContinue: (meters: 
   return (
     <div className="flex min-h-0 flex-1 flex-col">
       <Card className="flex min-h-0 flex-1 flex-col overflow-hidden !p-3.5">
-        <div className="mb-2 flex shrink-0 items-center justify-between">
-          <Tag>{t('bonus.tag')}</Tag>
+        <div className="mb-2 flex shrink-0 justify-center">
+          <Tag className="px-3 py-1.5 text-[15.4px] tracking-normal">{t('bonus.tag')}</Tag>
         </div>
 
         <p className="font-display mb-2 shrink-0 text-[clamp(0.95rem,2.5vh,1.15rem)] leading-snug text-ink">
@@ -101,15 +114,14 @@ export default function BonusMapQuestion({ onContinue }: { onContinue: (meters: 
 
         <div
           ref={containerRef}
-          className="min-h-40 w-full flex-1 overflow-hidden rounded-2xl border border-card-line"
+          className="min-h-[min(50vh,22rem)] w-full flex-1 overflow-hidden rounded-2xl border border-card-line"
         />
 
         {answered ? (
-          <div className="animate-rise mt-2 shrink-0 rounded-xl bg-good-bg px-3 py-2 text-[12px] leading-snug text-[#204623]">
+          <div className="animate-rise mt-2 shrink-0 rounded-xl bg-good-bg px-3 py-2 text-[12.5px] leading-snug text-[#204623]">
             <p className="font-semibold">
               {t('bonus.resultKm', { km: formatKilometers(distance, i18n.language) })}
             </p>
-            <p>{t('bonus.resultM', { m: formatMeters(distance, i18n.language) })}</p>
             <p className="mt-1 opacity-80">{t('bonus.reveal')}</p>
           </div>
         ) : (

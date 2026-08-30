@@ -2,22 +2,37 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
-import { Card, GhostButton, PrimaryButton, ScreenTitle, introTypeClass } from '../components/ui';
+import { Card, GhostButton, PrimaryButton, ScreenTitle } from '../components/ui';
 import { saveReciprocalQuiz } from '../lib/db';
 import {
   RECIPROCAL_QUIZ_LENGTH,
+  emptyDraftItem,
   isDraftItemComplete,
   selectAllGroupsComplete,
   useGameStore,
   type QuizDraftItem,
 } from '../state/gameStore';
-import { OPTION_KEYS, type OptionKey, type ReciprocalQuestion } from '../types';
+import {
+  RECIPROCAL_OPTION_KEYS,
+  type ReciprocalOptionKey,
+  type ReciprocalQuestion,
+} from '../types';
 
 export default function QuizCreation() {
   const { t } = useTranslation();
   const navigate = useNavigate();
 
-  const quizDraft = useGameStore((s) => s.quizDraft).slice(0, RECIPROCAL_QUIZ_LENGTH);
+  const storedDraft = useGameStore((s) => s.quizDraft);
+  const quizDraft = Array.from({ length: RECIPROCAL_QUIZ_LENGTH }, (_, index) => {
+    const raw = storedDraft[index];
+    const blank = emptyDraftItem();
+    if (!raw) return blank;
+    return {
+      ...blank,
+      ...raw,
+      options: { ...blank.options, ...raw.options },
+    };
+  });
   const setQuizDraftItem = useGameStore((s) => s.setQuizDraftItem);
   const saveReciprocalQuizLocally = useGameStore((s) => s.saveReciprocalQuizLocally);
   const allGroupsComplete = useGameStore(selectAllGroupsComplete);
@@ -29,14 +44,14 @@ export default function QuizCreation() {
     if (!allGroupsComplete) navigate('/menu', { replace: true });
   }, [allGroupsComplete, navigate]);
 
-  const item = quizDraft[step];
+  const item = quizDraft[step] ?? emptyDraftItem();
   const complete = isDraftItemComplete(item);
   const isLastStep = step === RECIPROCAL_QUIZ_LENGTH - 1;
 
   const update = (patch: Partial<QuizDraftItem>) =>
     setQuizDraftItem(step, { ...item, ...patch });
 
-  const setOption = (key: OptionKey, value: string) =>
+  const setOption = (key: ReciprocalOptionKey, value: string) =>
     update({ options: { ...item.options, [key]: value } });
 
   const save = async () => {
@@ -51,9 +66,9 @@ export default function QuizCreation() {
         A: draft.options.A.trim(),
         B: draft.options.B.trim(),
         C: draft.options.C.trim(),
-        D: draft.options.D.trim(),
+        D: '',
       },
-      correctOption: draft.correctOption ?? 'A',
+      correctOption: (draft.correctOption ?? 'A') as ReciprocalQuestion['correctOption'],
       createdAt: now,
     }));
 
@@ -69,13 +84,8 @@ export default function QuizCreation() {
     <div className="flex h-full min-h-0 flex-col overflow-hidden pt-1">
       <ScreenTitle title={t('create.title')} />
 
-      <Card className="flex min-h-0 flex-1 flex-col overflow-hidden !p-4">
-        <p
-          className={`${introTypeClass} mb-3 text-center text-[2.25rem] leading-tight text-wine`}
-        >
-          {t('create.step', { n: step + 1, total: RECIPROCAL_QUIZ_LENGTH })}
-        </p>
-        <div className="mb-4 flex justify-center gap-1">
+      <Card className="flex min-h-0 flex-1 flex-col overflow-hidden !p-5">
+        <div className="mb-4 flex shrink-0 justify-center gap-1">
           {quizDraft.map((draft, index) => (
             <span
               key={index}
@@ -90,28 +100,24 @@ export default function QuizCreation() {
           ))}
         </div>
 
-        <label className="mb-1.5 block text-xs font-semibold tracking-wide text-ink-soft uppercase">
-          {t('create.questionLabel')}
-        </label>
         <textarea
           value={item.questionText}
           onChange={(event) => update({ questionText: event.target.value })}
           placeholder={t('create.questionPlaceholder')}
-          rows={2}
-          className="mb-3 min-h-0 w-full resize-none rounded-xl border-[1.5px] border-card-line bg-white px-3.5 py-2.5 text-[14.5px] text-ink outline-none placeholder:text-ink-soft/50 focus:border-wine"
+          className="mb-4 h-1/2 w-full shrink-0 resize-none rounded-xl border-[1.5px] border-card-line bg-white px-3.5 py-4 text-[14.5px] leading-snug text-ink outline-none placeholder:text-ink-soft/50 focus:border-wine"
         />
 
-        <p className="mb-2 text-xs font-semibold tracking-wide text-ink-soft uppercase">
+        <p className="mb-2 shrink-0 text-xs font-semibold tracking-wide text-ink-soft uppercase">
           {t('create.markCorrect')}
         </p>
 
-        <div className="space-y-2.5">
-          {OPTION_KEYS.map((key) => {
+        <div className="mb-4 shrink-0 space-y-2.5">
+          {RECIPROCAL_OPTION_KEYS.map((key) => {
             const isCorrect = item.correctOption === key;
             return (
               <div
                 key={key}
-                className={`flex items-center gap-2.5 rounded-xl border-[1.5px] bg-white px-3 py-2 transition ${
+                className={`flex items-center gap-2.5 rounded-xl border-[1.5px] bg-white px-3 py-2.5 transition ${
                   isCorrect ? 'border-good bg-good-bg' : 'border-card-line'
                 }`}
               >
@@ -148,7 +154,7 @@ export default function QuizCreation() {
           })}
         </div>
 
-        <div className="mt-3 space-y-2">
+        <div className="mt-auto shrink-0 space-y-2">
           {isLastStep ? (
             <PrimaryButton onClick={() => void save()} disabled={!canSaveAll || saving}>
               {t('create.saveAll')}

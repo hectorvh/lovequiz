@@ -1,14 +1,14 @@
 import { useEffect, useState, type ReactNode } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
+import CelebrationBurst from '../components/CelebrationBurst';
 import Toast from '../components/Toast';
-import { chromeButtonClass, introTypeClass, unavailableButtonClass } from '../components/ui';
+import { Card, PrimaryButton, chromeButtonClass, introTypeClass, unavailableButtonClass } from '../components/ui';
 import { CREATE_QUIZ_STICKER, groupStickerSrc } from '../data/groupStickers';
 import {
   computeTally,
   selectAllGroupsComplete,
-  selectAnyGroupComplete,
   selectHectorQuizComplete,
   useGameStore,
 } from '../state/gameStore';
@@ -24,8 +24,8 @@ function CameraGlyph() {
   return (
     <svg
       aria-hidden
-      viewBox="0 0 24 24"
-      className="h-[53.55px] w-[53.55px]"
+      viewBox="3 6.5 18 13.5"
+      className="block h-[35.7px] w-[47.6px]"
       fill="none"
       stroke="currentColor"
       strokeWidth={1.6}
@@ -127,6 +127,7 @@ function MenuTile({
 export default function MainMenu() {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const completedGroups = useGameStore((s) => s.completedGroups);
   const groupStickers = useGameStore((s) => s.groupStickers);
@@ -134,10 +135,17 @@ export default function MainMenu() {
   const ensureGroupStickers = useGameStore((s) => s.ensureGroupStickers);
   const reciprocalQuizSaved = useGameStore((s) => s.reciprocalQuizSaved);
   const allGroupsComplete = useGameStore(selectAllGroupsComplete);
-  const anyGroupComplete = useGameStore(selectAnyGroupComplete);
   const hectorQuizComplete = useGameStore(selectHectorQuizComplete);
 
   const [toast, setToast] = useState<string | null>(null);
+  const menuNav = location.state as { celebrate?: boolean } | null;
+  const [burst, setBurst] = useState(() => Boolean(menuNav?.celebrate));
+  const [hintOpen, setHintOpen] = useState(false);
+
+  useEffect(() => {
+    if (!menuNav?.celebrate) return;
+    navigate('/menu', { replace: true, state: {} });
+  }, [menuNav?.celebrate, navigate]);
 
   useEffect(() => {
     ensureGroupStickers();
@@ -167,8 +175,16 @@ export default function MainMenu() {
     navigate('/photo');
   };
 
+  const onGift = () => {
+    if (!allGroupsComplete) {
+      setToast(t('menu.lockedGift'));
+      return;
+    }
+    setHintOpen(true);
+  };
+
   const onSummary = () => {
-    if (!anyGroupComplete) {
+    if (!allGroupsComplete) {
       setToast(t('menu.lockedResults'));
       return;
     }
@@ -191,6 +207,7 @@ export default function MainMenu() {
 
   return (
     <div className="flex h-full min-h-0 flex-col items-center overflow-hidden px-2 text-center">
+      {burst ? <CelebrationBurst onDone={() => setBurst(false)} /> : null}
       <div className="flex min-h-0 w-full flex-1 flex-col items-center justify-center">
         <p className={`${introLabelClass} mb-11`}>{t('menu.prompt')}</p>
         <div className="grid grid-cols-2 gap-x-4 gap-y-8">
@@ -242,12 +259,12 @@ export default function MainMenu() {
             type="button"
             onClick={onSummary}
             aria-label={t('menu.summary')}
-            aria-disabled={!anyGroupComplete}
+            aria-disabled={!allGroupsComplete}
             className={`${chromeButtonClass} !h-[69.3px] !w-[69.3px] !rounded-2xl ${
-              anyGroupComplete ? '' : unavailableButtonClass
+              allGroupsComplete ? '!opacity-100' : unavailableButtonClass
             }`}
           >
-            <span className="text-[1.8rem] leading-none opacity-[0.85]" aria-hidden>
+            <span className="text-[1.8rem] leading-none" aria-hidden>
               {PUNISHMENT_EMOJI.beso}
             </span>
           </button>
@@ -259,7 +276,7 @@ export default function MainMenu() {
             onClick={onPhoto}
             aria-label={t('menu.photo')}
             aria-disabled={!allGroupsComplete}
-            className={`${chromeButtonClass} !h-[83.16px] !w-[83.16px] ${
+            className={`${chromeButtonClass} !h-[83.16px] !w-[83.16px] overflow-hidden ${
               allGroupsComplete ? '' : unavailableButtonClass
             }`}
           >
@@ -270,15 +287,41 @@ export default function MainMenu() {
         <div className="flex justify-start pl-4">
           <button
             type="button"
+            onClick={onGift}
             aria-label={t('menu.lego')}
-            className={`${chromeButtonClass} !h-[69.3px] !w-[69.3px] !rounded-2xl`}
+            aria-disabled={!allGroupsComplete}
+            className={`${chromeButtonClass} !h-[69.3px] !w-[69.3px] !rounded-2xl ${
+              allGroupsComplete ? '!opacity-100' : unavailableButtonClass
+            }`}
           >
-            <span className={`${introTypeClass} text-[1.125rem] leading-none`}>{t('menu.lego')}</span>
+            <span className="text-[1.8rem] leading-none" aria-hidden>
+              🎁
+            </span>
           </button>
         </div>
       </div>
 
       <Toast message={toast} onDismiss={() => setToast(null)} />
+
+      {hintOpen ? (
+        <div className="fixed inset-0 z-[90] grid place-items-center bg-black/65 p-5 backdrop-blur-sm">
+          <div className="animate-pop w-full max-w-sm">
+            <Card>
+              <p className={`${introTypeClass} text-center text-2xl leading-snug text-wine`}>
+                {t('celebrate.hint')}
+              </p>
+              <p className={`${introTypeClass} mt-3 text-center text-[2.75rem] leading-tight text-wine`}>
+                {t('celebrate.love')}
+              </p>
+              <div className="mt-5">
+                <PrimaryButton onClick={() => setHintOpen(false)}>
+                  {t('common.continue')}
+                </PrimaryButton>
+              </div>
+            </Card>
+          </div>
+        </div>
+      ) : null}
     </div>
   );
 }

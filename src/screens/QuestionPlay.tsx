@@ -1,4 +1,4 @@
-import { Suspense, lazy, useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
@@ -10,18 +10,16 @@ import { GROUP_WITH_BONUS, questionsForIds } from '../data/questions';
 import { playSfx } from '../lib/sfx';
 import { addTally, computeTally, selectGroupAnswers, useGameStore } from '../state/gameStore';
 import {
-  OPTION_KEYS,
   PUNISHMENT_EMOJI,
   groupLetter,
   isFernandaGroup,
+  playQuestionFromReciprocal,
   playerForGroup,
   type GroupId,
   type PunishmentKey,
   type Question,
 } from '../types';
-
-/** Leaflet is only needed for group 3's closing question, so keep it out of the entry chunk. */
-const BonusMapQuestion = lazy(() => import('./BonusMapQuestion'));
+import BonusMapQuestion from './BonusMapQuestion';
 
 interface Feedback {
   selectedIndex: number | null;
@@ -60,12 +58,7 @@ export default function QuestionPlay() {
   const questions: Question[] = useMemo(() => {
     if (groupId === 'hector') {
       // Fernanda's own wording, always rendered as written — never translated.
-      return reciprocalQuiz.map((q) => ({
-        id: q.id,
-        text: q.questionText,
-        options: OPTION_KEYS.map((key) => q.options[key]),
-        correctIndex: OPTION_KEYS.indexOf(q.correctOption),
-      }));
+      return reciprocalQuiz.map(playQuestionFromReciprocal);
     }
     if (isFernandaGroup(groupId) && questionIds?.length) {
       return questionsForIds(groupId, locale, questionIds);
@@ -159,15 +152,7 @@ export default function QuestionPlay() {
   };
 
   if (showBonus) {
-    return (
-      <Suspense
-        fallback={
-          <Card className="mt-1 !p-6 text-center text-sm text-ink-soft">…</Card>
-        }
-      >
-        <BonusMapQuestion onContinue={(meters) => void finishGroup(meters)} />
-      </Suspense>
-    );
+    return <BonusMapQuestion onContinue={(meters) => void finishGroup(meters)} />;
   }
 
   if (!question) return null;
@@ -176,7 +161,8 @@ export default function QuestionPlay() {
     groupId === 'hector' ? t('play.hectorTitle') : t('play.group', { n: groupLetter(groupId) });
 
   return (
-    <div className="flex min-h-0 flex-1 flex-col justify-start pt-1">
+    <div className="grid min-h-0 flex-1 grid-rows-[17fr_auto_23fr] pt-1">
+      <div />
       <Card className="flex w-full max-h-full min-h-0 flex-col overflow-hidden !p-[5%]">
         <div className="mb-2 grid shrink-0 grid-cols-[1fr_auto_1fr] items-center gap-1">
           <span />
@@ -278,6 +264,7 @@ export default function QuestionPlay() {
           </div>
         ) : null}
       </Card>
+      <div />
     </div>
   );
 }

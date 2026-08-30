@@ -38,20 +38,27 @@
     "group": "Group {{n}}",
     "groupDone": "Completed",
     "groupLocked": "You already finished this group. Reset the game in settings to play it again.",
-    "createQuiz": "Create",
+    "createQuiz": "Create a new one",
     "hectorCycle": "Hector's results",
     "startHector": "Hector Play",
     "summary": "Summary",
-    "lego": "lego",
+    "lego": "Gift",
     "results": "Answers",
     "lockedCreate": "Finish the 3 question groups to create your own quiz",
-    "lockedResults": "Finish all the questions to see your results.",
+    "lockedResults": "Finish the 3 question groups to see the summary",
     "lockedPhoto": "Finish the 3 question groups to take a photo",
+    "lockedGift": "Finish the 3 question groups to see your gift",
     "settings": "Settings",
     "photo": "Take a photo"
   },
+  "celebrate": {
+    "complete": "Congratulations, you completed the game",
+    "hint": "Look behind the photo with our padlock on the Münster bridge",
+    "love": "I love you!"
+  },
   "pin": {
     "title": "Enter the code",
+    "tip": "Tip: Look behind the photo with the lotus flower in the album",
     "wrong": "Wrong code",
     "enter": "Enter"
   },
@@ -79,7 +86,7 @@
     "reveal": "Hector lives at that point on the map"
   },
   "partial": {
-    "title": "Group {{n}} results",
+    "title": "Results",
     "titleHector": "Hector's results",
     "heartsThisGroup": "Hearts from this group",
     "punishmentsTotal": "Punishments so far",
@@ -102,17 +109,18 @@
     "cleared": "Answers were hidden from this screen."
   },
   "create": {
-    "title": "Your quiz",
+    "title": "Create your quiz",
     "subtitle": "",
     "step": "Question {{n}} of {{total}}",
     "questionLabel": "Question",
     "questionPlaceholder": "Write your question here",
     "answerPlaceholder": "Answer {{letter}}",
     "markCorrect": "Mark the correct answer",
-    "incomplete": "Fill in the question, all 4 answers, and mark one as correct.",
+    "incomplete": "Fill in the question, all 3 answers, and mark one as correct.",
     "saveAll": "Save",
     "savedToast": "Your quiz is ready!",
-    "notTranslated": "This is saved exactly as you write it, with no translation."
+    "notTranslated": "This is saved exactly as you write it, with no translation.",
+    "overwriteConfirm": "Are you sure? The previous questions will be deleted"
   },
   "photo": {
     "title": "A photo to remember",
@@ -131,9 +139,9 @@
     "uploading": "Saving..."
   },
   "summary": {
-    "title": "Thank you for playing",
+    "title": "Now it's time to pay",
     "message": "Now it's time to pay what you owe!",
-    "fernandaOwes": "Fernanda",
+    "fernandaOwes": "Fer",
     "hectorOwes": "Hector",
     "hearts": "Hearts earned",
     "nothingOwed": "Nothing to pay",

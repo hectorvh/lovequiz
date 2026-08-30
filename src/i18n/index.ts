@@ -17,7 +17,7 @@ export const resources = {
 } as const;
 
 export const LOCALE_LABELS: Record<Locale, { flag: string; name: string }> = {
-  es: { flag: '🇪🇸', name: 'Español' },
+  es: { flag: '🇲🇽', name: 'Español' },
   en: { flag: '🇬🇧', name: 'English' },
   fr: { flag: '🇫🇷', name: 'Français' },
   de: { flag: '🇩🇪', name: 'Deutsch' },

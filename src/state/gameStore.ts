@@ -4,6 +4,7 @@ import { persist } from 'zustand/middleware';
 import {
   FERNANDA_GROUPS,
   PUNISHMENT_ORDER,
+  RECIPROCAL_OPTION_KEYS,
   emptyTally,
   isFernandaGroup,
   playerForGroup,
@@ -14,6 +15,7 @@ import {
   type PunishmentKey,
   type Question,
   type ReciprocalQuestion,
+  type ReciprocalOptionKey,
   type Tally,
 } from '../types';
 import { pickUniquePositiveSticker, type GroupStickerRef } from '../data/groupStickers';
@@ -76,6 +78,7 @@ interface GameState {
 
   photoTaken: boolean;
   questionDurationSeconds: number;
+  abcCongratsShown: boolean;
 }
 
 interface GameActions {
@@ -90,6 +93,7 @@ interface GameActions {
 
   setQuizDraftItem: (index: number, item: QuizDraftItem) => void;
   saveReciprocalQuizLocally: (questions: ReciprocalQuestion[]) => void;
+  beginNewReciprocalQuiz: () => void;
 
   setPhotoTaken: (taken: boolean) => void;
   setQuestionDurationSeconds: (seconds: number) => void;
@@ -97,6 +101,7 @@ interface GameActions {
   clearAnswersLocally: () => void;
   resetPhotoGate: () => void;
   resetAllProgress: () => void;
+  markAbcCongratsShown: () => void;
 }
 
 export type GameStore = GameState & GameActions;
@@ -117,6 +122,7 @@ const initialState: GameState = {
   quizDraft: Array.from({ length: RECIPROCAL_QUIZ_LENGTH }, emptyDraftItem),
   photoTaken: false,
   questionDurationSeconds: DEFAULT_QUESTION_DURATION_SECONDS,
+  abcCongratsShown: false,
 };
 
 /**
@@ -388,6 +394,30 @@ export const useGameStore = create<GameStore>()(
         pushFlag('hector_quiz_complete', false);
       },
 
+      beginNewReciprocalQuiz: () => {
+        set((state) => {
+          const { hector: _hectorAnswers, ...otherAnswers } = state.answers;
+          const { hector: _hectorBonus, ...otherBonus } = state.bonusDistances;
+          const { hector: _hectorProgress, ...otherProgress } = state.inProgress;
+          const { hector: _hectorPlayed, ...otherPlayed } = state.playedQuestionIds;
+          const { hector: _hectorSticker, ...otherStickers } = state.groupStickers;
+          return {
+            reciprocalQuiz: [],
+            reciprocalQuizSaved: false,
+            quizDraft: Array.from({ length: RECIPROCAL_QUIZ_LENGTH }, emptyDraftItem),
+            completedGroups: state.completedGroups.filter((id) => id !== 'hector'),
+            answers: otherAnswers,
+            bonusDistances: otherBonus,
+            inProgress: otherProgress,
+            playedQuestionIds: otherPlayed,
+            groupStickers: otherStickers,
+            tallies: { ...state.tallies, hector: emptyTally() },
+          };
+        });
+        pushFlag('reciprocal_quiz_saved', false);
+        pushFlag('hector_quiz_complete', false);
+      },
+
       setPhotoTaken: (taken) => {
         set({ photoTaken: taken });
         pushFlag('photo_taken', taken);
@@ -408,6 +438,8 @@ export const useGameStore = create<GameStore>()(
        */
       clearAnswersLocally: () =>
         set({ answers: {}, bonusDistances: {}, inProgress: {}, playedQuestionIds: {} }),
+
+      markAbcCongratsShown: () => set({ abcCongratsShown: true }),
 
       resetPhotoGate: () => {
         set({ photoTaken: false });
@@ -432,13 +464,14 @@ export const useGameStore = create<GameStore>()(
           reciprocalQuizSaved: false,
           quizDraft: Array.from({ length: RECIPROCAL_QUIZ_LENGTH }, emptyDraftItem),
           photoTaken: false,
+          abcCongratsShown: false,
         });
       },
     }),
     {
       name: STORE_KEY,
-      version: 5,
-      migrate: (persisted) => {
+      version: 7,
+      migrate: (persisted, version) => {
         const state = persisted as GameState;
         const draft = Array.isArray(state.quizDraft) ? state.quizDraft : [];
         const inProgress = Object.fromEntries(
@@ -457,13 +490,16 @@ export const useGameStore = create<GameStore>()(
           inProgress,
           playedQuestionIds: state.playedQuestionIds ?? {},
           groupStickers: state.groupStickers ?? {},
+          abcCongratsShown: version < 7 ? false : Boolean(state.abcCongratsShown),
           questionDurationSeconds:
-            Number.isFinite(duration) && duration > 0
-              ? Math.min(
-                  MAX_QUESTION_DURATION_SECONDS,
-                  Math.max(MIN_QUESTION_DURATION_SECONDS, Math.round(duration)),
-                )
-              : DEFAULT_QUESTION_DURATION_SECONDS,
+            duration === 30
+              ? DEFAULT_QUESTION_DURATION_SECONDS
+              : Number.isFinite(duration) && duration > 0
+                ? Math.min(
+                    MAX_QUESTION_DURATION_SECONDS,
+                    Math.max(MIN_QUESTION_DURATION_SECONDS, Math.round(duration)),
+                  )
+                : DEFAULT_QUESTION_DURATION_SECONDS,
           quizDraft: [
             ...draft.slice(0, RECIPROCAL_QUIZ_LENGTH),
             ...Array.from(
@@ -492,7 +528,12 @@ export const selectGroupAnswers =
   (state: GameStore): AnswerRecord[] | undefined =>
     state.inProgress[groupId]?.answers ?? state.answers[groupId];
 
-export const isDraftItemComplete = (item: QuizDraftItem) =>
-  item.questionText.trim().length > 0 &&
-  item.correctOption !== null &&
-  (['A', 'B', 'C', 'D'] as const).every((key) => item.options[key].trim().length > 0);
+export const isDraftItemComplete = (item: QuizDraftItem | undefined) => {
+  if (!item) return false;
+  return (
+    item.questionText.trim().length > 0 &&
+    item.correctOption !== null &&
+    RECIPROCAL_OPTION_KEYS.includes(item.correctOption as ReciprocalOptionKey) &&
+    RECIPROCAL_OPTION_KEYS.every((key) => item.options[key].trim().length > 0)
+  );
+};

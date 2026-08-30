@@ -2,7 +2,7 @@
  * Defaults and bounds for the per-question countdown.
  * The live value lives in the game store so Settings can change it.
  */
-export const DEFAULT_QUESTION_DURATION_SECONDS = 30;
+export const DEFAULT_QUESTION_DURATION_SECONDS = 20;
 export const MIN_QUESTION_DURATION_SECONDS = 5;
 export const MAX_QUESTION_DURATION_SECONDS = 30;
 

@@ -1,14 +1,16 @@
+import { useState } from 'react';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
+import ConfirmCreateQuizModal from '../components/ConfirmCreateQuizModal';
 import { Card, GhostButton, PrimaryButton, ScreenTitle } from '../components/ui';
 import { questionsForIds } from '../data/questions';
 import { formatKilometers } from '../lib/distance';
 import { useGameStore } from '../state/gameStore';
 import {
-  OPTION_KEYS,
   groupLetter,
   isFernandaGroup,
+  playQuestionFromReciprocal,
   type GroupId,
   type Locale,
   type Question,
@@ -31,6 +33,8 @@ export default function Results() {
   const bonusDistances = useGameStore((s) => s.bonusDistances);
   const completedGroups = useGameStore((s) => s.completedGroups);
   const reciprocalQuiz = useGameStore((s) => s.reciprocalQuiz);
+  const beginNewReciprocalQuiz = useGameStore((s) => s.beginNewReciprocalQuiz);
+  const [createConfirmOpen, setCreateConfirmOpen] = useState(false);
 
   const groupId = rawGroupId as GroupId | undefined;
   if (!groupId || !completedGroups.includes(groupId)) {
@@ -66,7 +70,7 @@ export default function Results() {
             {t('results.playAgain')}
           </PrimaryButton>
           {groupId === 'hector' ? (
-            <PrimaryButton onClick={() => navigate('/create-quiz')}>
+            <PrimaryButton onClick={() => setCreateConfirmOpen(true)}>
               {t('menu.createQuiz')}
             </PrimaryButton>
           ) : null}
@@ -120,6 +124,17 @@ export default function Results() {
           <GhostButton onClick={() => navigate('/menu')}>{t('common.back')}</GhostButton>
         </div>
       </Card>
+
+      {createConfirmOpen ? (
+        <ConfirmCreateQuizModal
+          onClose={() => setCreateConfirmOpen(false)}
+          onConfirm={() => {
+            beginNewReciprocalQuiz();
+            setCreateConfirmOpen(false);
+            navigate('/create-quiz');
+          }}
+        />
+      ) : null}
     </div>
   );
 }
@@ -132,15 +147,7 @@ function questionsForGroup(
 ): Question[] {
   if (groupId === 'hector') {
     const byId = new Map(
-      reciprocalQuiz.map((q) => [
-        q.id,
-        {
-          id: q.id,
-          text: q.questionText,
-          options: OPTION_KEYS.map((key) => q.options[key]),
-          correctIndex: OPTION_KEYS.indexOf(q.correctOption),
-        } satisfies Question,
-      ]),
+      reciprocalQuiz.map((q) => [q.id, playQuestionFromReciprocal(q)]),
     );
     return ids.flatMap((id) => {
       const question = byId.get(id);

@@ -64,6 +64,21 @@ export interface ReciprocalQuestion {
 export const OPTION_KEYS = ['A', 'B', 'C', 'D'] as const;
 export type OptionKey = (typeof OPTION_KEYS)[number];
 
+/** Fernanda writes three answers for Hector; D is kept empty for stored compatibility. */
+export const RECIPROCAL_OPTION_KEYS = ['A', 'B', 'C'] as const;
+export type ReciprocalOptionKey = (typeof RECIPROCAL_OPTION_KEYS)[number];
+
+export function playQuestionFromReciprocal(q: ReciprocalQuestion): Question {
+  const options = RECIPROCAL_OPTION_KEYS.map((key) => q.options[key] ?? '');
+  const correctIndex = RECIPROCAL_OPTION_KEYS.indexOf(q.correctOption as ReciprocalOptionKey);
+  return {
+    id: q.id,
+    text: q.questionText,
+    options,
+    correctIndex: correctIndex >= 0 ? correctIndex : 0,
+  };
+}
+
 export interface StoredPhoto {
   id: string;
   storagePath: string;

@@ -23,7 +23,7 @@ export function ScreenTitle({
   className = '',
 }: {
   eyebrow?: string;
-  title: string;
+  title?: string;
   subtitle?: string;
   className?: string;
 }) {
@@ -34,13 +34,19 @@ export function ScreenTitle({
           {eyebrow}
         </p>
       ) : null}
-      <h1
-        className={`font-display text-2xl leading-tight font-semibold text-[#faf1e8] italic ${className}`}
-      >
-        {title}
-      </h1>
+      {title ? (
+        <h1
+          className={`font-display text-2xl leading-tight font-semibold text-[#faf1e8] italic ${className}`}
+        >
+          {title}
+        </h1>
+      ) : null}
       {subtitle ? (
-        <p className="font-display mt-1 text-2xl leading-tight font-semibold text-[#faf1e8] italic">
+        <p
+          className={`font-display text-2xl leading-tight font-semibold text-[#faf1e8] italic ${
+            title ? 'mt-1' : ''
+          }`}
+        >
           {subtitle}
         </p>
       ) : null}

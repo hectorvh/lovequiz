@@ -34,7 +34,7 @@ export default function PinModal({
     <div className="fixed inset-0 z-50 grid place-items-center bg-black/65 p-5 backdrop-blur-sm">
       <div className="animate-pop w-full max-w-xs">
         <Card>
-          <h2 className={`${introTypeClass} mb-4 text-center text-xl text-ink`}>
+          <h2 className={`${introTypeClass} mb-4 text-center text-base leading-snug text-ink`}>
             {t('pin.title')}
           </h2>
 
@@ -54,6 +54,8 @@ export default function PinModal({
             }}
             className="w-full rounded-xl border-[1.5px] border-card-line bg-white py-3 text-center font-display text-2xl tracking-[0.5em] text-ink outline-none focus:border-wine"
           />
+
+          <p className="mt-3 text-center text-xs leading-snug text-ink-soft">{t('pin.tip')}</p>
 
           {error ? (
             <p className="mt-2 text-center text-xs text-bad">{t('pin.wrong')}</p>

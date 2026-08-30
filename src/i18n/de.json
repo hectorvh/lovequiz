@@ -38,20 +38,27 @@
     "group": "Gruppe {{n}}",
     "groupDone": "Abgeschlossen",
     "groupLocked": "Diese Gruppe hast du schon abgeschlossen. Setze das Spiel in den Einstellungen zurück, um sie erneut zu spielen.",
-    "createQuiz": "Erstellen",
+    "createQuiz": "Neues erstellen",
     "hectorCycle": "Hectors Ergebnisse",
     "startHector": "Hector spielt",
     "summary": "Zusammenfassung",
-    "lego": "lego",
+    "lego": "Geschenk",
     "results": "Antworten",
     "lockedCreate": "Schließe die 3 Fragengruppen ab, um dein eigenes Quiz zu erstellen",
-    "lockedResults": "Beende alle Fragen, um deine Ergebnisse zu sehen.",
+    "lockedResults": "Schließe die 3 Fragengruppen ab, um die Zusammenfassung zu sehen",
     "lockedPhoto": "Schließe die 3 Fragengruppen ab, um ein Foto aufzunehmen",
+    "lockedGift": "Schließe die 3 Fragengruppen ab, um dein Geschenk zu sehen",
     "settings": "Einstellungen",
     "photo": "Foto aufnehmen"
   },
+  "celebrate": {
+    "complete": "Glückwunsch, du hast das Spiel abgeschlossen",
+    "hint": "Schau hinter dem Foto mit unserem Schloss auf der Münster-Brücke nach",
+    "love": "Ich liebe dich!"
+  },
   "pin": {
     "title": "Gib den Code ein",
+    "tip": "Tipp: Schau hinter dem Foto mit der Lotusblume im Album nach",
     "wrong": "Falscher Code",
     "enter": "Weiter"
   },
@@ -79,7 +86,7 @@
     "reveal": "Hector wohnt an diesem Punkt auf der Karte"
   },
   "partial": {
-    "title": "Ergebnisse Gruppe {{n}}",
+    "title": "Ergebnisse",
     "titleHector": "Hectors Ergebnisse",
     "heartsThisGroup": "Herzen aus dieser Gruppe",
     "punishmentsTotal": "Bisherige Strafen",
@@ -102,17 +109,18 @@
     "cleared": "Die Antworten wurden auf diesem Bildschirm ausgeblendet."
   },
   "create": {
-    "title": "Dein Quiz",
+    "title": "Erstelle dein Quiz",
     "subtitle": "",
     "step": "Frage {{n}} von {{total}}",
     "questionLabel": "Frage",
     "questionPlaceholder": "Schreibe hier deine Frage",
     "answerPlaceholder": "Antwort {{letter}}",
     "markCorrect": "Markiere die richtige Antwort",
-    "incomplete": "Fülle die Frage und alle 4 Antworten aus und markiere eine als richtig.",
+    "incomplete": "Fülle die Frage und alle 3 Antworten aus und markiere eine als richtig.",
     "saveAll": "Speichern",
     "savedToast": "Dein Quiz ist fertig!",
-    "notTranslated": "Das wird genau so gespeichert, wie du es schreibst, ohne Übersetzung."
+    "notTranslated": "Das wird genau so gespeichert, wie du es schreibst, ohne Übersetzung.",
+    "overwriteConfirm": "Bist du sicher? Die bisherigen Fragen werden gelöscht"
   },
   "photo": {
     "title": "Ein Foto zur Erinnerung",
@@ -131,9 +139,9 @@
     "uploading": "Speichern..."
   },
   "summary": {
-    "title": "Danke fürs Mitspielen",
+    "title": "Jetzt wird gezahlt",
     "message": "Jetzt wird bezahlt, was du schuldest!",
-    "fernandaOwes": "Fernanda",
+    "fernandaOwes": "Fer",
     "hectorOwes": "Hector",
     "hearts": "Gewonnene Herzen",
     "nothingOwed": "Nichts zu bezahlen",
