@@ -83,7 +83,7 @@
     "noScore": "Cette question ne compte ni pour les cœurs ni pour les gages, et il n'y a pas de limite de temps.",
     "resultKm": "Ton marqueur est à {{km}} km du bon endroit",
     "resultM": "Cela fait {{m}} mètres",
-    "giftPrompt": "Imagine que quelqu'un fête ses 30 ans le 14 novembre. Quel cadeau ferait plaisir à cette personne ?",
+    "giftPrompt": "Imagine que « quelqu'un » fête ses 30 ans le 14 novembre. Quel cadeau ferait plaisir à ce « quelqu'un » ?",
     "giftHint": "Écris ta réponse, puis appuie sur Continuer",
     "giftPlaceholder": "Ta réponse"
   },

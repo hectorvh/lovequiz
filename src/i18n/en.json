@@ -83,7 +83,7 @@
     "noScore": "This question doesn't count towards hearts or punishments, and there's no time limit.",
     "resultKm": "Your marker landed {{km}} km from the right spot",
     "resultM": "That's {{m}} metres",
-    "giftPrompt": "Imagine someone turns 30 on 14 November. What gift would that someone like?",
+    "giftPrompt": "Imagine that \"someone\" turns 30 on 14 November. What gift would that \"someone\" like?",
     "giftHint": "Write your answer, then press Continue",
     "giftPlaceholder": "Your answer"
   },
