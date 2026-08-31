@@ -239,7 +239,7 @@ export default function MainMenu() {
           }`}
         >
           <span className="text-[1.8rem] leading-none" aria-hidden>
-            🎁
+            🏆
           </span>
         </button>
       </div>
