@@ -47,9 +47,11 @@
     "lockedCreate": "Termine les 3 groupes de questions pour créer ton propre questionnaire",
     "lockedResults": "Termine les 3 groupes de questions pour voir le résumé",
     "lockedPhoto": "Termine les 3 groupes de questions pour prendre une photo",
+    "lockedModel": "Termine les 3 groupes de questions pour voir le modèle",
     "lockedGift": "Termine les 3 groupes de questions pour voir ton cadeau",
     "settings": "Réglages",
-    "photo": "Prendre une photo"
+    "photo": "Prendre une photo",
+    "model": "Modèle 3D"
   },
   "celebrate": {
     "complete": "Félicitations, tu as terminé le jeu",
@@ -84,7 +86,6 @@
     "resultKm": "Ton marqueur est à {{km}} km du bon endroit",
     "resultM": "Cela fait {{m}} mètres",
     "giftPrompt": "Imagine que « quelqu'un » fête ses 30 ans le 14 novembre. Quel cadeau ferait plaisir à ce « quelqu'un » ?",
-    "giftHint": "Écris ta réponse, puis appuie sur Continuer",
     "giftPlaceholder": "Ta réponse"
   },
   "partial": {
@@ -140,6 +141,14 @@
     "permissionDenied": "Impossible d'accéder à la caméra. Vérifie les autorisations du navigateur.",
     "finish": "Continuer",
     "uploading": "Enregistrement..."
+  },
+  "model": {
+    "loading": "Chargement...",
+    "error": "Impossible de charger le modèle 3D.",
+    "fer": "Fer",
+    "hector": "Hector",
+    "ferCasual": "Fer casual",
+    "hectorCasual": "Hector casual"
   },
   "summary": {
     "title": "Maintenant, il faut payer",

@@ -11,6 +11,7 @@ import PartialResults from './screens/PartialResults';
 import Results from './screens/Results';
 import QuizCreation from './screens/QuizCreation';
 import TakePhoto from './screens/TakePhoto';
+import ModelViewer from './screens/ModelViewer';
 import FinalSummary from './screens/FinalSummary';
 import Settings from './screens/Settings';
 
@@ -54,6 +55,7 @@ export default function App() {
           <Route path="/results/:groupId" element={<Results />} />
           <Route path="/create-quiz" element={<QuizCreation />} />
           <Route path="/photo" element={<TakePhoto />} />
+          <Route path="/model" element={<ModelViewer />} />
           <Route path="/summary" element={<FinalSummary />} />
           <Route path="/settings" element={<Settings />} />
           <Route path="*" element={<Navigate to="/" replace />} />

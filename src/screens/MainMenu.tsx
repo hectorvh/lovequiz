@@ -20,23 +20,7 @@ const introLabelClass = `${introTypeClass} whitespace-pre-line text-center text-
 /** Previous 140px tiles reduced 20%. */
 const TILE_SIZE_CLASS = 'h-28 w-28';
 
-function CameraGlyph() {
-  return (
-    <svg
-      aria-hidden
-      viewBox="3 6.5 18 13.5"
-      className="block h-[35.7px] w-[47.6px]"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth={1.6}
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M4.5 8.5h3l1.2-2h6.6l1.2 2H19.5A1.5 1.5 0 0121 10v8.5a1.5 1.5 0 01-1.5 1.5h-15A1.5 1.5 0 013 18.5V10a1.5 1.5 0 011.5-1.5z" />
-      <circle cx="12" cy="14.2" r="3.2" />
-    </svg>
-  );
-}
+const MODEL_BUTTON_ICON = '/3d_models/icons/Hector_lego02-removebg-preview.png';
 
 /** Hearts sit on the top rim of a finished sticker circle. */
 function TopHearts({ count }: { count: number }) {
@@ -167,12 +151,12 @@ export default function MainMenu() {
     navigate('/create-quiz');
   };
 
-  const onPhoto = () => {
+  const onModel = () => {
     if (!allGroupsComplete) {
-      setToast(t('menu.lockedPhoto'));
+      setToast(t('menu.lockedModel'));
       return;
     }
-    navigate('/photo');
+    navigate('/model');
   };
 
   const onGift = () => {
@@ -273,14 +257,19 @@ export default function MainMenu() {
         <div className="flex justify-center">
           <button
             type="button"
-            onClick={onPhoto}
-            aria-label={t('menu.photo')}
+            onClick={onModel}
+            aria-label={t('menu.model')}
             aria-disabled={!allGroupsComplete}
-            className={`${chromeButtonClass} !h-[83.16px] !w-[83.16px] overflow-hidden ${
-              allGroupsComplete ? '' : unavailableButtonClass
+            className={`${chromeButtonClass} !h-[83.16px] !w-[83.16px] ${
+              allGroupsComplete ? '!opacity-100' : unavailableButtonClass
             }`}
           >
-            <CameraGlyph />
+            <img
+              src={MODEL_BUTTON_ICON}
+              alt=""
+              draggable={false}
+              className="pointer-events-none h-[72%] w-[72%] object-contain"
+            />
           </button>
         </div>
 

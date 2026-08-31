@@ -32,7 +32,6 @@ export default function BonusGiftQuestion({
         />
 
         <div className="mt-2 flex shrink-0 flex-col">
-          <p className="mb-2 text-center text-[11.5px] text-ink-soft">{t('bonus.giftHint')}</p>
           <PrimaryButton onClick={() => onContinue(answer)} disabled={answer.length === 0}>
             {t('common.continue')}
           </PrimaryButton>

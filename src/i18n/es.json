@@ -47,9 +47,11 @@
     "lockedCreate": "Finaliza los 3 grupos de preguntas para poder hacer tu propio cuestionario",
     "lockedResults": "Finaliza los 3 grupos de preguntas para ver el resumen",
     "lockedPhoto": "Finaliza los 3 grupos de preguntas para tomar una foto",
+    "lockedModel": "Finaliza los 3 grupos de preguntas para ver el modelo",
     "lockedGift": "Finaliza los 3 grupos de preguntas para ver tu regalo",
     "settings": "Ajustes",
-    "photo": "Tomar foto"
+    "photo": "Tomar foto",
+    "model": "Modelo 3D"
   },
   "celebrate": {
     "complete": "Felicidades completaste el juego",
@@ -84,7 +86,6 @@
     "resultKm": "Tu marcador quedó a {{km}} km del lugar correcto",
     "resultM": "Eso son {{m}} metros",
     "giftPrompt": "Imagina que \"alguien\" cumple 30 años el 14 de noviembre, ¿Qué regalo le gustaría a ese \"alguien\"?",
-    "giftHint": "Escribe tu respuesta, luego pulsa Continuar",
     "giftPlaceholder": "Tu respuesta"
   },
   "partial": {
@@ -140,6 +141,14 @@
     "permissionDenied": "No pudimos acceder a la cámara. Revisa los permisos del navegador.",
     "finish": "Continuar",
     "uploading": "Guardando..."
+  },
+  "model": {
+    "loading": "Cargando...",
+    "error": "No pudimos cargar el modelo 3D.",
+    "fer": "Fer",
+    "hector": "Hector",
+    "ferCasual": "Fer casual",
+    "hectorCasual": "Hector casual"
   },
   "summary": {
     "title": "Ahora toca pagar",

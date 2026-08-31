@@ -47,9 +47,11 @@
     "lockedCreate": "Schließe die 3 Fragengruppen ab, um dein eigenes Quiz zu erstellen",
     "lockedResults": "Schließe die 3 Fragengruppen ab, um die Zusammenfassung zu sehen",
     "lockedPhoto": "Schließe die 3 Fragengruppen ab, um ein Foto aufzunehmen",
+    "lockedModel": "Schließe die 3 Fragengruppen ab, um das Modell zu sehen",
     "lockedGift": "Schließe die 3 Fragengruppen ab, um dein Geschenk zu sehen",
     "settings": "Einstellungen",
-    "photo": "Foto aufnehmen"
+    "photo": "Foto aufnehmen",
+    "model": "3D-Modell"
   },
   "celebrate": {
     "complete": "Glückwunsch, du hast das Spiel abgeschlossen",
@@ -84,7 +86,6 @@
     "resultKm": "Dein Marker liegt {{km}} km vom richtigen Ort entfernt",
     "resultM": "Das sind {{m}} Meter",
     "giftPrompt": "Stell dir vor, \"jemand\" wird am 14. November 30. Welches Geschenk würde diesem \"jemand\" gefallen?",
-    "giftHint": "Schreib deine Antwort und tippe dann auf Weiter",
     "giftPlaceholder": "Deine Antwort"
   },
   "partial": {
@@ -140,6 +141,14 @@
     "permissionDenied": "Wir konnten nicht auf die Kamera zugreifen. Prüfe die Browser-Berechtigungen.",
     "finish": "Weiter",
     "uploading": "Speichern..."
+  },
+  "model": {
+    "loading": "Laden...",
+    "error": "Das 3D-Modell konnte nicht geladen werden.",
+    "fer": "Fer",
+    "hector": "Hector",
+    "ferCasual": "Fer casual",
+    "hectorCasual": "Hector casual"
   },
   "summary": {
     "title": "Jetzt wird gezahlt",

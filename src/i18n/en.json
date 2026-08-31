@@ -47,9 +47,11 @@
     "lockedCreate": "Finish the 3 question groups to create your own quiz",
     "lockedResults": "Finish the 3 question groups to see the summary",
     "lockedPhoto": "Finish the 3 question groups to take a photo",
+    "lockedModel": "Finish the 3 question groups to see the model",
     "lockedGift": "Finish the 3 question groups to see your gift",
     "settings": "Settings",
-    "photo": "Take a photo"
+    "photo": "Take a photo",
+    "model": "3D model"
   },
   "celebrate": {
     "complete": "Congratulations, you completed the game",
@@ -84,7 +86,6 @@
     "resultKm": "Your marker landed {{km}} km from the right spot",
     "resultM": "That's {{m}} metres",
     "giftPrompt": "Imagine that \"someone\" turns 30 on 14 November. What gift would that \"someone\" like?",
-    "giftHint": "Write your answer, then press Continue",
     "giftPlaceholder": "Your answer"
   },
   "partial": {
@@ -140,6 +141,14 @@
     "permissionDenied": "We couldn't access the camera. Check your browser permissions.",
     "finish": "Continue",
     "uploading": "Saving..."
+  },
+  "model": {
+    "loading": "Loading...",
+    "error": "We couldn't load the 3D model.",
+    "fer": "Fer",
+    "hector": "Hector",
+    "ferCasual": "Fer casual",
+    "hectorCasual": "Hector casual"
   },
   "summary": {
     "title": "Now it's time to pay",
