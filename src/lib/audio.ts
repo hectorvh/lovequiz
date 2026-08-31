@@ -87,3 +87,19 @@ export function setMuted(isPaused: boolean) {
     playWhenAllowed(audio);
   }
 }
+
+/** Stops the current track and starts the next one. No-op while paused. */
+export function skipToNextTrack() {
+  if (!musicRequested || paused) return;
+  if (gapTimer !== null) {
+    window.clearTimeout(gapTimer);
+    gapTimer = null;
+  }
+  const audio = getElement();
+  audio.pause();
+  trackIndex = trackIndex + 1 >= PLAYLIST.length ? 0 : trackIndex + 1;
+  audio.loop = false;
+  audio.src = PLAYLIST[trackIndex];
+  audio.currentTime = 0;
+  playWhenAllowed(audio);
+}

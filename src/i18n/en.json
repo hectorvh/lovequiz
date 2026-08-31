@@ -159,10 +159,10 @@
   "summary": {
     "title": "But first it's time to pay",
     "message": "Now it's time to pay what you owe!",
-    "fernandaOwes": "Fer debe...",
-    "hectorOwes": "Hector debe",
+    "fernandaOwes": "Fer owes...",
+    "hectorOwes": "Hector owes",
     "hectorHearts": "Un chingo ❤️",
-    "hectorPrize": "Nadaaa... se merece un premio",
+    "hectorPrize": "Nothing... he deserves an award",
     "hearts": "Hearts earned",
     "nothingOwed": "Nothing to pay",
     "closing": "With love, Hector"
