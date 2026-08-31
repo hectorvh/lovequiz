@@ -19,9 +19,10 @@ export default function Layout({ children }: { children: ReactNode }) {
   const { pathname } = useLocation();
   const allowScroll = pathname.startsWith('/results');
   const isModel = pathname === '/model';
+  const isMenu2 = pathname === '/menu2';
   const showInfo = pathname !== '/intro' && pathname !== '/' && !isModel;
-  const showSettings = pathname === '/intro' || pathname === '/menu';
-  const showHome = !showSettings && pathname !== '/';
+  const showSettings = pathname === '/intro' || pathname === '/menu' || pathname === '/menu2';
+  const showHome = !showSettings && pathname !== '/' && !isMenu2;
 
   return (
     <div className="relative flex h-dvh flex-col overflow-hidden">

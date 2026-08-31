@@ -9,18 +9,17 @@ import { CREATE_QUIZ_STICKER, groupStickerSrc } from '../data/groupStickers';
 import {
   computeTally,
   selectAllGroupsComplete,
+  selectGameComplete,
   selectHectorQuizComplete,
   useGameStore,
 } from '../state/gameStore';
-import { FERNANDA_GROUPS, GROUP_LETTERS, PUNISHMENT_EMOJI } from '../types';
+import { FERNANDA_GROUPS, GROUP_LETTERS } from '../types';
 
 /** 40% larger than text-3xl, forced to two lines. */
 const introLabelClass = `${introTypeClass} whitespace-pre-line text-center text-[2.625rem] leading-[1.05] text-[#faf1e8] drop-shadow-[0_3px_14px_rgba(0,0,0,0.7)]`;
 
 /** Previous 140px tiles reduced 20%. */
 const TILE_SIZE_CLASS = 'h-28 w-28';
-
-const MODEL_BUTTON_ICON = '/3d_models/icons/Hector_lego02-removebg-preview.png';
 
 /** Hearts sit on the top rim of a finished sticker circle. */
 function TopHearts({ count }: { count: number }) {
@@ -120,11 +119,14 @@ export default function MainMenu() {
   const reciprocalQuizSaved = useGameStore((s) => s.reciprocalQuizSaved);
   const allGroupsComplete = useGameStore(selectAllGroupsComplete);
   const hectorQuizComplete = useGameStore(selectHectorQuizComplete);
+  const gameComplete = useGameStore(selectGameComplete);
+  const gameCompleteAcknowledged = useGameStore((s) => s.gameCompleteAcknowledged);
+  const markGameCompleteAcknowledged = useGameStore((s) => s.markGameCompleteAcknowledged);
 
   const [toast, setToast] = useState<string | null>(null);
   const menuNav = location.state as { celebrate?: boolean } | null;
   const [burst, setBurst] = useState(() => Boolean(menuNav?.celebrate));
-  const [hintOpen, setHintOpen] = useState(false);
+  const [completeOpen, setCompleteOpen] = useState(false);
 
   useEffect(() => {
     if (!menuNav?.celebrate) return;
@@ -134,6 +136,10 @@ export default function MainMenu() {
   useEffect(() => {
     ensureGroupStickers();
   }, [ensureGroupStickers, completedGroups]);
+
+  useEffect(() => {
+    if (gameComplete && !gameCompleteAcknowledged) setCompleteOpen(true);
+  }, [gameComplete, gameCompleteAcknowledged]);
 
   const onCreateTile = () => {
     if (!allGroupsComplete) {
@@ -151,28 +157,13 @@ export default function MainMenu() {
     navigate('/create-quiz');
   };
 
-  const onModel = () => {
-    if (!allGroupsComplete) {
-      setToast(t('menu.lockedModel'));
-      return;
-    }
-    navigate('/model');
-  };
-
-  const onGift = () => {
-    if (!allGroupsComplete) {
+  const onMenu2 = () => {
+    if (!gameComplete) {
       setToast(t('menu.lockedGift'));
       return;
     }
-    setHintOpen(true);
-  };
-
-  const onSummary = () => {
-    if (!allGroupsComplete) {
-      setToast(t('menu.lockedResults'));
-      return;
-    }
-    navigate('/summary');
+    markGameCompleteAcknowledged();
+    navigate('/menu2');
   };
 
   const createStickerSrc = groupStickerSrc(CREATE_QUIZ_STICKER);
@@ -237,73 +228,39 @@ export default function MainMenu() {
         </div>
       </div>
 
-      <div className="mb-2 grid w-full grid-cols-3 items-center">
-        <div className="flex justify-end pr-4">
-          <button
-            type="button"
-            onClick={onSummary}
-            aria-label={t('menu.summary')}
-            aria-disabled={!allGroupsComplete}
-            className={`${chromeButtonClass} !h-[69.3px] !w-[69.3px] !rounded-2xl ${
-              allGroupsComplete ? '!opacity-100' : unavailableButtonClass
-            }`}
-          >
-            <span className="text-[1.8rem] leading-none" aria-hidden>
-              {PUNISHMENT_EMOJI.beso}
-            </span>
-          </button>
-        </div>
-
-        <div className="flex justify-center">
-          <button
-            type="button"
-            onClick={onModel}
-            aria-label={t('menu.model')}
-            aria-disabled={!allGroupsComplete}
-            className={`${chromeButtonClass} !h-[83.16px] !w-[83.16px] ${
-              allGroupsComplete ? '!opacity-100' : unavailableButtonClass
-            }`}
-          >
-            <img
-              src={MODEL_BUTTON_ICON}
-              alt=""
-              draggable={false}
-              className="pointer-events-none h-[72%] w-[72%] object-contain"
-            />
-          </button>
-        </div>
-
-        <div className="flex justify-start pl-4">
-          <button
-            type="button"
-            onClick={onGift}
-            aria-label={t('menu.lego')}
-            aria-disabled={!allGroupsComplete}
-            className={`${chromeButtonClass} !h-[69.3px] !w-[69.3px] !rounded-2xl ${
-              allGroupsComplete ? '!opacity-100' : unavailableButtonClass
-            }`}
-          >
-            <span className="text-[1.8rem] leading-none" aria-hidden>
-              🎁
-            </span>
-          </button>
-        </div>
+      <div className="mb-2 flex w-full justify-center">
+        <button
+          type="button"
+          onClick={onMenu2}
+          aria-label={t('menu.lego')}
+          aria-disabled={!gameComplete}
+          className={`${chromeButtonClass} !h-[83.16px] !w-[83.16px] ${
+            gameComplete ? '!opacity-100' : unavailableButtonClass
+          }`}
+        >
+          <span className="text-[1.8rem] leading-none" aria-hidden>
+            🎁
+          </span>
+        </button>
       </div>
 
       <Toast message={toast} onDismiss={() => setToast(null)} />
 
-      {hintOpen ? (
+      {completeOpen ? (
         <div className="fixed inset-0 z-[90] grid place-items-center bg-black/65 p-5 backdrop-blur-sm">
           <div className="animate-pop w-full max-w-sm">
             <Card>
               <p className={`${introTypeClass} text-center text-2xl leading-snug text-wine`}>
-                {t('celebrate.hint')}
-              </p>
-              <p className={`${introTypeClass} mt-3 text-center text-[2.75rem] leading-tight text-wine`}>
-                {t('celebrate.love')}
+                {t('celebrate.gameDone')}
               </p>
               <div className="mt-5">
-                <PrimaryButton onClick={() => setHintOpen(false)}>
+                <PrimaryButton
+                  onClick={() => {
+                    markGameCompleteAcknowledged();
+                    setCompleteOpen(false);
+                    navigate('/menu2');
+                  }}
+                >
                   {t('common.continue')}
                 </PrimaryButton>
               </div>

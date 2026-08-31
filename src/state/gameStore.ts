@@ -88,6 +88,9 @@ interface GameState {
   photoTaken: boolean;
   questionDurationSeconds: number;
   abcCongratsShown: boolean;
+  gameCompleteAcknowledged: boolean;
+  /** 0 summary only, 1 +model, 2 +gift, 3 +pizza, 4 pizza opened */
+  menu2Unlock: number;
 }
 
 interface GameActions {
@@ -113,6 +116,8 @@ interface GameActions {
   resetPhotoGate: () => void;
   resetAllProgress: () => void;
   markAbcCongratsShown: () => void;
+  markGameCompleteAcknowledged: () => void;
+  advanceMenu2Unlock: (level: number) => void;
 }
 
 export type GameStore = GameState & GameActions;
@@ -135,6 +140,8 @@ const initialState: GameState = {
   photoTaken: false,
   questionDurationSeconds: DEFAULT_QUESTION_DURATION_SECONDS,
   abcCongratsShown: false,
+  gameCompleteAcknowledged: false,
+  menu2Unlock: 0,
 };
 
 /**
@@ -481,6 +488,9 @@ export const useGameStore = create<GameStore>()(
         set({ answers: {}, bonusDistances: {}, bonusTexts: {}, inProgress: {}, playedQuestionIds: {} }),
 
       markAbcCongratsShown: () => set({ abcCongratsShown: true }),
+      markGameCompleteAcknowledged: () => set({ gameCompleteAcknowledged: true }),
+      advanceMenu2Unlock: (level) =>
+        set((state) => ({ menu2Unlock: Math.max(state.menu2Unlock, level) })),
 
       resetPhotoGate: () => {
         set({ photoTaken: false });
@@ -507,6 +517,8 @@ export const useGameStore = create<GameStore>()(
           quizDraft: Array.from({ length: RECIPROCAL_QUIZ_LENGTH }, emptyDraftItem),
           photoTaken: false,
           abcCongratsShown: false,
+          gameCompleteAcknowledged: false,
+          menu2Unlock: 0,
         });
       },
     }),
@@ -535,6 +547,10 @@ export const useGameStore = create<GameStore>()(
           groupStickers: state.groupStickers ?? {},
           bonusTexts: state.bonusTexts ?? {},
           abcCongratsShown: version < 7 ? false : Boolean(state.abcCongratsShown),
+          gameCompleteAcknowledged: Boolean(state.gameCompleteAcknowledged),
+          menu2Unlock: Number.isFinite(Number(state.menu2Unlock))
+            ? Math.min(4, Math.max(0, Math.floor(Number(state.menu2Unlock))))
+            : 0,
           questionDurationSeconds:
             duration === 30
               ? DEFAULT_QUESTION_DURATION_SECONDS
@@ -565,6 +581,9 @@ export const selectAnyGroupComplete = (state: GameStore) =>
 
 export const selectHectorQuizComplete = (state: GameStore) =>
   state.completedGroups.includes('hector');
+
+export const selectGameComplete = (state: GameStore) =>
+  selectAllGroupsComplete(state) && selectHectorQuizComplete(state);
 
 /** Prefer the live run when a group is being replayed; otherwise the last saved answers. */
 export const selectGroupAnswers =

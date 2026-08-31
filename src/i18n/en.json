@@ -48,15 +48,21 @@
     "lockedResults": "Finish the 3 question groups to see the summary",
     "lockedPhoto": "Finish the 3 question groups to take a photo",
     "lockedModel": "Finish the 3 question groups to see the model",
-    "lockedGift": "Finish the 3 question groups to see your gift",
+    "lockedGift": "Finish all 4 question groups to see your gift",
     "settings": "Settings",
     "photo": "Take a photo",
-    "model": "3D model"
+    "model": "3D model",
+    "pizza": "Pizza",
+    "prizes": "Here are\nthe prizes!",
+    "lockedPrize": "Open the prizes in order"
   },
   "celebrate": {
     "complete": "Congratulations, you completed the game",
+    "gameDone": "Congratulations love! you finished the game",
     "hint": "Look behind the photo with our padlock on the Münster bridge",
-    "love": "I love you!"
+    "love": "I love you!",
+    "pizzaHint": "Look behind the photo of your 3D heart",
+    "pizzaLove": "I love you! x2"
   },
   "pin": {
     "title": "Enter the code",
@@ -151,7 +157,7 @@
     "hectorCasual": "Hector casual"
   },
   "summary": {
-    "title": "Now it's time to pay",
+    "title": "But first it's time to pay",
     "message": "Now it's time to pay what you owe!",
     "fernandaOwes": "Fer debe...",
     "hectorOwes": "Hector debe",

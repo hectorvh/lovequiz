@@ -48,15 +48,21 @@
     "lockedResults": "Schließe die 3 Fragengruppen ab, um die Zusammenfassung zu sehen",
     "lockedPhoto": "Schließe die 3 Fragengruppen ab, um ein Foto aufzunehmen",
     "lockedModel": "Schließe die 3 Fragengruppen ab, um das Modell zu sehen",
-    "lockedGift": "Schließe die 3 Fragengruppen ab, um dein Geschenk zu sehen",
+    "lockedGift": "Schließe die 4 Fragengruppen ab, um dein Geschenk zu sehen",
     "settings": "Einstellungen",
     "photo": "Foto aufnehmen",
-    "model": "3D-Modell"
+    "model": "3D-Modell",
+    "pizza": "Pizza",
+    "prizes": "Hier sind\ndie Preise!",
+    "lockedPrize": "Öffne die Preise der Reihe nach"
   },
   "celebrate": {
     "complete": "Glückwunsch, du hast das Spiel abgeschlossen",
+    "gameDone": "Glückwunsch meine Liebe! du hast das Spiel beendet",
     "hint": "Schau hinter dem Foto mit unserem Schloss auf der Münster-Brücke nach",
-    "love": "Ich liebe dich!"
+    "love": "Ich liebe dich!",
+    "pizzaHint": "Schau hinter dem Foto deines 3D-Herzens nach",
+    "pizzaLove": "Ich liebe dich! x2"
   },
   "pin": {
     "title": "Gib den Code ein",
@@ -151,7 +157,7 @@
     "hectorCasual": "Hector casual"
   },
   "summary": {
-    "title": "Jetzt wird gezahlt",
+    "title": "Aber zuerst wird gezahlt",
     "message": "Jetzt wird bezahlt, was du schuldest!",
     "fernandaOwes": "Fer debe...",
     "hectorOwes": "Hector debe",

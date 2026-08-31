@@ -6,6 +6,7 @@ import Layout from './components/Layout';
 import Start from './screens/Start';
 import Intro from './screens/Intro';
 import MainMenu from './screens/MainMenu';
+import Menu2 from './screens/Menu2';
 import QuestionPlay from './screens/QuestionPlay';
 import PartialResults from './screens/PartialResults';
 import Results from './screens/Results';
@@ -50,6 +51,7 @@ export default function App() {
           <Route path="/intro" element={<Intro />} />
           <Route path="/instructions" element={<Navigate to="/intro" replace />} />
           <Route path="/menu" element={<MainMenu />} />
+          <Route path="/menu2" element={<Menu2 />} />
           <Route path="/play/:groupId" element={<QuestionPlay />} />
           <Route path="/partial-results/:groupId" element={<PartialResults />} />
           <Route path="/results/:groupId" element={<Results />} />

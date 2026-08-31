@@ -1,17 +1,25 @@
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
+import { selectGameComplete, useGameStore } from '../state/gameStore';
 import { chromeButtonClass } from './ui';
 
 export default function HomeButton() {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const { pathname } = useLocation();
+  const gameComplete = useGameStore(selectGameComplete);
 
   return (
     <button
       type="button"
-      onClick={() => navigate('/menu')}
-      aria-label={t('common.home')}
+      onClick={() => {
+        if (pathname === '/model') navigate('/menu2');
+        else if (pathname === '/menu2') navigate('/menu');
+        else if (gameComplete) navigate('/menu2');
+        else navigate('/menu');
+      }}
+      aria-label={pathname === '/menu2' ? t('intro.toMenu') : t('common.home')}
       className={chromeButtonClass}
     >
       <svg

@@ -48,15 +48,21 @@
     "lockedResults": "Finaliza los 3 grupos de preguntas para ver el resumen",
     "lockedPhoto": "Finaliza los 3 grupos de preguntas para tomar una foto",
     "lockedModel": "Finaliza los 3 grupos de preguntas para ver el modelo",
-    "lockedGift": "Finaliza los 3 grupos de preguntas para ver tu regalo",
+    "lockedGift": "Finaliza los 4 grupos de preguntas para ver tu regalo",
     "settings": "Ajustes",
     "photo": "Tomar foto",
-    "model": "Modelo 3D"
+    "model": "Modelo 3D",
+    "pizza": "Pizza",
+    "prizes": "Aquí estan\nlos premios!",
+    "lockedPrize": "Abre los premios en orden"
   },
   "celebrate": {
     "complete": "Felicidades completaste el juego",
+    "gameDone": "Felicidades amor! terminaste el juego",
     "hint": "Busca detrás de la foto con nuestro candado en el puente de Münster",
-    "love": "Te amo!"
+    "love": "Te amo!",
+    "pizzaHint": "Busca detrás de la foto de tu corazón 3D",
+    "pizzaLove": "Te amo! x2"
   },
   "pin": {
     "title": "Introduce el código",
@@ -151,7 +157,7 @@
     "hectorCasual": "Hector casual"
   },
   "summary": {
-    "title": "Ahora toca pagar",
+    "title": "Pero primero toca pagar",
     "message": "Ahora toca pagar lo que debes!",
     "fernandaOwes": "Fer debe...",
     "hectorOwes": "Hector debe",

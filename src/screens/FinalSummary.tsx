@@ -60,7 +60,7 @@ export default function FinalSummary() {
     <div className="relative h-full min-h-0 overflow-hidden">
       <div className="pointer-events-none fixed inset-x-0 top-[20%] z-10 -translate-y-1/2 px-4">
         <div className="mx-auto max-w-md [&>div]:mb-0">
-          <ScreenTitle title={t('summary.title')} className="!mb-0 !text-[2.25rem]" />
+          <ScreenTitle title={t('summary.title')} className="!mb-0 !text-[1.9125rem]" />
         </div>
       </div>
 
@@ -81,7 +81,7 @@ export default function FinalSummary() {
           </div>
 
           <div className="mt-8">
-            <GhostButton onClick={() => navigate('/menu')}>{t('common.back')}</GhostButton>
+            <GhostButton onClick={() => navigate('/menu2')}>{t('common.back')}</GhostButton>
           </div>
         </Card>
       </div>
